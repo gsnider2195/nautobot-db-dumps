@@ -71,7 +71,7 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git rm *.sql
+          git rm *.sql --ignore-unmatch
           git add *.sql
           git commit -m "Commit generated sql dumps"
           git push -u origin dumps

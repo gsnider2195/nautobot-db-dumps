@@ -1,7 +1,8 @@
 ---
 name: "Generate Nautobot DB Dumps"
-on: # yamllint disable-line rule:truthy rule:comments
-  workflow_dispatch:
+on:
+  schedule:
+    - cron:  "0 4 * * 1"
 
 env:
   APP_NAME: "nautobot-db-dumps"

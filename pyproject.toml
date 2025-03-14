@@ -1,5 +1,6 @@
 [tool.poetry]
 name = "nautobot-db-dumps"
+package-mode = false
 version = "0.1.0"
 description = "Nautobot Database Dumps"
 authors = ["Network to Code, LLC <info@networktocode.com>"]
@@ -19,19 +20,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-packages = [
-    { include = "nautobot_db_dumps" },
-]
-include = [
-    # Poetry by default will exclude files that are in .gitignore
-    "nautobot_db_dumps/static/nautobot_db_dumps/docs/**/*",
-]
-
-[tool.poetry.dependencies]
-python = ">=3.8,<3.13"
-# Used for local development
-nautobot = "^1.6.0"
-
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
 django-debug-toolbar = "*"

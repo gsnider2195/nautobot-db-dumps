@@ -55,14 +55,14 @@ jobs:
         with:
           name: nautobot-db-dumps
           path: "/tmp/db_dumps/*.sql"
-  publish_gh:
-    needs:
-      - "generate-db-dumps"
-    name: "Publish release to GitHub"
-    runs-on: "ubuntu-22.04"
-    env:
-      INVOKE_NAUTOBOT_DB_DUMPS_LOCAL: "True"
-    steps:
-      # - run: "gh release upload ${{ github.event.release.tag_name }} /tmp/db_dumps/*.sql"
-      #   env:
-      #     GH_TOKEN: "${{ github.token }}"
+  # publish_gh:
+  #   needs:
+  #     - "generate-db-dumps"
+  #   name: "Publish release to GitHub"
+  #   runs-on: "ubuntu-22.04"
+  #   env:
+  #     INVOKE_NAUTOBOT_DB_DUMPS_LOCAL: "True"
+  #   steps:
+  #     - run: "gh release upload ${{ github.event.release.tag_name }} /tmp/db_dumps/*.sql"
+  #       env:
+  #         GH_TOKEN: "${{ github.token }}"

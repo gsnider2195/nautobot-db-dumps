@@ -1,6 +1,6 @@
 # Nautobot Database Dumps
 
-This repository contains database dumps for Nautobot databases fully migrated for each minor version of nautobot and the `latest` version. The dumps are provided in both PostgreSQL and MySQL formats and can be used in development environments to skip the migration process. If the file is mounted to the `/docker-entrypoint-initdb.d/` directory in a MySQL or PostgreSQL Docker container, the database will be initialized with the data from the dump file every time the database is initialized. The database data will be persisted until the persistent volume is deleted with `invoke destroy`.
+This repository contains database dumps for Nautobot databases fully migrated for each minor version of nautobot and the `latest` version. The dumps are provided in both PostgreSQL and MySQL formats and can be used in development environments to skip the migration process. If the file is mounted to the `/docker-entrypoint-initdb.d/` directory in a MySQL or PostgreSQL Docker container, the database will be initialized with the data from the dump file every time the database is initialized. In a typical Nautobot app development environment, the database data will be persisted until the persistent volume is deleted with `invoke destroy`.
 
 The dumps are provided in the `dumps` branch of this repository. The `main` branch contains the GitHub actions workflows used to generate the files and this README. The `dumps` branch is regenerated weekly.
 
@@ -48,7 +48,7 @@ services:
       - "development_mysql.env"
     volumes:
       - "mysql_data:/var/lib/mysql"
-      - "./nautobot2.4.0-mysqldump.sql:/docker-entrypoint-initdb.d/nautobot.sql:z"
+      - "./nautobot2.4.0-mysqldump.sql:/docker-entrypoint-initdb.d/nautobot.sql"
     healthcheck:
       test:
         - "CMD"

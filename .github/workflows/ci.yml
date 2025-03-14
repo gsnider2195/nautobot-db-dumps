@@ -53,7 +53,7 @@ jobs:
       - name: Upload database dumps
         uses: actions/upload-artifact@v4
         with:
-          name: nautobot-db-dumps
+          name: "nautobot-db-dumps-${{ matrix.nautobot-version }}-${{ matrix.db-backend }}"
           path: "/tmp/db_dumps/*.sql"
   # publish_gh:
   #   needs:

@@ -1,0 +1,26 @@
+{
+    "cookiecutter": {
+        "codeowner_github_usernames": "",
+        "full_name": "Network to Code, LLC",
+        "email": "info@networktocode.com",
+        "github_org": "gsnider2195",
+        "app_name": "nautobot_db_dumps",
+        "verbose_name": "Nautobot Database Dumps",
+        "app_slug": "nautobot-db-dumps",
+        "project_slug": "nautobot-app-db-dumps",
+        "repo_url": "https://github.com/gsnider2195/nautobot-db-dumps",
+        "base_url": "nautobot-db-dumps",
+        "min_nautobot_version": "1.6.0",
+        "max_nautobot_version": "2.9999",
+        "camel_name": "NautobotDbDumps",
+        "project_short_description": "Nautobot Database Dumps",
+        "model_class_name": "None",
+        "open_source_license": "Apache-2.0",
+        "docs_base_url": "https://docs.nautobot.com",
+        "docs_app_url": "https://docs.nautobot.com/projects/nautobot-db-dumps/en/latest",
+        "_template": "/home/gary/github/nautobot/cookiecutter-nautobot-app/",
+        "_output_dir": "/home/gary/github/gsnider2195/nautobot_db_dumps",
+        "_repo_dir": "/home/gary/github/nautobot/cookiecutter-nautobot-app/nautobot-app",
+        "_checkout": null
+    }
+}

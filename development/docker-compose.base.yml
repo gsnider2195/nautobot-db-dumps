@@ -1,0 +1,25 @@
+---
+x-nautobot-build: &nautobot-build
+  build:
+    args:
+      NAUTOBOT_VER: "${NAUTOBOT_VER}"
+      PYTHON_VER: "${PYTHON_VER}"
+    context: "../"
+    dockerfile: "development/Dockerfile"
+x-nautobot-base: &nautobot-base
+  image: "nautobot-db-dumps/nautobot:${NAUTOBOT_VER}-py${PYTHON_VER}"
+  env_file:
+    - "development.env"
+    - "creds.env"
+  tty: true
+
+services:
+  nautobot:
+    depends_on:
+      redis:
+        condition: "service_started"
+      db:
+        condition: "service_healthy"
+    <<:
+      - *nautobot-base
+      - *nautobot-build

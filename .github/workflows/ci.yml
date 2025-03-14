@@ -55,14 +55,23 @@ jobs:
         with:
           name: "nautobot-db-dumps-${{ matrix.nautobot-version }}-${{ matrix.db-backend }}"
           path: "/tmp/db_dumps/*.sql"
-  # publish_gh:
-  #   needs:
-  #     - "generate-db-dumps"
-  #   name: "Publish release to GitHub"
-  #   runs-on: "ubuntu-22.04"
-  #   env:
-  #     INVOKE_NAUTOBOT_DB_DUMPS_LOCAL: "True"
-  #   steps:
-  #     - run: "gh release upload ${{ github.event.release.tag_name }} /tmp/db_dumps/*.sql"
-  #       env:
-  #         GH_TOKEN: "${{ github.token }}"
+  publish_gh:
+    needs:
+      - "generate-db-dumps"
+    name: "Commit dumps to dumps branch"
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v4"
+        with:
+          ref: "dumps"
+      - name: "Download database dumps"
+        uses: actions/download-artifact@v4
+      - name: "Commit and push database dumps"
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git rm *.sql
+          git add *.sql
+          git commit -m "Commit generated sql dumps"
+          git push -u origin dumps

@@ -3,6 +3,7 @@ name: "Generate Nautobot DB Dumps"
 on:
   schedule:
     - cron:  "0 4 * * 1"
+  workflow_dispatch:
 
 env:
   APP_NAME: "nautobot-db-dumps"
@@ -49,6 +50,8 @@ jobs:
         if: "matrix.db-backend == 'mysql'"
       - name: "Migrate database"
         run: "invoke migrate"
+      - name: "Copy nautobot database to test database"
+        run: "invoke copy-nautobot-db-to-test-db"
       - name: "Dump database"
         run: "invoke backup-db"
       - name: Upload database dumps
@@ -56,29 +59,29 @@ jobs:
         with:
           name: "nautobot-db-dumps-${{ matrix.nautobot-version }}-${{ matrix.db-backend }}"
           path: "/tmp/db_dumps/*.sql"
-  publish_gh:
-    permissions:
-      contents: "write"
-    needs:
-      - "generate-db-dumps"
-    name: "Commit dumps to dumps branch"
-    runs-on: "ubuntu-22.04"
-    steps:
-      - name: "Check out repository code"
-        uses: "actions/checkout@v4"
-        with:
-          ref: "dumps"
-      - name: "Git rm database dumps"
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git rm --ignore-unmatch *.sql
-      - name: "Download database dumps"
-        uses: actions/download-artifact@v4
-        with:
-          merge-multiple: true
-      - name: "Commit and push database dumps"
-        run: |
-          git add *.sql
-          git commit -m "Commit generated sql dumps"
-          git push -u origin dumps
+  # publish_gh:
+  #   permissions:
+  #     contents: "write"
+  #   needs:
+  #     - "generate-db-dumps"
+  #   name: "Commit dumps to dumps branch"
+  #   runs-on: "ubuntu-22.04"
+  #   steps:
+  #     - name: "Check out repository code"
+  #       uses: "actions/checkout@v4"
+  #       with:
+  #         ref: "dumps"
+  #     - name: "Git rm database dumps"
+  #       run: |
+  #         git config user.name github-actions
+  #         git config user.email github-actions@github.com
+  #         git rm --ignore-unmatch *.sql
+  #     - name: "Download database dumps"
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         merge-multiple: true
+  #     - name: "Commit and push database dumps"
+  #       run: |
+  #         git add *.sql
+  #         git commit -m "Commit generated sql dumps"
+  #         git push -u origin dumps

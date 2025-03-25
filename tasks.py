@@ -899,3 +899,26 @@ def validate_app_config(context):
     """Validate the app config based on the app config schema."""
     start(context, service="nautobot")
     nbshell(context, plain=True, file="development/app_config_schema.py", env={"APP_CONFIG_SCHEMA_COMMAND": "validate"})
+
+
+@task
+def copy_nautobot_db_to_test_db(context):
+    """Test database migration from a given dataset to latest Nautobot schema."""
+    # DB must be running, else will fail with errors like:
+    # dropdb: error: could not connect to database template1: could not connect to server: No such file or directory
+    start(context, service="db")
+    _await_healthy_service(context, "db")
+
+    if _is_compose_included(context, "postgres"):
+        common_args = "-U $NAUTOBOT_DB_USER --no-password -h localhost"
+        run_command(context, command=f"sh -c 'dropdb --if-exists {common_args} test_nautobot'", service="db")
+        run_command(context, command=f"sh -c 'createdb {common_args} --template=nautobot test_nautobot'", service="db")
+    else:
+        base_command = "mysql --user=$NAUTOBOT_DB_USER --password=$NAUTOBOT_DB_PASSWORD --host 127.0.0.1"
+        dump_base_command = "mysqldump --user=$NAUTOBOT_DB_USER --password=$NAUTOBOT_DB_PASSWORD --host 127.0.0.1"
+        run_command(
+            context, command=f"sh -c '{base_command} -e \"DROP DATABASE IF EXISTS test_nautobot;\"'", service="db"
+        )
+        run_command(
+            context, command=f"sh -c '{dump_base_command} nautobot | {base_command} test_nautobot'", service="db"
+        )

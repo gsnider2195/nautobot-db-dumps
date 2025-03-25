@@ -3,6 +3,7 @@ name: "Generate Nautobot DB Dumps"
 on:
   schedule:
     - cron:  "0 4 * * 1"
+  workflow_dispatch:
 
 env:
   APP_NAME: "nautobot-db-dumps"

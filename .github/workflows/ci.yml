@@ -80,6 +80,7 @@ jobs:
           merge-multiple: true
       - name: "Commit and push database dumps"
         run: |
-          git add *.sql
+          git add $(git ls-files -o --exclude-standard) # Add any new sql files
+          git add *latest*.sql # Add the latest files
           git commit -m "Commit generated sql dumps"
           git push -u origin dumps

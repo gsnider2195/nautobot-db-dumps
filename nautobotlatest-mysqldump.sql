@@ -27,7 +27,7 @@ CREATE TABLE `auth_group` (
   `name` varchar(150) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `auth_group` (
 
 LOCK TABLES `auth_group` WRITE;
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+INSERT INTO `auth_group` VALUES (1,'nautobot-default-scheduledjob-approver'),(3,'nautobot-default-scheduledjob-architect'),(2,'nautobot-default-scheduledjob-operator');
 /*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,7 +83,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=643 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=747 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +92,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add permission',30,'add_permission'),(2,'Can change permission',30,'change_permission'),(3,'Can delete permission',30,'delete_permission'),(4,'Can view permission',30,'view_permission'),(5,'Can add group',31,'add_group'),(6,'Can change group',31,'change_group'),(7,'Can delete group',31,'delete_group'),(8,'Can view group',31,'view_group'),(9,'Can add content type',32,'add_contenttype'),(10,'Can change content type',32,'change_contenttype'),(11,'Can delete content type',32,'delete_contenttype'),(12,'Can view content type',32,'view_contenttype'),(13,'Can add session',33,'add_session'),(14,'Can change session',33,'change_session'),(15,'Can delete session',33,'delete_session'),(16,'Can view session',33,'view_session'),(17,'Can add association',34,'add_association'),(18,'Can change association',34,'change_association'),(19,'Can delete association',34,'delete_association'),(20,'Can view association',34,'view_association'),(21,'Can add code',35,'add_code'),(22,'Can change code',35,'change_code'),(23,'Can delete code',35,'delete_code'),(24,'Can view code',35,'view_code'),(25,'Can add nonce',36,'add_nonce'),(26,'Can change nonce',36,'change_nonce'),(27,'Can delete nonce',36,'delete_nonce'),(28,'Can view nonce',36,'view_nonce'),(29,'Can add user social auth',37,'add_usersocialauth'),(30,'Can change user social auth',37,'change_usersocialauth'),(31,'Can delete user social auth',37,'delete_usersocialauth'),(32,'Can view user social auth',37,'view_usersocialauth'),(33,'Can add partial',38,'add_partial'),(34,'Can change partial',38,'change_partial'),(35,'Can delete partial',38,'delete_partial'),(36,'Can view partial',38,'view_partial'),(37,'Can add tag',39,'add_tag'),(38,'Can change tag',39,'change_tag'),(39,'Can delete tag',39,'delete_tag'),(40,'Can view tag',39,'view_tag'),(41,'Can add tagged item',40,'add_taggeditem'),(42,'Can change tagged item',40,'change_taggeditem'),(43,'Can delete tagged item',40,'delete_taggeditem'),(44,'Can view tagged item',40,'view_taggeditem'),(45,'Can add constance',41,'add_constance'),(46,'Can change constance',41,'change_constance'),(47,'Can delete constance',41,'delete_constance'),(48,'Can view constance',41,'view_constance'),(49,'Can change config',41,'change_config'),(50,'Can view config',41,'view_config'),(51,'Can add log entry',43,'add_logentry'),(52,'Can change log entry',43,'change_logentry'),(53,'Can delete log entry',43,'delete_logentry'),(54,'Can view log entry',43,'view_logentry'),(55,'Can add crontab',44,'add_crontabschedule'),(56,'Can change crontab',44,'change_crontabschedule'),(57,'Can delete crontab',44,'delete_crontabschedule'),(58,'Can view crontab',44,'view_crontabschedule'),(59,'Can add interval',45,'add_intervalschedule'),(60,'Can change interval',45,'change_intervalschedule'),(61,'Can delete interval',45,'delete_intervalschedule'),(62,'Can view interval',45,'view_intervalschedule'),(63,'Can add periodic task',46,'add_periodictask'),(64,'Can change periodic task',46,'change_periodictask'),(65,'Can delete periodic task',46,'delete_periodictask'),(66,'Can view periodic task',46,'view_periodictask'),(67,'Can add periodic task track',47,'add_periodictasks'),(68,'Can change periodic task track',47,'change_periodictasks'),(69,'Can delete periodic task track',47,'delete_periodictasks'),(70,'Can view periodic task track',47,'view_periodictasks'),(71,'Can add solar event',48,'add_solarschedule'),(72,'Can change solar event',48,'change_solarschedule'),(73,'Can delete solar event',48,'delete_solarschedule'),(74,'Can view solar event',48,'view_solarschedule'),(75,'Can add clocked',49,'add_clockedschedule'),(76,'Can change clocked',49,'change_clockedschedule'),(77,'Can delete clocked',49,'delete_clockedschedule'),(78,'Can view clocked',49,'view_clockedschedule'),(79,'Can add task result',50,'add_taskresult'),(80,'Can change task result',50,'change_taskresult'),(81,'Can delete task result',50,'delete_taskresult'),(82,'Can view task result',50,'view_taskresult'),(83,'Can add chord counter',51,'add_chordcounter'),(84,'Can change chord counter',51,'change_chordcounter'),(85,'Can delete chord counter',51,'delete_chordcounter'),(86,'Can view chord counter',51,'view_chordcounter'),(87,'Can add group result',52,'add_groupresult'),(88,'Can change group result',52,'change_groupresult'),(89,'Can delete group result',52,'delete_groupresult'),(90,'Can view group result',52,'view_groupresult'),(91,'Can add circuit',1,'add_circuit'),(92,'Can change circuit',1,'change_circuit'),(93,'Can delete circuit',1,'delete_circuit'),(94,'Can view circuit',1,'view_circuit'),(95,'Can add circuit termination',53,'add_circuittermination'),(96,'Can change circuit termination',53,'change_circuittermination'),(97,'Can delete circuit termination',53,'delete_circuittermination'),(98,'Can view circuit termination',53,'view_circuittermination'),(99,'Can add circuit type',54,'add_circuittype'),(100,'Can change circuit type',54,'change_circuittype'),(101,'Can delete circuit type',54,'delete_circuittype'),(102,'Can view circuit type',54,'view_circuittype'),(103,'Can add provider',55,'add_provider'),(104,'Can change provider',55,'change_provider'),(105,'Can delete provider',55,'delete_provider'),(106,'Can view provider',55,'view_provider'),(107,'Can add provider network',56,'add_providernetwork'),(108,'Can change provider network',56,'change_providernetwork'),(109,'Can delete provider network',56,'delete_providernetwork'),(110,'Can view provider network',56,'view_providernetwork'),(111,'Can add cloud account',57,'add_cloudaccount'),(112,'Can change cloud account',57,'change_cloudaccount'),(113,'Can delete cloud account',57,'delete_cloudaccount'),(114,'Can view cloud account',57,'view_cloudaccount'),(115,'Can add cloud network',58,'add_cloudnetwork'),(116,'Can change cloud network',58,'change_cloudnetwork'),(117,'Can delete cloud network',58,'delete_cloudnetwork'),(118,'Can view cloud network',58,'view_cloudnetwork'),(119,'Can add cloud resource type',59,'add_cloudresourcetype'),(120,'Can change cloud resource type',59,'change_cloudresourcetype'),(121,'Can delete cloud resource type',59,'delete_cloudresourcetype'),(122,'Can view cloud resource type',59,'view_cloudresourcetype'),(123,'Can add cloud service',60,'add_cloudservice'),(124,'Can change cloud service',60,'change_cloudservice'),(125,'Can delete cloud service',60,'delete_cloudservice'),(126,'Can view cloud service',60,'view_cloudservice'),(127,'Can add cloud network prefix assignment',61,'add_cloudnetworkprefixassignment'),(128,'Can change cloud network prefix assignment',61,'change_cloudnetworkprefixassignment'),(129,'Can delete cloud network prefix assignment',61,'delete_cloudnetworkprefixassignment'),(130,'Can view cloud network prefix assignment',61,'view_cloudnetworkprefixassignment'),(131,'Can add cloud service network assignment',62,'add_cloudservicenetworkassignment'),(132,'Can change cloud service network assignment',62,'change_cloudservicenetworkassignment'),(133,'Can delete cloud service network assignment',62,'delete_cloudservicenetworkassignment'),(134,'Can view cloud service network assignment',62,'view_cloudservicenetworkassignment'),(135,'Can add cable',2,'add_cable'),(136,'Can change cable',2,'change_cable'),(137,'Can delete cable',2,'delete_cable'),(138,'Can view cable',2,'view_cable'),(139,'Can add cable path',63,'add_cablepath'),(140,'Can change cable path',63,'change_cablepath'),(141,'Can delete cable path',63,'delete_cablepath'),(142,'Can view cable path',63,'view_cablepath'),(143,'Can add console port',64,'add_consoleport'),(144,'Can change console port',64,'change_consoleport'),(145,'Can delete console port',64,'delete_consoleport'),(146,'Can view console port',64,'view_consoleport'),(147,'Can add console port template',65,'add_consoleporttemplate'),(148,'Can change console port template',65,'change_consoleporttemplate'),(149,'Can delete console port template',65,'delete_consoleporttemplate'),(150,'Can view console port template',65,'view_consoleporttemplate'),(151,'Can add console server port',66,'add_consoleserverport'),(152,'Can change console server port',66,'change_consoleserverport'),(153,'Can delete console server port',66,'delete_consoleserverport'),(154,'Can view console server port',66,'view_consoleserverport'),(155,'Can add console server port template',67,'add_consoleserverporttemplate'),(156,'Can change console server port template',67,'change_consoleserverporttemplate'),(157,'Can delete console server port template',67,'delete_consoleserverporttemplate'),(158,'Can view console server port template',67,'view_consoleserverporttemplate'),(159,'Can add device',3,'add_device'),(160,'Can change device',3,'change_device'),(161,'Can delete device',3,'delete_device'),(162,'Can view device',3,'view_device'),(163,'Can add device bay',68,'add_devicebay'),(164,'Can change device bay',68,'change_devicebay'),(165,'Can delete device bay',68,'delete_devicebay'),(166,'Can view device bay',68,'view_devicebay'),(167,'Can add device bay template',69,'add_devicebaytemplate'),(168,'Can change device bay template',69,'change_devicebaytemplate'),(169,'Can delete device bay template',69,'delete_devicebaytemplate'),(170,'Can view device bay template',69,'view_devicebaytemplate'),(171,'Can add device type',70,'add_devicetype'),(172,'Can change device type',70,'change_devicetype'),(173,'Can delete device type',70,'delete_devicetype'),(174,'Can view device type',70,'view_devicetype'),(175,'Can add front port',71,'add_frontport'),(176,'Can change front port',71,'change_frontport'),(177,'Can delete front port',71,'delete_frontport'),(178,'Can view front port',71,'view_frontport'),(179,'Can add front port template',72,'add_frontporttemplate'),(180,'Can change front port template',72,'change_frontporttemplate'),(181,'Can delete front port template',72,'delete_frontporttemplate'),(182,'Can view front port template',72,'view_frontporttemplate'),(183,'Can add interface',13,'add_interface'),(184,'Can change interface',13,'change_interface'),(185,'Can delete interface',13,'delete_interface'),(186,'Can view interface',13,'view_interface'),(187,'Can add interface template',73,'add_interfacetemplate'),(188,'Can change interface template',73,'change_interfacetemplate'),(189,'Can delete interface template',73,'delete_interfacetemplate'),(190,'Can view interface template',73,'view_interfacetemplate'),(191,'Can add inventory item',74,'add_inventoryitem'),(192,'Can change inventory item',74,'change_inventoryitem'),(193,'Can delete inventory item',74,'delete_inventoryitem'),(194,'Can view inventory item',74,'view_inventoryitem'),(195,'Can add manufacturer',75,'add_manufacturer'),(196,'Can change manufacturer',75,'change_manufacturer'),(197,'Can delete manufacturer',75,'delete_manufacturer'),(198,'Can view manufacturer',75,'view_manufacturer'),(199,'Can add platform',76,'add_platform'),(200,'Can change platform',76,'change_platform'),(201,'Can delete platform',76,'delete_platform'),(202,'Can view platform',76,'view_platform'),(203,'Can add power feed',4,'add_powerfeed'),(204,'Can change power feed',4,'change_powerfeed'),(205,'Can delete power feed',4,'delete_powerfeed'),(206,'Can view power feed',4,'view_powerfeed'),(207,'Can add power outlet',77,'add_poweroutlet'),(208,'Can change power outlet',77,'change_poweroutlet'),(209,'Can delete power outlet',77,'delete_poweroutlet'),(210,'Can view power outlet',77,'view_poweroutlet'),(211,'Can add power outlet template',78,'add_poweroutlettemplate'),(212,'Can change power outlet template',78,'change_poweroutlettemplate'),(213,'Can delete power outlet template',78,'delete_poweroutlettemplate'),(214,'Can view power outlet template',78,'view_poweroutlettemplate'),(215,'Can add power panel',79,'add_powerpanel'),(216,'Can change power panel',79,'change_powerpanel'),(217,'Can delete power panel',79,'delete_powerpanel'),(218,'Can view power panel',79,'view_powerpanel'),(219,'Can add power port',80,'add_powerport'),(220,'Can change power port',80,'change_powerport'),(221,'Can delete power port',80,'delete_powerport'),(222,'Can view power port',80,'view_powerport'),(223,'Can add power port template',81,'add_powerporttemplate'),(224,'Can change power port template',81,'change_powerporttemplate'),(225,'Can delete power port template',81,'delete_powerporttemplate'),(226,'Can view power port template',81,'view_powerporttemplate'),(227,'Can add rack',5,'add_rack'),(228,'Can change rack',5,'change_rack'),(229,'Can delete rack',5,'delete_rack'),(230,'Can view rack',5,'view_rack'),(231,'Can add rack group',82,'add_rackgroup'),(232,'Can change rack group',82,'change_rackgroup'),(233,'Can delete rack group',82,'delete_rackgroup'),(234,'Can view rack group',82,'view_rackgroup'),(235,'Can add rack reservation',83,'add_rackreservation'),(236,'Can change rack reservation',83,'change_rackreservation'),(237,'Can delete rack reservation',83,'delete_rackreservation'),(238,'Can view rack reservation',83,'view_rackreservation'),(239,'Can add rear port',84,'add_rearport'),(240,'Can change rear port',84,'change_rearport'),(241,'Can delete rear port',84,'delete_rearport'),(242,'Can view rear port',84,'view_rearport'),(243,'Can add rear port template',85,'add_rearporttemplate'),(244,'Can change rear port template',85,'change_rearporttemplate'),(245,'Can delete rear port template',85,'delete_rearporttemplate'),(246,'Can view rear port template',85,'view_rearporttemplate'),(247,'Can add virtual chassis',86,'add_virtualchassis'),(248,'Can change virtual chassis',86,'change_virtualchassis'),(249,'Can delete virtual chassis',86,'delete_virtualchassis'),(250,'Can view virtual chassis',86,'view_virtualchassis'),(251,'Can add location type',87,'add_locationtype'),(252,'Can change location type',87,'change_locationtype'),(253,'Can delete location type',87,'delete_locationtype'),(254,'Can view location type',87,'view_locationtype'),(255,'Can add location',14,'add_location'),(256,'Can change location',14,'change_location'),(257,'Can delete location',14,'delete_location'),(258,'Can view location',14,'view_location'),(259,'Can add device redundancy group',19,'add_deviceredundancygroup'),(260,'Can change device redundancy group',19,'change_deviceredundancygroup'),(261,'Can delete device redundancy group',19,'delete_deviceredundancygroup'),(262,'Can view device redundancy group',19,'view_deviceredundancygroup'),(263,'Can add interface redundancy group',20,'add_interfaceredundancygroup'),(264,'Can change interface redundancy group',20,'change_interfaceredundancygroup'),(265,'Can delete interface redundancy group',20,'delete_interfaceredundancygroup'),(266,'Can view interface redundancy group',20,'view_interfaceredundancygroup'),(267,'Can add interface redundancy group association',88,'add_interfaceredundancygroupassociation'),(268,'Can change interface redundancy group association',88,'change_interfaceredundancygroupassociation'),(269,'Can delete interface redundancy group association',88,'delete_interfaceredundancygroupassociation'),(270,'Can view interface redundancy group association',88,'view_interfaceredundancygroupassociation'),(271,'Can add device family',89,'add_devicefamily'),(272,'Can change device family',89,'change_devicefamily'),(273,'Can delete device family',89,'delete_devicefamily'),(274,'Can view device family',89,'view_devicefamily'),(275,'Can add software version',25,'add_softwareversion'),(276,'Can change software version',25,'change_softwareversion'),(277,'Can delete software version',25,'delete_softwareversion'),(278,'Can view software version',25,'view_softwareversion'),(279,'Can add software image file',24,'add_softwareimagefile'),(280,'Can change software image file',24,'change_softwareimagefile'),(281,'Can delete software image file',24,'delete_softwareimagefile'),(282,'Can view software image file',24,'view_softwareimagefile'),(283,'Can add device type to software image file mapping',90,'add_devicetypetosoftwareimagefile'),(284,'Can change device type to software image file mapping',90,'change_devicetypetosoftwareimagefile'),(285,'Can delete device type to software image file mapping',90,'delete_devicetypetosoftwareimagefile'),(286,'Can view device type to software image file mapping',90,'view_devicetypetosoftwareimagefile'),(287,'Can add controller',26,'add_controller'),(288,'Can change controller',26,'change_controller'),(289,'Can delete controller',26,'delete_controller'),(290,'Can view controller',26,'view_controller'),(291,'Can add controller managed device group',91,'add_controllermanageddevicegroup'),(292,'Can change controller managed device group',91,'change_controllermanageddevicegroup'),(293,'Can delete controller managed device group',91,'delete_controllermanageddevicegroup'),(294,'Can view controller managed device group',91,'view_controllermanageddevicegroup'),(295,'Can add module',27,'add_module'),(296,'Can change module',27,'change_module'),(297,'Can delete module',27,'delete_module'),(298,'Can view module',27,'view_module'),(299,'Can add module bay',92,'add_modulebay'),(300,'Can change module bay',92,'change_modulebay'),(301,'Can delete module bay',92,'delete_modulebay'),(302,'Can view module bay',92,'view_modulebay'),(303,'Can add module bay template',93,'add_modulebaytemplate'),(304,'Can change module bay template',93,'change_modulebaytemplate'),(305,'Can delete module bay template',93,'delete_modulebaytemplate'),(306,'Can view module bay template',93,'view_modulebaytemplate'),(307,'Can add module type',94,'add_moduletype'),(308,'Can change module type',94,'change_moduletype'),(309,'Can delete module type',94,'delete_moduletype'),(310,'Can view module type',94,'view_moduletype'),(311,'Can add interface vdc assignment',95,'add_interfacevdcassignment'),(312,'Can change interface vdc assignment',95,'change_interfacevdcassignment'),(313,'Can delete interface vdc assignment',95,'delete_interfacevdcassignment'),(314,'Can view interface vdc assignment',95,'view_interfacevdcassignment'),(315,'Can add virtual device context',29,'add_virtualdevicecontext'),(316,'Can change virtual device context',29,'change_virtualdevicecontext'),(317,'Can delete virtual device context',29,'delete_virtualdevicecontext'),(318,'Can view virtual device context',29,'view_virtualdevicecontext'),(319,'Can add module family',96,'add_modulefamily'),(320,'Can change module family',96,'change_modulefamily'),(321,'Can delete module family',96,'delete_modulefamily'),(322,'Can view module family',96,'view_modulefamily'),(323,'Can add IP address',6,'add_ipaddress'),(324,'Can change IP address',6,'change_ipaddress'),(325,'Can delete IP address',6,'delete_ipaddress'),(326,'Can view IP address',6,'view_ipaddress'),(327,'Can add prefix',7,'add_prefix'),(328,'Can change prefix',7,'change_prefix'),(329,'Can delete prefix',7,'delete_prefix'),(330,'Can view prefix',7,'view_prefix'),(331,'Can add RIR',97,'add_rir'),(332,'Can change RIR',97,'change_rir'),(333,'Can delete RIR',97,'delete_rir'),(334,'Can view RIR',97,'view_rir'),(335,'Can add route target',98,'add_routetarget'),(336,'Can change route target',98,'change_routetarget'),(337,'Can delete route target',98,'delete_routetarget'),(338,'Can view route target',98,'view_routetarget'),(339,'Can add VRF',28,'add_vrf'),(340,'Can change VRF',28,'change_vrf'),(341,'Can delete VRF',28,'delete_vrf'),(342,'Can view VRF',28,'view_vrf'),(343,'Can add VLAN group',99,'add_vlangroup'),(344,'Can change VLAN group',99,'change_vlangroup'),(345,'Can delete VLAN group',99,'delete_vlangroup'),(346,'Can view VLAN group',99,'view_vlangroup'),(347,'Can add VLAN',8,'add_vlan'),(348,'Can change VLAN',8,'change_vlan'),(349,'Can delete VLAN',8,'delete_vlan'),(350,'Can view VLAN',8,'view_vlan'),(351,'Can add service',100,'add_service'),(352,'Can change service',100,'change_service'),(353,'Can delete service',100,'delete_service'),(354,'Can view service',100,'view_service'),(355,'Can add IP Address Assignment',101,'add_ipaddresstointerface'),(356,'Can change IP Address Assignment',101,'change_ipaddresstointerface'),(357,'Can delete IP Address Assignment',101,'delete_ipaddresstointerface'),(358,'Can view IP Address Assignment',101,'view_ipaddresstointerface'),(359,'Can add VRF-prefix assignment',102,'add_vrfprefixassignment'),(360,'Can change VRF-prefix assignment',102,'change_vrfprefixassignment'),(361,'Can delete VRF-prefix assignment',102,'delete_vrfprefixassignment'),(362,'Can view VRF-prefix assignment',102,'view_vrfprefixassignment'),(363,'Can add VRF-device assignment',103,'add_vrfdeviceassignment'),(364,'Can change VRF-device assignment',103,'change_vrfdeviceassignment'),(365,'Can delete VRF-device assignment',103,'delete_vrfdeviceassignment'),(366,'Can view VRF-device assignment',103,'view_vrfdeviceassignment'),(367,'Can add namespace',104,'add_namespace'),(368,'Can change namespace',104,'change_namespace'),(369,'Can delete namespace',104,'delete_namespace'),(370,'Can view namespace',104,'view_namespace'),(371,'Can add vlan location assignment',105,'add_vlanlocationassignment'),(372,'Can change vlan location assignment',105,'change_vlanlocationassignment'),(373,'Can delete vlan location assignment',105,'delete_vlanlocationassignment'),(374,'Can view vlan location assignment',105,'view_vlanlocationassignment'),(375,'Can add prefix location assignment',106,'add_prefixlocationassignment'),(376,'Can change prefix location assignment',106,'change_prefixlocationassignment'),(377,'Can delete prefix location assignment',106,'delete_prefixlocationassignment'),(378,'Can view prefix location assignment',106,'view_prefixlocationassignment'),(379,'Can add config context',107,'add_configcontext'),(380,'Can change config context',107,'change_configcontext'),(381,'Can delete config context',107,'delete_configcontext'),(382,'Can view config context',107,'view_configcontext'),(383,'Can add custom field',10,'add_customfield'),(384,'Can change custom field',10,'change_customfield'),(385,'Can delete custom field',10,'delete_customfield'),(386,'Can view custom field',10,'view_customfield'),(387,'Can add custom field choice',108,'add_customfieldchoice'),(388,'Can change custom field choice',108,'change_customfieldchoice'),(389,'Can delete custom field choice',108,'delete_customfieldchoice'),(390,'Can view custom field choice',108,'view_customfieldchoice'),(391,'Can add custom link',109,'add_customlink'),(392,'Can change custom link',109,'change_customlink'),(393,'Can delete custom link',109,'delete_customlink'),(394,'Can view custom link',109,'view_customlink'),(395,'Can add export template',110,'add_exporttemplate'),(396,'Can change export template',110,'change_exporttemplate'),(397,'Can delete export template',110,'delete_exporttemplate'),(398,'Can view export template',110,'view_exporttemplate'),(399,'Can add Git repository',111,'add_gitrepository'),(400,'Can change Git repository',111,'change_gitrepository'),(401,'Can delete Git repository',111,'delete_gitrepository'),(402,'Can view Git repository',111,'view_gitrepository'),(403,'Can add image attachment',112,'add_imageattachment'),(404,'Can change image attachment',112,'change_imageattachment'),(405,'Can delete image attachment',112,'delete_imageattachment'),(406,'Can view image attachment',112,'view_imageattachment'),(407,'Can add job result',113,'add_jobresult'),(408,'Can change job result',113,'change_jobresult'),(409,'Can delete job result',113,'delete_jobresult'),(410,'Can view job result',113,'view_jobresult'),(411,'Can add relationship',114,'add_relationship'),(412,'Can change relationship',114,'change_relationship'),(413,'Can delete relationship',114,'delete_relationship'),(414,'Can view relationship',114,'view_relationship'),(415,'Can add tag',115,'add_tag'),(416,'Can change tag',115,'change_tag'),(417,'Can delete tag',115,'delete_tag'),(418,'Can view tag',115,'view_tag'),(419,'Can add webhook',116,'add_webhook'),(420,'Can change webhook',116,'change_webhook'),(421,'Can delete webhook',116,'delete_webhook'),(422,'Can view webhook',116,'view_webhook'),(423,'Can add tagged item',117,'add_taggeditem'),(424,'Can change tagged item',117,'change_taggeditem'),(425,'Can delete tagged item',117,'delete_taggeditem'),(426,'Can view tagged item',117,'view_taggeditem'),(427,'Can add status',118,'add_status'),(428,'Can change status',118,'change_status'),(429,'Can delete status',118,'delete_status'),(430,'Can view status',118,'view_status'),(431,'Can add relationship association',119,'add_relationshipassociation'),(432,'Can change relationship association',119,'change_relationshipassociation'),(433,'Can delete relationship association',119,'delete_relationshipassociation'),(434,'Can view relationship association',119,'view_relationshipassociation'),(435,'Can add object change',120,'add_objectchange'),(436,'Can change object change',120,'change_objectchange'),(437,'Can delete object change',120,'delete_objectchange'),(438,'Can view object change',120,'view_objectchange'),(439,'Can add GraphQL query',121,'add_graphqlquery'),(440,'Can change GraphQL query',121,'change_graphqlquery'),(441,'Can delete GraphQL query',121,'delete_graphqlquery'),(442,'Can view GraphQL query',121,'view_graphqlquery'),(443,'Can add config context schema',122,'add_configcontextschema'),(444,'Can change config context schema',122,'change_configcontextschema'),(445,'Can delete config context schema',122,'delete_configcontextschema'),(446,'Can view config context schema',122,'view_configcontextschema'),(447,'Can add computed field',123,'add_computedfield'),(448,'Can change computed field',123,'change_computedfield'),(449,'Can delete computed field',123,'delete_computedfield'),(450,'Can view computed field',123,'view_computedfield'),(451,'Can add file attachment',124,'add_fileattachment'),(452,'Can change file attachment',124,'change_fileattachment'),(453,'Can delete file attachment',124,'delete_fileattachment'),(454,'Can view file attachment',124,'view_fileattachment'),(455,'Can add file proxy',125,'add_fileproxy'),(456,'Can change file proxy',125,'change_fileproxy'),(457,'Can delete file proxy',125,'delete_fileproxy'),(458,'Can view file proxy',125,'view_fileproxy'),(459,'Can add health check test model',126,'add_healthchecktestmodel'),(460,'Can change health check test model',126,'change_healthchecktestmodel'),(461,'Can delete health check test model',126,'delete_healthchecktestmodel'),(462,'Can view health check test model',126,'view_healthchecktestmodel'),(463,'Can add scheduled jobs',127,'add_scheduledjobs'),(464,'Can change scheduled jobs',127,'change_scheduledjobs'),(465,'Can delete scheduled jobs',127,'delete_scheduledjobs'),(466,'Can view scheduled jobs',127,'view_scheduledjobs'),(467,'Can add scheduled job',128,'add_scheduledjob'),(468,'Can change scheduled job',128,'change_scheduledjob'),(469,'Can delete scheduled job',128,'delete_scheduledjob'),(470,'Can view scheduled job',128,'view_scheduledjob'),(471,'Can add secret',129,'add_secret'),(472,'Can change secret',129,'change_secret'),(473,'Can delete secret',129,'delete_secret'),(474,'Can view secret',129,'view_secret'),(475,'Can add secrets group',130,'add_secretsgroup'),(476,'Can change secrets group',130,'change_secretsgroup'),(477,'Can delete secrets group',130,'delete_secretsgroup'),(478,'Can view secrets group',130,'view_secretsgroup'),(479,'Can add secrets group association',131,'add_secretsgroupassociation'),(480,'Can change secrets group association',131,'change_secretsgroupassociation'),(481,'Can delete secrets group association',131,'delete_secretsgroupassociation'),(482,'Can view secrets group association',131,'view_secretsgroupassociation'),(483,'Can add job log entry',132,'add_joblogentry'),(484,'Can change job log entry',132,'change_joblogentry'),(485,'Can delete job log entry',132,'delete_joblogentry'),(486,'Can view job log entry',132,'view_joblogentry'),(487,'Can add job',11,'add_job'),(488,'Can change job',11,'change_job'),(489,'Can delete job',11,'delete_job'),(490,'Can view job',11,'view_job'),(491,'Can add dynamic group',42,'add_dynamicgroup'),(492,'Can change dynamic group',42,'change_dynamicgroup'),(493,'Can delete dynamic group',42,'delete_dynamicgroup'),(494,'Can view dynamic group',42,'view_dynamicgroup'),(495,'Can add dynamic group membership',133,'add_dynamicgroupmembership'),(496,'Can change dynamic group membership',133,'change_dynamicgroupmembership'),(497,'Can delete dynamic group membership',133,'delete_dynamicgroupmembership'),(498,'Can view dynamic group membership',133,'view_dynamicgroupmembership'),(499,'Can add note',134,'add_note'),(500,'Can change note',134,'change_note'),(501,'Can delete note',134,'delete_note'),(502,'Can view note',134,'view_note'),(503,'Can add job hook',135,'add_jobhook'),(504,'Can change job hook',135,'change_jobhook'),(505,'Can delete job hook',135,'delete_jobhook'),(506,'Can view job hook',135,'view_jobhook'),(507,'Can add job button',136,'add_jobbutton'),(508,'Can change job button',136,'change_jobbutton'),(509,'Can delete job button',136,'delete_jobbutton'),(510,'Can view job button',136,'view_jobbutton'),(511,'Can add role',16,'add_role'),(512,'Can change role',16,'change_role'),(513,'Can delete role',16,'delete_role'),(514,'Can view role',16,'view_role'),(515,'Can add external integration',137,'add_externalintegration'),(516,'Can change external integration',137,'change_externalintegration'),(517,'Can delete external integration',137,'delete_externalintegration'),(518,'Can view external integration',137,'view_externalintegration'),(519,'Can add contact',138,'add_contact'),(520,'Can change contact',138,'change_contact'),(521,'Can delete contact',138,'delete_contact'),(522,'Can view contact',138,'view_contact'),(523,'Can add team',139,'add_team'),(524,'Can change team',139,'change_team'),(525,'Can delete team',139,'delete_team'),(526,'Can view team',139,'view_team'),(527,'Can add contact association',23,'add_contactassociation'),(528,'Can change contact association',23,'change_contactassociation'),(529,'Can delete contact association',23,'delete_contactassociation'),(530,'Can view contact association',23,'view_contactassociation'),(531,'Can add static group association',140,'add_staticgroupassociation'),(532,'Can change static group association',140,'change_staticgroupassociation'),(533,'Can delete static group association',140,'delete_staticgroupassociation'),(534,'Can view static group association',140,'view_staticgroupassociation'),(535,'Can add metadata type',141,'add_metadatatype'),(536,'Can change metadata type',141,'change_metadatatype'),(537,'Can delete metadata type',141,'delete_metadatatype'),(538,'Can view metadata type',141,'view_metadatatype'),(539,'Can add object metadata',142,'add_objectmetadata'),(540,'Can change object metadata',142,'change_objectmetadata'),(541,'Can delete object metadata',142,'delete_objectmetadata'),(542,'Can view object metadata',142,'view_objectmetadata'),(543,'Can add metadata choice',143,'add_metadatachoice'),(544,'Can change metadata choice',143,'change_metadatachoice'),(545,'Can delete metadata choice',143,'delete_metadatachoice'),(546,'Can view metadata choice',143,'view_metadatachoice'),(547,'Can add saved view',144,'add_savedview'),(548,'Can change saved view',144,'change_savedview'),(549,'Can delete saved view',144,'delete_savedview'),(550,'Can view saved view',144,'view_savedview'),(551,'Can add user saved view association',145,'add_usersavedviewassociation'),(552,'Can change user saved view association',145,'change_usersavedviewassociation'),(553,'Can delete user saved view association',145,'delete_usersavedviewassociation'),(554,'Can view user saved view association',145,'view_usersavedviewassociation'),(555,'Can add job queue',146,'add_jobqueue'),(556,'Can change job queue',146,'change_jobqueue'),(557,'Can delete job queue',146,'delete_jobqueue'),(558,'Can view job queue',146,'view_jobqueue'),(559,'Can add job queue assignment',147,'add_jobqueueassignment'),(560,'Can change job queue assignment',147,'change_jobqueueassignment'),(561,'Can delete job queue assignment',147,'delete_jobqueueassignment'),(562,'Can view job queue assignment',147,'view_jobqueueassignment'),(563,'Can add tenant group',148,'add_tenantgroup'),(564,'Can change tenant group',148,'change_tenantgroup'),(565,'Can delete tenant group',148,'delete_tenantgroup'),(566,'Can view tenant group',148,'view_tenantgroup'),(567,'Can add tenant',149,'add_tenant'),(568,'Can change tenant',149,'change_tenant'),(569,'Can delete tenant',149,'delete_tenant'),(570,'Can view tenant',149,'view_tenant'),(571,'Can add user',150,'add_user'),(572,'Can change user',150,'change_user'),(573,'Can delete user',150,'delete_user'),(574,'Can view user',150,'view_user'),(575,'Can add Group',151,'add_admingroup'),(576,'Can change Group',151,'change_admingroup'),(577,'Can delete Group',151,'delete_admingroup'),(578,'Can view Group',151,'view_admingroup'),(579,'Can add token',152,'add_token'),(580,'Can change token',152,'change_token'),(581,'Can delete token',152,'delete_token'),(582,'Can view token',152,'view_token'),(583,'Can add permission',153,'add_objectpermission'),(584,'Can change permission',153,'change_objectpermission'),(585,'Can delete permission',153,'delete_objectpermission'),(586,'Can view permission',153,'view_objectpermission'),(587,'Can add cluster',154,'add_cluster'),(588,'Can change cluster',154,'change_cluster'),(589,'Can delete cluster',154,'delete_cluster'),(590,'Can view cluster',154,'view_cluster'),(591,'Can add cluster group',155,'add_clustergroup'),(592,'Can change cluster group',155,'change_clustergroup'),(593,'Can delete cluster group',155,'delete_clustergroup'),(594,'Can view cluster group',155,'view_clustergroup'),(595,'Can add cluster type',156,'add_clustertype'),(596,'Can change cluster type',156,'change_clustertype'),(597,'Can delete cluster type',156,'delete_clustertype'),(598,'Can view cluster type',156,'view_clustertype'),(599,'Can add virtual machine',9,'add_virtualmachine'),(600,'Can change virtual machine',9,'change_virtualmachine'),(601,'Can delete virtual machine',9,'delete_virtualmachine'),(602,'Can view virtual machine',9,'view_virtualmachine'),(603,'Can add VM interface',12,'add_vminterface'),(604,'Can change VM interface',12,'change_vminterface'),(605,'Can delete VM interface',12,'delete_vminterface'),(606,'Can view VM interface',12,'view_vminterface'),(607,'Can add wireless network',157,'add_wirelessnetwork'),(608,'Can change wireless network',157,'change_wirelessnetwork'),(609,'Can delete wireless network',157,'delete_wirelessnetwork'),(610,'Can view wireless network',157,'view_wirelessnetwork'),(611,'Can add supported data rate',158,'add_supporteddatarate'),(612,'Can change supported data rate',158,'change_supporteddatarate'),(613,'Can delete supported data rate',158,'delete_supporteddatarate'),(614,'Can view supported data rate',158,'view_supporteddatarate'),(615,'Can add radio profile',159,'add_radioprofile'),(616,'Can change radio profile',159,'change_radioprofile'),(617,'Can delete radio profile',159,'delete_radioprofile'),(618,'Can view radio profile',159,'view_radioprofile'),(619,'Can add controller managed device group wireless network assignment',160,'add_controllermanageddevicegroupwirelessnetworkassignment'),(620,'Can change controller managed device group wireless network assignment',160,'change_controllermanageddevicegroupwirelessnetworkassignment'),(621,'Can delete controller managed device group wireless network assignment',160,'delete_controllermanageddevicegroupwirelessnetworkassignment'),(622,'Can view controller managed device group wireless network assignment',160,'view_controllermanageddevicegroupwirelessnetworkassignment'),(623,'Can add controller managed device group radio profile assignment',161,'add_controllermanageddevicegroupradioprofileassignment'),(624,'Can change controller managed device group radio profile assignment',161,'change_controllermanageddevicegroupradioprofileassignment'),(625,'Can delete controller managed device group radio profile assignment',161,'delete_controllermanageddevicegroupradioprofileassignment'),(626,'Can view controller managed device group radio profile assignment',161,'view_controllermanageddevicegroupradioprofileassignment'),(627,'Can add profile',162,'add_profile'),(628,'Can change profile',162,'change_profile'),(629,'Can delete profile',162,'delete_profile'),(630,'Can view profile',162,'view_profile'),(631,'Can add request',163,'add_request'),(632,'Can change request',163,'change_request'),(633,'Can delete request',163,'delete_request'),(634,'Can view request',163,'view_request'),(635,'Can add response',164,'add_response'),(636,'Can change response',164,'change_response'),(637,'Can delete response',164,'delete_response'),(638,'Can view response',164,'view_response'),(639,'Can add sql query',165,'add_sqlquery'),(640,'Can change sql query',165,'change_sqlquery'),(641,'Can delete sql query',165,'delete_sqlquery'),(642,'Can view sql query',165,'view_sqlquery');
+INSERT INTO `auth_permission` VALUES (1,'Can add permission',39,'add_permission'),(2,'Can change permission',39,'change_permission'),(3,'Can delete permission',39,'delete_permission'),(4,'Can view permission',39,'view_permission'),(5,'Can add group',40,'add_group'),(6,'Can change group',40,'change_group'),(7,'Can delete group',40,'delete_group'),(8,'Can view group',40,'view_group'),(9,'Can add content type',41,'add_contenttype'),(10,'Can change content type',41,'change_contenttype'),(11,'Can delete content type',41,'delete_contenttype'),(12,'Can view content type',41,'view_contenttype'),(13,'Can add session',42,'add_session'),(14,'Can change session',42,'change_session'),(15,'Can delete session',42,'delete_session'),(16,'Can view session',42,'view_session'),(17,'Can add association',43,'add_association'),(18,'Can change association',43,'change_association'),(19,'Can delete association',43,'delete_association'),(20,'Can view association',43,'view_association'),(21,'Can add code',44,'add_code'),(22,'Can change code',44,'change_code'),(23,'Can delete code',44,'delete_code'),(24,'Can view code',44,'view_code'),(25,'Can add nonce',45,'add_nonce'),(26,'Can change nonce',45,'change_nonce'),(27,'Can delete nonce',45,'delete_nonce'),(28,'Can view nonce',45,'view_nonce'),(29,'Can add user social auth',46,'add_usersocialauth'),(30,'Can change user social auth',46,'change_usersocialauth'),(31,'Can delete user social auth',46,'delete_usersocialauth'),(32,'Can view user social auth',46,'view_usersocialauth'),(33,'Can add partial',47,'add_partial'),(34,'Can change partial',47,'change_partial'),(35,'Can delete partial',47,'delete_partial'),(36,'Can view partial',47,'view_partial'),(37,'Can add tag',48,'add_tag'),(38,'Can change tag',48,'change_tag'),(39,'Can delete tag',48,'delete_tag'),(40,'Can view tag',48,'view_tag'),(41,'Can add tagged item',49,'add_taggeditem'),(42,'Can change tagged item',49,'change_taggeditem'),(43,'Can delete tagged item',49,'delete_taggeditem'),(44,'Can view tagged item',49,'view_taggeditem'),(45,'Can add constance',50,'add_constance'),(46,'Can change constance',50,'change_constance'),(47,'Can delete constance',50,'delete_constance'),(48,'Can view constance',50,'view_constance'),(49,'Can change config',50,'change_config'),(50,'Can view config',50,'view_config'),(51,'Can add log entry',52,'add_logentry'),(52,'Can change log entry',52,'change_logentry'),(53,'Can delete log entry',52,'delete_logentry'),(54,'Can view log entry',52,'view_logentry'),(55,'Can add crontab',53,'add_crontabschedule'),(56,'Can change crontab',53,'change_crontabschedule'),(57,'Can delete crontab',53,'delete_crontabschedule'),(58,'Can view crontab',53,'view_crontabschedule'),(59,'Can add interval',54,'add_intervalschedule'),(60,'Can change interval',54,'change_intervalschedule'),(61,'Can delete interval',54,'delete_intervalschedule'),(62,'Can view interval',54,'view_intervalschedule'),(63,'Can add periodic task',55,'add_periodictask'),(64,'Can change periodic task',55,'change_periodictask'),(65,'Can delete periodic task',55,'delete_periodictask'),(66,'Can view periodic task',55,'view_periodictask'),(67,'Can add periodic task track',56,'add_periodictasks'),(68,'Can change periodic task track',56,'change_periodictasks'),(69,'Can delete periodic task track',56,'delete_periodictasks'),(70,'Can view periodic task track',56,'view_periodictasks'),(71,'Can add solar event',57,'add_solarschedule'),(72,'Can change solar event',57,'change_solarschedule'),(73,'Can delete solar event',57,'delete_solarschedule'),(74,'Can view solar event',57,'view_solarschedule'),(75,'Can add clocked',58,'add_clockedschedule'),(76,'Can change clocked',58,'change_clockedschedule'),(77,'Can delete clocked',58,'delete_clockedschedule'),(78,'Can view clocked',58,'view_clockedschedule'),(79,'Can add task result',59,'add_taskresult'),(80,'Can change task result',59,'change_taskresult'),(81,'Can delete task result',59,'delete_taskresult'),(82,'Can view task result',59,'view_taskresult'),(83,'Can add chord counter',60,'add_chordcounter'),(84,'Can change chord counter',60,'change_chordcounter'),(85,'Can delete chord counter',60,'delete_chordcounter'),(86,'Can view chord counter',60,'view_chordcounter'),(87,'Can add group result',61,'add_groupresult'),(88,'Can change group result',61,'change_groupresult'),(89,'Can delete group result',61,'delete_groupresult'),(90,'Can view group result',61,'view_groupresult'),(91,'Can add circuit',1,'add_circuit'),(92,'Can change circuit',1,'change_circuit'),(93,'Can delete circuit',1,'delete_circuit'),(94,'Can view circuit',1,'view_circuit'),(95,'Can add circuit termination',62,'add_circuittermination'),(96,'Can change circuit termination',62,'change_circuittermination'),(97,'Can delete circuit termination',62,'delete_circuittermination'),(98,'Can view circuit termination',62,'view_circuittermination'),(99,'Can add circuit type',63,'add_circuittype'),(100,'Can change circuit type',63,'change_circuittype'),(101,'Can delete circuit type',63,'delete_circuittype'),(102,'Can view circuit type',63,'view_circuittype'),(103,'Can add provider',64,'add_provider'),(104,'Can change provider',64,'change_provider'),(105,'Can delete provider',64,'delete_provider'),(106,'Can view provider',64,'view_provider'),(107,'Can add provider network',65,'add_providernetwork'),(108,'Can change provider network',65,'change_providernetwork'),(109,'Can delete provider network',65,'delete_providernetwork'),(110,'Can view provider network',65,'view_providernetwork'),(111,'Can add cloud account',66,'add_cloudaccount'),(112,'Can change cloud account',66,'change_cloudaccount'),(113,'Can delete cloud account',66,'delete_cloudaccount'),(114,'Can view cloud account',66,'view_cloudaccount'),(115,'Can add cloud network',67,'add_cloudnetwork'),(116,'Can change cloud network',67,'change_cloudnetwork'),(117,'Can delete cloud network',67,'delete_cloudnetwork'),(118,'Can view cloud network',67,'view_cloudnetwork'),(119,'Can add cloud resource type',68,'add_cloudresourcetype'),(120,'Can change cloud resource type',68,'change_cloudresourcetype'),(121,'Can delete cloud resource type',68,'delete_cloudresourcetype'),(122,'Can view cloud resource type',68,'view_cloudresourcetype'),(123,'Can add cloud service',69,'add_cloudservice'),(124,'Can change cloud service',69,'change_cloudservice'),(125,'Can delete cloud service',69,'delete_cloudservice'),(126,'Can view cloud service',69,'view_cloudservice'),(127,'Can add cloud network prefix assignment',70,'add_cloudnetworkprefixassignment'),(128,'Can change cloud network prefix assignment',70,'change_cloudnetworkprefixassignment'),(129,'Can delete cloud network prefix assignment',70,'delete_cloudnetworkprefixassignment'),(130,'Can view cloud network prefix assignment',70,'view_cloudnetworkprefixassignment'),(131,'Can add cloud service network assignment',71,'add_cloudservicenetworkassignment'),(132,'Can change cloud service network assignment',71,'change_cloudservicenetworkassignment'),(133,'Can delete cloud service network assignment',71,'delete_cloudservicenetworkassignment'),(134,'Can view cloud service network assignment',71,'view_cloudservicenetworkassignment'),(135,'Can add unique validation rule',72,'add_uniquevalidationrule'),(136,'Can change unique validation rule',72,'change_uniquevalidationrule'),(137,'Can delete unique validation rule',72,'delete_uniquevalidationrule'),(138,'Can view unique validation rule',72,'view_uniquevalidationrule'),(139,'Can add required validation rule',73,'add_requiredvalidationrule'),(140,'Can change required validation rule',73,'change_requiredvalidationrule'),(141,'Can delete required validation rule',73,'delete_requiredvalidationrule'),(142,'Can view required validation rule',73,'view_requiredvalidationrule'),(143,'Can add regular expression validation rule',74,'add_regularexpressionvalidationrule'),(144,'Can change regular expression validation rule',74,'change_regularexpressionvalidationrule'),(145,'Can delete regular expression validation rule',74,'delete_regularexpressionvalidationrule'),(146,'Can view regular expression validation rule',74,'view_regularexpressionvalidationrule'),(147,'Can add min max validation rule',75,'add_minmaxvalidationrule'),(148,'Can change min max validation rule',75,'change_minmaxvalidationrule'),(149,'Can delete min max validation rule',75,'delete_minmaxvalidationrule'),(150,'Can view min max validation rule',75,'view_minmaxvalidationrule'),(151,'Can add data compliance',76,'add_datacompliance'),(152,'Can change data compliance',76,'change_datacompliance'),(153,'Can delete data compliance',76,'delete_datacompliance'),(154,'Can view data compliance',76,'view_datacompliance'),(155,'Can add cable',2,'add_cable'),(156,'Can change cable',2,'change_cable'),(157,'Can delete cable',2,'delete_cable'),(158,'Can view cable',2,'view_cable'),(159,'Can add cable path',77,'add_cablepath'),(160,'Can change cable path',77,'change_cablepath'),(161,'Can delete cable path',77,'delete_cablepath'),(162,'Can view cable path',77,'view_cablepath'),(163,'Can add console port',78,'add_consoleport'),(164,'Can change console port',78,'change_consoleport'),(165,'Can delete console port',78,'delete_consoleport'),(166,'Can view console port',78,'view_consoleport'),(167,'Can add console port template',79,'add_consoleporttemplate'),(168,'Can change console port template',79,'change_consoleporttemplate'),(169,'Can delete console port template',79,'delete_consoleporttemplate'),(170,'Can view console port template',79,'view_consoleporttemplate'),(171,'Can add console server port',80,'add_consoleserverport'),(172,'Can change console server port',80,'change_consoleserverport'),(173,'Can delete console server port',80,'delete_consoleserverport'),(174,'Can view console server port',80,'view_consoleserverport'),(175,'Can add console server port template',81,'add_consoleserverporttemplate'),(176,'Can change console server port template',81,'change_consoleserverporttemplate'),(177,'Can delete console server port template',81,'delete_consoleserverporttemplate'),(178,'Can view console server port template',81,'view_consoleserverporttemplate'),(179,'Can add device',3,'add_device'),(180,'Can change device',3,'change_device'),(181,'Can delete device',3,'delete_device'),(182,'Can view device',3,'view_device'),(183,'Can add device bay',82,'add_devicebay'),(184,'Can change device bay',82,'change_devicebay'),(185,'Can delete device bay',82,'delete_devicebay'),(186,'Can view device bay',82,'view_devicebay'),(187,'Can add device bay template',83,'add_devicebaytemplate'),(188,'Can change device bay template',83,'change_devicebaytemplate'),(189,'Can delete device bay template',83,'delete_devicebaytemplate'),(190,'Can view device bay template',83,'view_devicebaytemplate'),(191,'Can add device type',84,'add_devicetype'),(192,'Can change device type',84,'change_devicetype'),(193,'Can delete device type',84,'delete_devicetype'),(194,'Can view device type',84,'view_devicetype'),(195,'Can add front port',85,'add_frontport'),(196,'Can change front port',85,'change_frontport'),(197,'Can delete front port',85,'delete_frontport'),(198,'Can view front port',85,'view_frontport'),(199,'Can add front port template',86,'add_frontporttemplate'),(200,'Can change front port template',86,'change_frontporttemplate'),(201,'Can delete front port template',86,'delete_frontporttemplate'),(202,'Can view front port template',86,'view_frontporttemplate'),(203,'Can add interface',13,'add_interface'),(204,'Can change interface',13,'change_interface'),(205,'Can delete interface',13,'delete_interface'),(206,'Can view interface',13,'view_interface'),(207,'Can add interface template',87,'add_interfacetemplate'),(208,'Can change interface template',87,'change_interfacetemplate'),(209,'Can delete interface template',87,'delete_interfacetemplate'),(210,'Can view interface template',87,'view_interfacetemplate'),(211,'Can add inventory item',88,'add_inventoryitem'),(212,'Can change inventory item',88,'change_inventoryitem'),(213,'Can delete inventory item',88,'delete_inventoryitem'),(214,'Can view inventory item',88,'view_inventoryitem'),(215,'Can add manufacturer',89,'add_manufacturer'),(216,'Can change manufacturer',89,'change_manufacturer'),(217,'Can delete manufacturer',89,'delete_manufacturer'),(218,'Can view manufacturer',89,'view_manufacturer'),(219,'Can add platform',90,'add_platform'),(220,'Can change platform',90,'change_platform'),(221,'Can delete platform',90,'delete_platform'),(222,'Can view platform',90,'view_platform'),(223,'Can add power feed',4,'add_powerfeed'),(224,'Can change power feed',4,'change_powerfeed'),(225,'Can delete power feed',4,'delete_powerfeed'),(226,'Can view power feed',4,'view_powerfeed'),(227,'Can add power outlet',91,'add_poweroutlet'),(228,'Can change power outlet',91,'change_poweroutlet'),(229,'Can delete power outlet',91,'delete_poweroutlet'),(230,'Can view power outlet',91,'view_poweroutlet'),(231,'Can add power outlet template',92,'add_poweroutlettemplate'),(232,'Can change power outlet template',92,'change_poweroutlettemplate'),(233,'Can delete power outlet template',92,'delete_poweroutlettemplate'),(234,'Can view power outlet template',92,'view_poweroutlettemplate'),(235,'Can add power panel',93,'add_powerpanel'),(236,'Can change power panel',93,'change_powerpanel'),(237,'Can delete power panel',93,'delete_powerpanel'),(238,'Can view power panel',93,'view_powerpanel'),(239,'Can add power port',94,'add_powerport'),(240,'Can change power port',94,'change_powerport'),(241,'Can delete power port',94,'delete_powerport'),(242,'Can view power port',94,'view_powerport'),(243,'Can add power port template',95,'add_powerporttemplate'),(244,'Can change power port template',95,'change_powerporttemplate'),(245,'Can delete power port template',95,'delete_powerporttemplate'),(246,'Can view power port template',95,'view_powerporttemplate'),(247,'Can add rack',5,'add_rack'),(248,'Can change rack',5,'change_rack'),(249,'Can delete rack',5,'delete_rack'),(250,'Can view rack',5,'view_rack'),(251,'Can add rack group',96,'add_rackgroup'),(252,'Can change rack group',96,'change_rackgroup'),(253,'Can delete rack group',96,'delete_rackgroup'),(254,'Can view rack group',96,'view_rackgroup'),(255,'Can add rack reservation',97,'add_rackreservation'),(256,'Can change rack reservation',97,'change_rackreservation'),(257,'Can delete rack reservation',97,'delete_rackreservation'),(258,'Can view rack reservation',97,'view_rackreservation'),(259,'Can add rear port',98,'add_rearport'),(260,'Can change rear port',98,'change_rearport'),(261,'Can delete rear port',98,'delete_rearport'),(262,'Can view rear port',98,'view_rearport'),(263,'Can add rear port template',99,'add_rearporttemplate'),(264,'Can change rear port template',99,'change_rearporttemplate'),(265,'Can delete rear port template',99,'delete_rearporttemplate'),(266,'Can view rear port template',99,'view_rearporttemplate'),(267,'Can add virtual chassis',100,'add_virtualchassis'),(268,'Can change virtual chassis',100,'change_virtualchassis'),(269,'Can delete virtual chassis',100,'delete_virtualchassis'),(270,'Can view virtual chassis',100,'view_virtualchassis'),(271,'Can add location type',101,'add_locationtype'),(272,'Can change location type',101,'change_locationtype'),(273,'Can delete location type',101,'delete_locationtype'),(274,'Can view location type',101,'view_locationtype'),(275,'Can add location',14,'add_location'),(276,'Can change location',14,'change_location'),(277,'Can delete location',14,'delete_location'),(278,'Can view location',14,'view_location'),(279,'Can add device redundancy group',19,'add_deviceredundancygroup'),(280,'Can change device redundancy group',19,'change_deviceredundancygroup'),(281,'Can delete device redundancy group',19,'delete_deviceredundancygroup'),(282,'Can view device redundancy group',19,'view_deviceredundancygroup'),(283,'Can add interface redundancy group',20,'add_interfaceredundancygroup'),(284,'Can change interface redundancy group',20,'change_interfaceredundancygroup'),(285,'Can delete interface redundancy group',20,'delete_interfaceredundancygroup'),(286,'Can view interface redundancy group',20,'view_interfaceredundancygroup'),(287,'Can add interface redundancy group association',102,'add_interfaceredundancygroupassociation'),(288,'Can change interface redundancy group association',102,'change_interfaceredundancygroupassociation'),(289,'Can delete interface redundancy group association',102,'delete_interfaceredundancygroupassociation'),(290,'Can view interface redundancy group association',102,'view_interfaceredundancygroupassociation'),(291,'Can add device family',103,'add_devicefamily'),(292,'Can change device family',103,'change_devicefamily'),(293,'Can delete device family',103,'delete_devicefamily'),(294,'Can view device family',103,'view_devicefamily'),(295,'Can add software version',25,'add_softwareversion'),(296,'Can change software version',25,'change_softwareversion'),(297,'Can delete software version',25,'delete_softwareversion'),(298,'Can view software version',25,'view_softwareversion'),(299,'Can add software image file',24,'add_softwareimagefile'),(300,'Can change software image file',24,'change_softwareimagefile'),(301,'Can delete software image file',24,'delete_softwareimagefile'),(302,'Can view software image file',24,'view_softwareimagefile'),(303,'Can add device type to software image file mapping',104,'add_devicetypetosoftwareimagefile'),(304,'Can change device type to software image file mapping',104,'change_devicetypetosoftwareimagefile'),(305,'Can delete device type to software image file mapping',104,'delete_devicetypetosoftwareimagefile'),(306,'Can view device type to software image file mapping',104,'view_devicetypetosoftwareimagefile'),(307,'Can add controller',26,'add_controller'),(308,'Can change controller',26,'change_controller'),(309,'Can delete controller',26,'delete_controller'),(310,'Can view controller',26,'view_controller'),(311,'Can add controller managed device group',105,'add_controllermanageddevicegroup'),(312,'Can change controller managed device group',105,'change_controllermanageddevicegroup'),(313,'Can delete controller managed device group',105,'delete_controllermanageddevicegroup'),(314,'Can view controller managed device group',105,'view_controllermanageddevicegroup'),(315,'Can add module',27,'add_module'),(316,'Can change module',27,'change_module'),(317,'Can delete module',27,'delete_module'),(318,'Can view module',27,'view_module'),(319,'Can add module bay',106,'add_modulebay'),(320,'Can change module bay',106,'change_modulebay'),(321,'Can delete module bay',106,'delete_modulebay'),(322,'Can view module bay',106,'view_modulebay'),(323,'Can add module bay template',107,'add_modulebaytemplate'),(324,'Can change module bay template',107,'change_modulebaytemplate'),(325,'Can delete module bay template',107,'delete_modulebaytemplate'),(326,'Can view module bay template',107,'view_modulebaytemplate'),(327,'Can add module type',108,'add_moduletype'),(328,'Can change module type',108,'change_moduletype'),(329,'Can delete module type',108,'delete_moduletype'),(330,'Can view module type',108,'view_moduletype'),(331,'Can add interface vdc assignment',109,'add_interfacevdcassignment'),(332,'Can change interface vdc assignment',109,'change_interfacevdcassignment'),(333,'Can delete interface vdc assignment',109,'delete_interfacevdcassignment'),(334,'Can view interface vdc assignment',109,'view_interfacevdcassignment'),(335,'Can add virtual device context',29,'add_virtualdevicecontext'),(336,'Can change virtual device context',29,'change_virtualdevicecontext'),(337,'Can delete virtual device context',29,'delete_virtualdevicecontext'),(338,'Can view virtual device context',29,'view_virtualdevicecontext'),(339,'Can add module family',110,'add_modulefamily'),(340,'Can change module family',110,'change_modulefamily'),(341,'Can delete module family',110,'delete_modulefamily'),(342,'Can view module family',110,'view_modulefamily'),(343,'Can add device cluster assignment',111,'add_deviceclusterassignment'),(344,'Can change device cluster assignment',111,'change_deviceclusterassignment'),(345,'Can delete device cluster assignment',111,'delete_deviceclusterassignment'),(346,'Can view device cluster assignment',111,'view_deviceclusterassignment'),(347,'Can add config context',112,'add_configcontext'),(348,'Can change config context',112,'change_configcontext'),(349,'Can delete config context',112,'delete_configcontext'),(350,'Can view config context',112,'view_configcontext'),(351,'Can add custom field',10,'add_customfield'),(352,'Can change custom field',10,'change_customfield'),(353,'Can delete custom field',10,'delete_customfield'),(354,'Can view custom field',10,'view_customfield'),(355,'Can add custom field choice',113,'add_customfieldchoice'),(356,'Can change custom field choice',113,'change_customfieldchoice'),(357,'Can delete custom field choice',113,'delete_customfieldchoice'),(358,'Can view custom field choice',113,'view_customfieldchoice'),(359,'Can add custom link',114,'add_customlink'),(360,'Can change custom link',114,'change_customlink'),(361,'Can delete custom link',114,'delete_customlink'),(362,'Can view custom link',114,'view_customlink'),(363,'Can add export template',115,'add_exporttemplate'),(364,'Can change export template',115,'change_exporttemplate'),(365,'Can delete export template',115,'delete_exporttemplate'),(366,'Can view export template',115,'view_exporttemplate'),(367,'Can add Git repository',116,'add_gitrepository'),(368,'Can change Git repository',116,'change_gitrepository'),(369,'Can delete Git repository',116,'delete_gitrepository'),(370,'Can view Git repository',116,'view_gitrepository'),(371,'Can add image attachment',117,'add_imageattachment'),(372,'Can change image attachment',117,'change_imageattachment'),(373,'Can delete image attachment',117,'delete_imageattachment'),(374,'Can view image attachment',117,'view_imageattachment'),(375,'Can add job result',118,'add_jobresult'),(376,'Can change job result',118,'change_jobresult'),(377,'Can delete job result',118,'delete_jobresult'),(378,'Can view job result',118,'view_jobresult'),(379,'Can add relationship',119,'add_relationship'),(380,'Can change relationship',119,'change_relationship'),(381,'Can delete relationship',119,'delete_relationship'),(382,'Can view relationship',119,'view_relationship'),(383,'Can add tag',120,'add_tag'),(384,'Can change tag',120,'change_tag'),(385,'Can delete tag',120,'delete_tag'),(386,'Can view tag',120,'view_tag'),(387,'Can add webhook',121,'add_webhook'),(388,'Can change webhook',121,'change_webhook'),(389,'Can delete webhook',121,'delete_webhook'),(390,'Can view webhook',121,'view_webhook'),(391,'Can add tagged item',122,'add_taggeditem'),(392,'Can change tagged item',122,'change_taggeditem'),(393,'Can delete tagged item',122,'delete_taggeditem'),(394,'Can view tagged item',122,'view_taggeditem'),(395,'Can add status',123,'add_status'),(396,'Can change status',123,'change_status'),(397,'Can delete status',123,'delete_status'),(398,'Can view status',123,'view_status'),(399,'Can add relationship association',124,'add_relationshipassociation'),(400,'Can change relationship association',124,'change_relationshipassociation'),(401,'Can delete relationship association',124,'delete_relationshipassociation'),(402,'Can view relationship association',124,'view_relationshipassociation'),(403,'Can add object change',125,'add_objectchange'),(404,'Can change object change',125,'change_objectchange'),(405,'Can delete object change',125,'delete_objectchange'),(406,'Can view object change',125,'view_objectchange'),(407,'Can add GraphQL query',126,'add_graphqlquery'),(408,'Can change GraphQL query',126,'change_graphqlquery'),(409,'Can delete GraphQL query',126,'delete_graphqlquery'),(410,'Can view GraphQL query',126,'view_graphqlquery'),(411,'Can add config context schema',127,'add_configcontextschema'),(412,'Can change config context schema',127,'change_configcontextschema'),(413,'Can delete config context schema',127,'delete_configcontextschema'),(414,'Can view config context schema',127,'view_configcontextschema'),(415,'Can add computed field',128,'add_computedfield'),(416,'Can change computed field',128,'change_computedfield'),(417,'Can delete computed field',128,'delete_computedfield'),(418,'Can view computed field',128,'view_computedfield'),(419,'Can add file attachment',129,'add_fileattachment'),(420,'Can change file attachment',129,'change_fileattachment'),(421,'Can delete file attachment',129,'delete_fileattachment'),(422,'Can view file attachment',129,'view_fileattachment'),(423,'Can add file proxy',130,'add_fileproxy'),(424,'Can change file proxy',130,'change_fileproxy'),(425,'Can delete file proxy',130,'delete_fileproxy'),(426,'Can view file proxy',130,'view_fileproxy'),(427,'Can add health check test model',131,'add_healthchecktestmodel'),(428,'Can change health check test model',131,'change_healthchecktestmodel'),(429,'Can delete health check test model',131,'delete_healthchecktestmodel'),(430,'Can view health check test model',131,'view_healthchecktestmodel'),(431,'Can add scheduled jobs',132,'add_scheduledjobs'),(432,'Can change scheduled jobs',132,'change_scheduledjobs'),(433,'Can delete scheduled jobs',132,'delete_scheduledjobs'),(434,'Can view scheduled jobs',132,'view_scheduledjobs'),(435,'Can add scheduled job',35,'add_scheduledjob'),(436,'Can change scheduled job',35,'change_scheduledjob'),(437,'Can delete scheduled job',35,'delete_scheduledjob'),(438,'Can view scheduled job',35,'view_scheduledjob'),(439,'Can add secret',133,'add_secret'),(440,'Can change secret',133,'change_secret'),(441,'Can delete secret',133,'delete_secret'),(442,'Can view secret',133,'view_secret'),(443,'Can add secrets group',134,'add_secretsgroup'),(444,'Can change secrets group',134,'change_secretsgroup'),(445,'Can delete secrets group',134,'delete_secretsgroup'),(446,'Can view secrets group',134,'view_secretsgroup'),(447,'Can add secrets group association',135,'add_secretsgroupassociation'),(448,'Can change secrets group association',135,'change_secretsgroupassociation'),(449,'Can delete secrets group association',135,'delete_secretsgroupassociation'),(450,'Can view secrets group association',135,'view_secretsgroupassociation'),(451,'Can add job log entry',136,'add_joblogentry'),(452,'Can change job log entry',136,'change_joblogentry'),(453,'Can delete job log entry',136,'delete_joblogentry'),(454,'Can view job log entry',136,'view_joblogentry'),(455,'Can add job',11,'add_job'),(456,'Can change job',11,'change_job'),(457,'Can delete job',11,'delete_job'),(458,'Can view job',11,'view_job'),(459,'Can add dynamic group',51,'add_dynamicgroup'),(460,'Can change dynamic group',51,'change_dynamicgroup'),(461,'Can delete dynamic group',51,'delete_dynamicgroup'),(462,'Can view dynamic group',51,'view_dynamicgroup'),(463,'Can add dynamic group membership',137,'add_dynamicgroupmembership'),(464,'Can change dynamic group membership',137,'change_dynamicgroupmembership'),(465,'Can delete dynamic group membership',137,'delete_dynamicgroupmembership'),(466,'Can view dynamic group membership',137,'view_dynamicgroupmembership'),(467,'Can add note',138,'add_note'),(468,'Can change note',138,'change_note'),(469,'Can delete note',138,'delete_note'),(470,'Can view note',138,'view_note'),(471,'Can add job hook',139,'add_jobhook'),(472,'Can change job hook',139,'change_jobhook'),(473,'Can delete job hook',139,'delete_jobhook'),(474,'Can view job hook',139,'view_jobhook'),(475,'Can add job button',140,'add_jobbutton'),(476,'Can change job button',140,'change_jobbutton'),(477,'Can delete job button',140,'delete_jobbutton'),(478,'Can view job button',140,'view_jobbutton'),(479,'Can add role',16,'add_role'),(480,'Can change role',16,'change_role'),(481,'Can delete role',16,'delete_role'),(482,'Can view role',16,'view_role'),(483,'Can add external integration',141,'add_externalintegration'),(484,'Can change external integration',141,'change_externalintegration'),(485,'Can delete external integration',141,'delete_externalintegration'),(486,'Can view external integration',141,'view_externalintegration'),(487,'Can add contact',142,'add_contact'),(488,'Can change contact',142,'change_contact'),(489,'Can delete contact',142,'delete_contact'),(490,'Can view contact',142,'view_contact'),(491,'Can add team',143,'add_team'),(492,'Can change team',143,'change_team'),(493,'Can delete team',143,'delete_team'),(494,'Can view team',143,'view_team'),(495,'Can add contact association',23,'add_contactassociation'),(496,'Can change contact association',23,'change_contactassociation'),(497,'Can delete contact association',23,'delete_contactassociation'),(498,'Can view contact association',23,'view_contactassociation'),(499,'Can add static group association',144,'add_staticgroupassociation'),(500,'Can change static group association',144,'change_staticgroupassociation'),(501,'Can delete static group association',144,'delete_staticgroupassociation'),(502,'Can view static group association',144,'view_staticgroupassociation'),(503,'Can add metadata type',145,'add_metadatatype'),(504,'Can change metadata type',145,'change_metadatatype'),(505,'Can delete metadata type',145,'delete_metadatatype'),(506,'Can view metadata type',145,'view_metadatatype'),(507,'Can add object metadata',146,'add_objectmetadata'),(508,'Can change object metadata',146,'change_objectmetadata'),(509,'Can delete object metadata',146,'delete_objectmetadata'),(510,'Can view object metadata',146,'view_objectmetadata'),(511,'Can add metadata choice',147,'add_metadatachoice'),(512,'Can change metadata choice',147,'change_metadatachoice'),(513,'Can delete metadata choice',147,'delete_metadatachoice'),(514,'Can view metadata choice',147,'view_metadatachoice'),(515,'Can add saved view',148,'add_savedview'),(516,'Can change saved view',148,'change_savedview'),(517,'Can delete saved view',148,'delete_savedview'),(518,'Can view saved view',148,'view_savedview'),(519,'Can add user saved view association',149,'add_usersavedviewassociation'),(520,'Can change user saved view association',149,'change_usersavedviewassociation'),(521,'Can delete user saved view association',149,'delete_usersavedviewassociation'),(522,'Can view user saved view association',149,'view_usersavedviewassociation'),(523,'Can add job queue',150,'add_jobqueue'),(524,'Can change job queue',150,'change_jobqueue'),(525,'Can delete job queue',150,'delete_jobqueue'),(526,'Can view job queue',150,'view_jobqueue'),(527,'Can add job queue assignment',151,'add_jobqueueassignment'),(528,'Can change job queue assignment',151,'change_jobqueueassignment'),(529,'Can delete job queue assignment',151,'delete_jobqueueassignment'),(530,'Can view job queue assignment',151,'view_jobqueueassignment'),(531,'Can add Approval Workflow',30,'add_approvalworkflow'),(532,'Can change Approval Workflow',30,'change_approvalworkflow'),(533,'Can delete Approval Workflow',30,'delete_approvalworkflow'),(534,'Can view Approval Workflow',30,'view_approvalworkflow'),(535,'Can add Approval Workflow Definition',33,'add_approvalworkflowdefinition'),(536,'Can change Approval Workflow Definition',33,'change_approvalworkflowdefinition'),(537,'Can delete Approval Workflow Definition',33,'delete_approvalworkflowdefinition'),(538,'Can view Approval Workflow Definition',33,'view_approvalworkflowdefinition'),(539,'Can add Approval Workflow Stage',31,'add_approvalworkflowstage'),(540,'Can change Approval Workflow Stage',31,'change_approvalworkflowstage'),(541,'Can delete Approval Workflow Stage',31,'delete_approvalworkflowstage'),(542,'Can view Approval Workflow Stage',31,'view_approvalworkflowstage'),(543,'Can add Approval Workflow Stage Response',32,'add_approvalworkflowstageresponse'),(544,'Can change Approval Workflow Stage Response',32,'change_approvalworkflowstageresponse'),(545,'Can delete Approval Workflow Stage Response',32,'delete_approvalworkflowstageresponse'),(546,'Can view Approval Workflow Stage Response',32,'view_approvalworkflowstageresponse'),(547,'Can add Approval Workflow Stage Definition',34,'add_approvalworkflowstagedefinition'),(548,'Can change Approval Workflow Stage Definition',34,'change_approvalworkflowstagedefinition'),(549,'Can delete Approval Workflow Stage Definition',34,'delete_approvalworkflowstagedefinition'),(550,'Can view Approval Workflow Stage Definition',34,'view_approvalworkflowstagedefinition'),(551,'Can add IP address',6,'add_ipaddress'),(552,'Can change IP address',6,'change_ipaddress'),(553,'Can delete IP address',6,'delete_ipaddress'),(554,'Can view IP address',6,'view_ipaddress'),(555,'Can add prefix',7,'add_prefix'),(556,'Can change prefix',7,'change_prefix'),(557,'Can delete prefix',7,'delete_prefix'),(558,'Can view prefix',7,'view_prefix'),(559,'Can add RIR',152,'add_rir'),(560,'Can change RIR',152,'change_rir'),(561,'Can delete RIR',152,'delete_rir'),(562,'Can view RIR',152,'view_rir'),(563,'Can add route target',153,'add_routetarget'),(564,'Can change route target',153,'change_routetarget'),(565,'Can delete route target',153,'delete_routetarget'),(566,'Can view route target',153,'view_routetarget'),(567,'Can add VRF',28,'add_vrf'),(568,'Can change VRF',28,'change_vrf'),(569,'Can delete VRF',28,'delete_vrf'),(570,'Can view VRF',28,'view_vrf'),(571,'Can add VLAN group',154,'add_vlangroup'),(572,'Can change VLAN group',154,'change_vlangroup'),(573,'Can delete VLAN group',154,'delete_vlangroup'),(574,'Can view VLAN group',154,'view_vlangroup'),(575,'Can add VLAN',8,'add_vlan'),(576,'Can change VLAN',8,'change_vlan'),(577,'Can delete VLAN',8,'delete_vlan'),(578,'Can view VLAN',8,'view_vlan'),(579,'Can add service',155,'add_service'),(580,'Can change service',155,'change_service'),(581,'Can delete service',155,'delete_service'),(582,'Can view service',155,'view_service'),(583,'Can add IP Address Assignment',156,'add_ipaddresstointerface'),(584,'Can change IP Address Assignment',156,'change_ipaddresstointerface'),(585,'Can delete IP Address Assignment',156,'delete_ipaddresstointerface'),(586,'Can view IP Address Assignment',156,'view_ipaddresstointerface'),(587,'Can add VRF-prefix assignment',157,'add_vrfprefixassignment'),(588,'Can change VRF-prefix assignment',157,'change_vrfprefixassignment'),(589,'Can delete VRF-prefix assignment',157,'delete_vrfprefixassignment'),(590,'Can view VRF-prefix assignment',157,'view_vrfprefixassignment'),(591,'Can add VRF-device assignment',158,'add_vrfdeviceassignment'),(592,'Can change VRF-device assignment',158,'change_vrfdeviceassignment'),(593,'Can delete VRF-device assignment',158,'delete_vrfdeviceassignment'),(594,'Can view VRF-device assignment',158,'view_vrfdeviceassignment'),(595,'Can add namespace',159,'add_namespace'),(596,'Can change namespace',159,'change_namespace'),(597,'Can delete namespace',159,'delete_namespace'),(598,'Can view namespace',159,'view_namespace'),(599,'Can add vlan location assignment',160,'add_vlanlocationassignment'),(600,'Can change vlan location assignment',160,'change_vlanlocationassignment'),(601,'Can delete vlan location assignment',160,'delete_vlanlocationassignment'),(602,'Can view vlan location assignment',160,'view_vlanlocationassignment'),(603,'Can add prefix location assignment',161,'add_prefixlocationassignment'),(604,'Can change prefix location assignment',161,'change_prefixlocationassignment'),(605,'Can delete prefix location assignment',161,'delete_prefixlocationassignment'),(606,'Can view prefix location assignment',161,'view_prefixlocationassignment'),(607,'Can add Certificate Profile',162,'add_certificateprofile'),(608,'Can change Certificate Profile',162,'change_certificateprofile'),(609,'Can delete Certificate Profile',162,'delete_certificateprofile'),(610,'Can view Certificate Profile',162,'view_certificateprofile'),(611,'Can add Health Check Monitor',163,'add_healthcheckmonitor'),(612,'Can change Health Check Monitor',163,'change_healthcheckmonitor'),(613,'Can delete Health Check Monitor',163,'delete_healthcheckmonitor'),(614,'Can view Health Check Monitor',163,'view_healthcheckmonitor'),(615,'Can add Load Balancer Pool',164,'add_loadbalancerpool'),(616,'Can change Load Balancer Pool',164,'change_loadbalancerpool'),(617,'Can delete Load Balancer Pool',164,'delete_loadbalancerpool'),(618,'Can view Load Balancer Pool',164,'view_loadbalancerpool'),(619,'Can add Load Balancer Pool Member',36,'add_loadbalancerpoolmember'),(620,'Can change Load Balancer Pool Member',36,'change_loadbalancerpoolmember'),(621,'Can delete Load Balancer Pool Member',36,'delete_loadbalancerpoolmember'),(622,'Can view Load Balancer Pool Member',36,'view_loadbalancerpoolmember'),(623,'Can add Virtual Server',165,'add_virtualserver'),(624,'Can change Virtual Server',165,'change_virtualserver'),(625,'Can delete Virtual Server',165,'delete_virtualserver'),(626,'Can view Virtual Server',165,'view_virtualserver'),(627,'Can add virtual server certificate profile assignment',166,'add_virtualservercertificateprofileassignment'),(628,'Can change virtual server certificate profile assignment',166,'change_virtualservercertificateprofileassignment'),(629,'Can delete virtual server certificate profile assignment',166,'delete_virtualservercertificateprofileassignment'),(630,'Can view virtual server certificate profile assignment',166,'view_virtualservercertificateprofileassignment'),(631,'Can add load balancer pool member certificate profile assignment',167,'add_loadbalancerpoolmembercertificateprofileassignment'),(632,'Can change load balancer pool member certificate profile assignment',167,'change_loadbalancerpoolmembercertificateprofileassignment'),(633,'Can delete load balancer pool member certificate profile assignment',167,'delete_loadbalancerpoolmembercertificateprofileassignment'),(634,'Can view load balancer pool member certificate profile assignment',167,'view_loadbalancerpoolmembercertificateprofileassignment'),(635,'Can add tenant group',168,'add_tenantgroup'),(636,'Can change tenant group',168,'change_tenantgroup'),(637,'Can delete tenant group',168,'delete_tenantgroup'),(638,'Can view tenant group',168,'view_tenantgroup'),(639,'Can add tenant',169,'add_tenant'),(640,'Can change tenant',169,'change_tenant'),(641,'Can delete tenant',169,'delete_tenant'),(642,'Can view tenant',169,'view_tenant'),(643,'Can add user',170,'add_user'),(644,'Can change user',170,'change_user'),(645,'Can delete user',170,'delete_user'),(646,'Can view user',170,'view_user'),(647,'Can add Group',171,'add_admingroup'),(648,'Can change Group',171,'change_admingroup'),(649,'Can delete Group',171,'delete_admingroup'),(650,'Can view Group',171,'view_admingroup'),(651,'Can add token',172,'add_token'),(652,'Can change token',172,'change_token'),(653,'Can delete token',172,'delete_token'),(654,'Can view token',172,'view_token'),(655,'Can add permission',173,'add_objectpermission'),(656,'Can change permission',173,'change_objectpermission'),(657,'Can delete permission',173,'delete_objectpermission'),(658,'Can view permission',173,'view_objectpermission'),(659,'Can add cluster',174,'add_cluster'),(660,'Can change cluster',174,'change_cluster'),(661,'Can delete cluster',174,'delete_cluster'),(662,'Can view cluster',174,'view_cluster'),(663,'Can add cluster group',175,'add_clustergroup'),(664,'Can change cluster group',175,'change_clustergroup'),(665,'Can delete cluster group',175,'delete_clustergroup'),(666,'Can view cluster group',175,'view_clustergroup'),(667,'Can add cluster type',176,'add_clustertype'),(668,'Can change cluster type',176,'change_clustertype'),(669,'Can delete cluster type',176,'delete_clustertype'),(670,'Can view cluster type',176,'view_clustertype'),(671,'Can add virtual machine',9,'add_virtualmachine'),(672,'Can change virtual machine',9,'change_virtualmachine'),(673,'Can delete virtual machine',9,'delete_virtualmachine'),(674,'Can view virtual machine',9,'view_virtualmachine'),(675,'Can add VM interface',12,'add_vminterface'),(676,'Can change VM interface',12,'change_vminterface'),(677,'Can delete VM interface',12,'delete_vminterface'),(678,'Can view VM interface',12,'view_vminterface'),(679,'Can add VPN',177,'add_vpn'),(680,'Can change VPN',177,'change_vpn'),(681,'Can delete VPN',177,'delete_vpn'),(682,'Can view VPN',177,'view_vpn'),(683,'Can add VPN Phase 1 Policy',178,'add_vpnphase1policy'),(684,'Can change VPN Phase 1 Policy',178,'change_vpnphase1policy'),(685,'Can delete VPN Phase 1 Policy',178,'delete_vpnphase1policy'),(686,'Can view VPN Phase 1 Policy',178,'view_vpnphase1policy'),(687,'Can add VPN Phase 2 Policy',179,'add_vpnphase2policy'),(688,'Can change VPN Phase 2 Policy',179,'change_vpnphase2policy'),(689,'Can delete VPN Phase 2 Policy',179,'delete_vpnphase2policy'),(690,'Can view VPN Phase 2 Policy',179,'view_vpnphase2policy'),(691,'Can add VPN Profile',180,'add_vpnprofile'),(692,'Can change VPN Profile',180,'change_vpnprofile'),(693,'Can delete VPN Profile',180,'delete_vpnprofile'),(694,'Can view VPN Profile',180,'view_vpnprofile'),(695,'Can add VPN Tunnel Endpoint',38,'add_vpntunnelendpoint'),(696,'Can change VPN Tunnel Endpoint',38,'change_vpntunnelendpoint'),(697,'Can delete VPN Tunnel Endpoint',38,'delete_vpntunnelendpoint'),(698,'Can view VPN Tunnel Endpoint',38,'view_vpntunnelendpoint'),(699,'Can add VPN Tunnel',37,'add_vpntunnel'),(700,'Can change VPN Tunnel',37,'change_vpntunnel'),(701,'Can delete VPN Tunnel',37,'delete_vpntunnel'),(702,'Can view VPN Tunnel',37,'view_vpntunnel'),(703,'Can add vpn profile phase2 policy assignment',181,'add_vpnprofilephase2policyassignment'),(704,'Can change vpn profile phase2 policy assignment',181,'change_vpnprofilephase2policyassignment'),(705,'Can delete vpn profile phase2 policy assignment',181,'delete_vpnprofilephase2policyassignment'),(706,'Can view vpn profile phase2 policy assignment',181,'view_vpnprofilephase2policyassignment'),(707,'Can add vpn profile phase1 policy assignment',182,'add_vpnprofilephase1policyassignment'),(708,'Can change vpn profile phase1 policy assignment',182,'change_vpnprofilephase1policyassignment'),(709,'Can delete vpn profile phase1 policy assignment',182,'delete_vpnprofilephase1policyassignment'),(710,'Can view vpn profile phase1 policy assignment',182,'view_vpnprofilephase1policyassignment'),(711,'Can add wireless network',183,'add_wirelessnetwork'),(712,'Can change wireless network',183,'change_wirelessnetwork'),(713,'Can delete wireless network',183,'delete_wirelessnetwork'),(714,'Can view wireless network',183,'view_wirelessnetwork'),(715,'Can add supported data rate',184,'add_supporteddatarate'),(716,'Can change supported data rate',184,'change_supporteddatarate'),(717,'Can delete supported data rate',184,'delete_supporteddatarate'),(718,'Can view supported data rate',184,'view_supporteddatarate'),(719,'Can add radio profile',185,'add_radioprofile'),(720,'Can change radio profile',185,'change_radioprofile'),(721,'Can delete radio profile',185,'delete_radioprofile'),(722,'Can view radio profile',185,'view_radioprofile'),(723,'Can add controller managed device group wireless network assignment',186,'add_controllermanageddevicegroupwirelessnetworkassignment'),(724,'Can change controller managed device group wireless network assignment',186,'change_controllermanageddevicegroupwirelessnetworkassignment'),(725,'Can delete controller managed device group wireless network assignment',186,'delete_controllermanageddevicegroupwirelessnetworkassignment'),(726,'Can view controller managed device group wireless network assignment',186,'view_controllermanageddevicegroupwirelessnetworkassignment'),(727,'Can add controller managed device group radio profile assignment',187,'add_controllermanageddevicegroupradioprofileassignment'),(728,'Can change controller managed device group radio profile assignment',187,'change_controllermanageddevicegroupradioprofileassignment'),(729,'Can delete controller managed device group radio profile assignment',187,'delete_controllermanageddevicegroupradioprofileassignment'),(730,'Can view controller managed device group radio profile assignment',187,'view_controllermanageddevicegroupradioprofileassignment'),(731,'Can add profile',188,'add_profile'),(732,'Can change profile',188,'change_profile'),(733,'Can delete profile',188,'delete_profile'),(734,'Can view profile',188,'view_profile'),(735,'Can add request',189,'add_request'),(736,'Can change request',189,'change_request'),(737,'Can delete request',189,'delete_request'),(738,'Can view request',189,'view_request'),(739,'Can add response',190,'add_response'),(740,'Can change response',190,'change_response'),(741,'Can delete response',190,'delete_response'),(742,'Can view response',190,'view_response'),(743,'Can add sql query',191,'add_sqlquery'),(744,'Can change sql query',191,'change_sqlquery'),(745,'Can delete sql query',191,'delete_sqlquery'),(746,'Can view sql query',191,'view_sqlquery');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -620,7 +621,7 @@ CREATE TABLE `constance_constance` (
   `value` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -629,7 +630,180 @@ CREATE TABLE `constance_constance` (
 
 LOCK TABLES `constance_constance` WRITE;
 /*!40000 ALTER TABLE `constance_constance` DISABLE KEYS */;
+INSERT INTO `constance_constance` VALUES (1,'DEVICE_UNIQUENESS','location_tenant_name');
 /*!40000 ALTER TABLE `constance_constance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `data_validation_datacompliance`
+--
+
+DROP TABLE IF EXISTS `data_validation_datacompliance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `data_validation_datacompliance` (
+  `id` char(32) NOT NULL,
+  `compliance_class_name` varchar(255) NOT NULL,
+  `last_validation_date` datetime(6) NOT NULL,
+  `object_id` char(32) NOT NULL,
+  `validated_object_str` varchar(255) NOT NULL,
+  `validated_attribute` varchar(255) NOT NULL,
+  `validated_attribute_value` varchar(255) NOT NULL,
+  `valid` tinyint(1) NOT NULL,
+  `message` longtext NOT NULL,
+  `content_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `data_validation_datacomp_compliance_class_name_co_b0e38158_uniq` (`compliance_class_name`,`content_type_id`,`object_id`,`validated_attribute`),
+  KEY `data_validation_data_content_type_id_26bf587e_fk_django_co` (`content_type_id`),
+  CONSTRAINT `data_validation_data_content_type_id_26bf587e_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_validation_datacompliance`
+--
+
+LOCK TABLES `data_validation_datacompliance` WRITE;
+/*!40000 ALTER TABLE `data_validation_datacompliance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `data_validation_datacompliance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `data_validation_minmaxrule`
+--
+
+DROP TABLE IF EXISTS `data_validation_minmaxrule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `data_validation_minmaxrule` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `field` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `error_message` varchar(255) NOT NULL,
+  `min` double DEFAULT NULL,
+  `max` double DEFAULT NULL,
+  `content_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `data_validation_minmaxrule_content_type_id_field_a0d64d51_uniq` (`content_type_id`,`field`),
+  CONSTRAINT `data_validation_minm_content_type_id_669cb2ce_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_validation_minmaxrule`
+--
+
+LOCK TABLES `data_validation_minmaxrule` WRITE;
+/*!40000 ALTER TABLE `data_validation_minmaxrule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `data_validation_minmaxrule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `data_validation_regexrule`
+--
+
+DROP TABLE IF EXISTS `data_validation_regexrule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `data_validation_regexrule` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `field` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `error_message` varchar(255) NOT NULL,
+  `regular_expression` longtext NOT NULL,
+  `context_processing` tinyint(1) NOT NULL,
+  `content_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `data_validation_regexrule_content_type_id_field_6b19bc08_uniq` (`content_type_id`,`field`),
+  CONSTRAINT `data_validation_rege_content_type_id_87ed748b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_validation_regexrule`
+--
+
+LOCK TABLES `data_validation_regexrule` WRITE;
+/*!40000 ALTER TABLE `data_validation_regexrule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `data_validation_regexrule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `data_validation_requiredrule`
+--
+
+DROP TABLE IF EXISTS `data_validation_requiredrule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `data_validation_requiredrule` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `field` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `error_message` varchar(255) NOT NULL,
+  `content_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `data_validation_requiredrule_content_type_id_field_fccaa1c1_uniq` (`content_type_id`,`field`),
+  CONSTRAINT `data_validation_requ_content_type_id_1eea2be4_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_validation_requiredrule`
+--
+
+LOCK TABLES `data_validation_requiredrule` WRITE;
+/*!40000 ALTER TABLE `data_validation_requiredrule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `data_validation_requiredrule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `data_validation_uniquerule`
+--
+
+DROP TABLE IF EXISTS `data_validation_uniquerule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `data_validation_uniquerule` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `field` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `error_message` varchar(255) NOT NULL,
+  `max_instances` int unsigned NOT NULL,
+  `content_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `data_validation_uniquerule_content_type_id_field_02db8a56_uniq` (`content_type_id`,`field`),
+  CONSTRAINT `data_validation_uniq_content_type_id_0c0249fc_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `data_validation_uniquerule_chk_1` CHECK ((`max_instances` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_validation_uniquerule`
+--
+
+LOCK TABLES `data_validation_uniquerule` WRITE;
+/*!40000 ALTER TABLE `data_validation_uniquerule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `data_validation_uniquerule` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -658,8 +832,8 @@ CREATE TABLE `dcim_cable` (
   `termination_a_type_id` int NOT NULL,
   `termination_b_type_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `dcim_cable_termination_b_type_id_termination_b_id_057fc21f_uniq` (`termination_b_type_id`,`termination_b_id`),
   UNIQUE KEY `dcim_cable_termination_a_type_id_termination_a_id_e9d24bad_uniq` (`termination_a_type_id`,`termination_a_id`),
+  UNIQUE KEY `dcim_cable_termination_b_type_id_termination_b_id_057fc21f_uniq` (`termination_b_type_id`,`termination_b_id`),
   KEY `dcim_cable__termination_a_device_id_e59cde1c_fk_dcim_device_id` (`_termination_a_device_id`),
   KEY `dcim_cable__termination_b_device_id_a9073762_fk_dcim_device_id` (`_termination_b_device_id`),
   KEY `dcim_cable_status_id_6a580869` (`status_id`),
@@ -1002,7 +1176,6 @@ CREATE TABLE `dcim_device` (
   `vc_position` smallint unsigned DEFAULT NULL,
   `vc_priority` smallint unsigned DEFAULT NULL,
   `comments` longtext NOT NULL,
-  `cluster_id` char(32) DEFAULT NULL,
   `device_type_id` char(32) NOT NULL,
   `local_config_context_data_owner_content_type_id` int DEFAULT NULL,
   `platform_id` char(32) DEFAULT NULL,
@@ -1015,17 +1188,15 @@ CREATE TABLE `dcim_device` (
   `local_config_context_schema_id` char(32) DEFAULT NULL,
   `secrets_group_id` char(32) DEFAULT NULL,
   `location_id` char(32) NOT NULL,
-  `device_redundancy_group_priority` smallint unsigned DEFAULT NULL,
+  `device_redundancy_group_priority` int unsigned DEFAULT NULL,
   `device_redundancy_group_id` char(32) DEFAULT NULL,
   `role_id` char(32) NOT NULL,
   `software_version_id` char(32) DEFAULT NULL,
   `controller_managed_device_group_id` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `asset_tag` (`asset_tag`),
-  UNIQUE KEY `dcim_device_virtual_chassis_id_vc_position_efea7133_uniq` (`virtual_chassis_id`,`vc_position`),
   UNIQUE KEY `dcim_device_rack_id_position_face_43208a79_uniq` (`rack_id`,`position`,`face`),
-  UNIQUE KEY `dcim_device_location_id_tenant_id_name_2259bd02_uniq` (`location_id`,`tenant_id`,`name`),
-  KEY `dcim_device_cluster_id_cf852f78_fk_virtualization_cluster_id` (`cluster_id`),
+  UNIQUE KEY `dcim_device_virtual_chassis_id_vc_position_efea7133_uniq` (`virtual_chassis_id`,`vc_position`),
   KEY `dcim_device_device_type_id_d61b4086_fk_dcim_devicetype_id` (`device_type_id`),
   KEY `dcim_device_platform_id_468138f1_fk_dcim_platform_id` (`platform_id`),
   KEY `dcim_device_tenant_id_dcea7969_fk_tenancy_tenant_id` (`tenant_id`),
@@ -1042,7 +1213,7 @@ CREATE TABLE `dcim_device` (
   KEY `dcim_device_primary_ip6_id_d180fe91` (`primary_ip6_id`),
   KEY `dcim_device_software_version_id_5bc284cc_fk_dcim_soft` (`software_version_id`),
   KEY `dcim_device_controller_managed_d_81d03712_fk_dcim_cont` (`controller_managed_device_group_id`),
-  CONSTRAINT `dcim_device_cluster_id_cf852f78_fk_virtualization_cluster_id` FOREIGN KEY (`cluster_id`) REFERENCES `virtualization_cluster` (`id`),
+  KEY `dcim_device_location_id_11a7bedb` (`location_id`),
   CONSTRAINT `dcim_device_controller_managed_d_81d03712_fk_dcim_cont` FOREIGN KEY (`controller_managed_device_group_id`) REFERENCES `dcim_controllermanageddevicegroup` (`id`),
   CONSTRAINT `dcim_device_device_redundancy_gr_ca97f1fc_fk_dcim_devi` FOREIGN KEY (`device_redundancy_group_id`) REFERENCES `dcim_deviceredundancygroup` (`id`),
   CONSTRAINT `dcim_device_device_type_id_d61b4086_fk_dcim_devicetype_id` FOREIGN KEY (`device_type_id`) REFERENCES `dcim_devicetype` (`id`),
@@ -1170,6 +1341,34 @@ CREATE TABLE `dcim_devicebaytemplate` (
 LOCK TABLES `dcim_devicebaytemplate` WRITE;
 /*!40000 ALTER TABLE `dcim_devicebaytemplate` DISABLE KEYS */;
 /*!40000 ALTER TABLE `dcim_devicebaytemplate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dcim_deviceclusterassignment`
+--
+
+DROP TABLE IF EXISTS `dcim_deviceclusterassignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `dcim_deviceclusterassignment` (
+  `id` char(32) NOT NULL,
+  `cluster_id` char(32) NOT NULL,
+  `device_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dcim_deviceclusterassignment_device_id_cluster_id_a7029fa6_uniq` (`device_id`,`cluster_id`),
+  KEY `dcim_deviceclusteras_cluster_id_1d7e167c_fk_virtualiz` (`cluster_id`),
+  CONSTRAINT `dcim_deviceclusteras_cluster_id_1d7e167c_fk_virtualiz` FOREIGN KEY (`cluster_id`) REFERENCES `virtualization_cluster` (`id`),
+  CONSTRAINT `dcim_deviceclusteras_device_id_8b6ac12e_fk_dcim_devi` FOREIGN KEY (`device_id`) REFERENCES `dcim_device` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dcim_deviceclusterassignment`
+--
+
+LOCK TABLES `dcim_deviceclusterassignment` WRITE;
+/*!40000 ALTER TABLE `dcim_deviceclusterassignment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dcim_deviceclusterassignment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1434,6 +1633,8 @@ CREATE TABLE `dcim_interface` (
   `vrf_id` char(32) DEFAULT NULL,
   `role_id` char(32) DEFAULT NULL,
   `module_id` char(32) DEFAULT NULL,
+  `duplex` varchar(10) NOT NULL,
+  `speed` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `dcim_interface_device_name_unique` (`device_id`,`name`),
   UNIQUE KEY `dcim_interface_module_name_unique` (`module_id`,`name`),
@@ -1462,7 +1663,8 @@ CREATE TABLE `dcim_interface` (
   CONSTRAINT `dcim_interface_status_id_5d68d3d6_fk_extras_status_id` FOREIGN KEY (`status_id`) REFERENCES `extras_status` (`id`),
   CONSTRAINT `dcim_interface_untagged_vlan_id_838dc7be_fk_ipam_vlan_id` FOREIGN KEY (`untagged_vlan_id`) REFERENCES `ipam_vlan` (`id`),
   CONSTRAINT `dcim_interface_vrf_id_a92e59b2_fk_ipam_vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `ipam_vrf` (`id`),
-  CONSTRAINT `dcim_interface_chk_1` CHECK ((`mtu` >= 0))
+  CONSTRAINT `dcim_interface_chk_1` CHECK ((`mtu` >= 0)),
+  CONSTRAINT `dcim_interface_chk_2` CHECK ((`speed` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1552,7 +1754,7 @@ DROP TABLE IF EXISTS `dcim_interfaceredundancygroupassociation`;
 CREATE TABLE `dcim_interfaceredundancygroupassociation` (
   `id` char(32) NOT NULL,
   `last_updated` datetime(6) DEFAULT NULL,
-  `priority` smallint unsigned NOT NULL,
+  `priority` int unsigned NOT NULL,
   `interface_id` char(32) NOT NULL,
   `interface_redundancy_group_id` char(32) NOT NULL,
   `created` datetime(6) DEFAULT NULL,
@@ -1594,12 +1796,15 @@ CREATE TABLE `dcim_interfacetemplate` (
   `created` datetime(6) DEFAULT NULL,
   `last_updated` datetime(6) DEFAULT NULL,
   `module_type_id` char(32) DEFAULT NULL,
+  `duplex` varchar(10) NOT NULL,
+  `speed` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `dcim_interfacetemplate_device_type_name_unique` (`device_type_id`,`name`),
   UNIQUE KEY `dcim_interfacetemplate_module_type_name_unique` (`module_type_id`,`name`),
   KEY `dcim_interfacetemplate_module_type_id_f941f180` (`module_type_id`),
   CONSTRAINT `dcim_interfacetempla_device_type_id_4bfcbfab_fk_dcim_devi` FOREIGN KEY (`device_type_id`) REFERENCES `dcim_devicetype` (`id`),
-  CONSTRAINT `dcim_interfacetempla_module_type_id_f941f180_fk_dcim_modu` FOREIGN KEY (`module_type_id`) REFERENCES `dcim_moduletype` (`id`)
+  CONSTRAINT `dcim_interfacetempla_module_type_id_f941f180_fk_dcim_modu` FOREIGN KEY (`module_type_id`) REFERENCES `dcim_moduletype` (`id`),
+  CONSTRAINT `dcim_interfacetemplate_chk_1` CHECK ((`speed` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3085,7 +3290,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3094,7 +3299,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (43,'admin','logentry'),(31,'auth','group'),(30,'auth','permission'),(1,'circuits','circuit'),(53,'circuits','circuittermination'),(54,'circuits','circuittype'),(55,'circuits','provider'),(56,'circuits','providernetwork'),(57,'cloud','cloudaccount'),(58,'cloud','cloudnetwork'),(61,'cloud','cloudnetworkprefixassignment'),(59,'cloud','cloudresourcetype'),(60,'cloud','cloudservice'),(62,'cloud','cloudservicenetworkassignment'),(41,'constance','constance'),(32,'contenttypes','contenttype'),(2,'dcim','cable'),(63,'dcim','cablepath'),(64,'dcim','consoleport'),(65,'dcim','consoleporttemplate'),(66,'dcim','consoleserverport'),(67,'dcim','consoleserverporttemplate'),(26,'dcim','controller'),(91,'dcim','controllermanageddevicegroup'),(3,'dcim','device'),(68,'dcim','devicebay'),(69,'dcim','devicebaytemplate'),(89,'dcim','devicefamily'),(19,'dcim','deviceredundancygroup'),(15,'dcim','devicerole'),(70,'dcim','devicetype'),(90,'dcim','devicetypetosoftwareimagefile'),(71,'dcim','frontport'),(72,'dcim','frontporttemplate'),(13,'dcim','interface'),(20,'dcim','interfaceredundancygroup'),(88,'dcim','interfaceredundancygroupassociation'),(73,'dcim','interfacetemplate'),(95,'dcim','interfacevdcassignment'),(74,'dcim','inventoryitem'),(14,'dcim','location'),(87,'dcim','locationtype'),(75,'dcim','manufacturer'),(27,'dcim','module'),(92,'dcim','modulebay'),(93,'dcim','modulebaytemplate'),(96,'dcim','modulefamily'),(94,'dcim','moduletype'),(76,'dcim','platform'),(4,'dcim','powerfeed'),(77,'dcim','poweroutlet'),(78,'dcim','poweroutlettemplate'),(79,'dcim','powerpanel'),(80,'dcim','powerport'),(81,'dcim','powerporttemplate'),(5,'dcim','rack'),(82,'dcim','rackgroup'),(83,'dcim','rackreservation'),(17,'dcim','rackrole'),(84,'dcim','rearport'),(85,'dcim','rearporttemplate'),(21,'dcim','site'),(24,'dcim','softwareimagefile'),(25,'dcim','softwareversion'),(86,'dcim','virtualchassis'),(29,'dcim','virtualdevicecontext'),(49,'django_celery_beat','clockedschedule'),(44,'django_celery_beat','crontabschedule'),(45,'django_celery_beat','intervalschedule'),(46,'django_celery_beat','periodictask'),(47,'django_celery_beat','periodictasks'),(48,'django_celery_beat','solarschedule'),(51,'django_celery_results','chordcounter'),(52,'django_celery_results','groupresult'),(50,'django_celery_results','taskresult'),(123,'extras','computedfield'),(107,'extras','configcontext'),(122,'extras','configcontextschema'),(138,'extras','contact'),(23,'extras','contactassociation'),(10,'extras','customfield'),(108,'extras','customfieldchoice'),(109,'extras','customlink'),(42,'extras','dynamicgroup'),(133,'extras','dynamicgroupmembership'),(110,'extras','exporttemplate'),(137,'extras','externalintegration'),(124,'extras','fileattachment'),(125,'extras','fileproxy'),(111,'extras','gitrepository'),(121,'extras','graphqlquery'),(126,'extras','healthchecktestmodel'),(112,'extras','imageattachment'),(11,'extras','job'),(136,'extras','jobbutton'),(135,'extras','jobhook'),(132,'extras','joblogentry'),(146,'extras','jobqueue'),(147,'extras','jobqueueassignment'),(113,'extras','jobresult'),(143,'extras','metadatachoice'),(141,'extras','metadatatype'),(134,'extras','note'),(120,'extras','objectchange'),(142,'extras','objectmetadata'),(114,'extras','relationship'),(119,'extras','relationshipassociation'),(16,'extras','role'),(144,'extras','savedview'),(128,'extras','scheduledjob'),(127,'extras','scheduledjobs'),(129,'extras','secret'),(130,'extras','secretsgroup'),(131,'extras','secretsgroupassociation'),(140,'extras','staticgroupassociation'),(118,'extras','status'),(115,'extras','tag'),(117,'extras','taggeditem'),(139,'extras','team'),(145,'extras','usersavedviewassociation'),(116,'extras','webhook'),(22,'ipam','aggregate'),(6,'ipam','ipaddress'),(101,'ipam','ipaddresstointerface'),(104,'ipam','namespace'),(7,'ipam','prefix'),(106,'ipam','prefixlocationassignment'),(97,'ipam','rir'),(18,'ipam','role'),(98,'ipam','routetarget'),(100,'ipam','service'),(8,'ipam','vlan'),(99,'ipam','vlangroup'),(105,'ipam','vlanlocationassignment'),(28,'ipam','vrf'),(103,'ipam','vrfdeviceassignment'),(102,'ipam','vrfprefixassignment'),(33,'sessions','session'),(162,'silk','profile'),(163,'silk','request'),(164,'silk','response'),(165,'silk','sqlquery'),(34,'social_django','association'),(35,'social_django','code'),(36,'social_django','nonce'),(38,'social_django','partial'),(37,'social_django','usersocialauth'),(39,'taggit','tag'),(40,'taggit','taggeditem'),(149,'tenancy','tenant'),(148,'tenancy','tenantgroup'),(151,'users','admingroup'),(153,'users','objectpermission'),(152,'users','token'),(150,'users','user'),(154,'virtualization','cluster'),(155,'virtualization','clustergroup'),(156,'virtualization','clustertype'),(9,'virtualization','virtualmachine'),(12,'virtualization','vminterface'),(161,'wireless','controllermanageddevicegroupradioprofileassignment'),(160,'wireless','controllermanageddevicegroupwirelessnetworkassignment'),(159,'wireless','radioprofile'),(158,'wireless','supporteddatarate'),(157,'wireless','wirelessnetwork');
+INSERT INTO `django_content_type` VALUES (52,'admin','logentry'),(40,'auth','group'),(39,'auth','permission'),(1,'circuits','circuit'),(62,'circuits','circuittermination'),(63,'circuits','circuittype'),(64,'circuits','provider'),(65,'circuits','providernetwork'),(66,'cloud','cloudaccount'),(67,'cloud','cloudnetwork'),(70,'cloud','cloudnetworkprefixassignment'),(68,'cloud','cloudresourcetype'),(69,'cloud','cloudservice'),(71,'cloud','cloudservicenetworkassignment'),(50,'constance','constance'),(41,'contenttypes','contenttype'),(76,'data_validation','datacompliance'),(75,'data_validation','minmaxvalidationrule'),(74,'data_validation','regularexpressionvalidationrule'),(73,'data_validation','requiredvalidationrule'),(72,'data_validation','uniquevalidationrule'),(2,'dcim','cable'),(77,'dcim','cablepath'),(78,'dcim','consoleport'),(79,'dcim','consoleporttemplate'),(80,'dcim','consoleserverport'),(81,'dcim','consoleserverporttemplate'),(26,'dcim','controller'),(105,'dcim','controllermanageddevicegroup'),(3,'dcim','device'),(82,'dcim','devicebay'),(83,'dcim','devicebaytemplate'),(111,'dcim','deviceclusterassignment'),(103,'dcim','devicefamily'),(19,'dcim','deviceredundancygroup'),(15,'dcim','devicerole'),(84,'dcim','devicetype'),(104,'dcim','devicetypetosoftwareimagefile'),(85,'dcim','frontport'),(86,'dcim','frontporttemplate'),(13,'dcim','interface'),(20,'dcim','interfaceredundancygroup'),(102,'dcim','interfaceredundancygroupassociation'),(87,'dcim','interfacetemplate'),(109,'dcim','interfacevdcassignment'),(88,'dcim','inventoryitem'),(14,'dcim','location'),(101,'dcim','locationtype'),(89,'dcim','manufacturer'),(27,'dcim','module'),(106,'dcim','modulebay'),(107,'dcim','modulebaytemplate'),(110,'dcim','modulefamily'),(108,'dcim','moduletype'),(90,'dcim','platform'),(4,'dcim','powerfeed'),(91,'dcim','poweroutlet'),(92,'dcim','poweroutlettemplate'),(93,'dcim','powerpanel'),(94,'dcim','powerport'),(95,'dcim','powerporttemplate'),(5,'dcim','rack'),(96,'dcim','rackgroup'),(97,'dcim','rackreservation'),(17,'dcim','rackrole'),(98,'dcim','rearport'),(99,'dcim','rearporttemplate'),(21,'dcim','site'),(24,'dcim','softwareimagefile'),(25,'dcim','softwareversion'),(100,'dcim','virtualchassis'),(29,'dcim','virtualdevicecontext'),(58,'django_celery_beat','clockedschedule'),(53,'django_celery_beat','crontabschedule'),(54,'django_celery_beat','intervalschedule'),(55,'django_celery_beat','periodictask'),(56,'django_celery_beat','periodictasks'),(57,'django_celery_beat','solarschedule'),(60,'django_celery_results','chordcounter'),(61,'django_celery_results','groupresult'),(59,'django_celery_results','taskresult'),(30,'extras','approvalworkflow'),(33,'extras','approvalworkflowdefinition'),(31,'extras','approvalworkflowstage'),(34,'extras','approvalworkflowstagedefinition'),(32,'extras','approvalworkflowstageresponse'),(128,'extras','computedfield'),(112,'extras','configcontext'),(127,'extras','configcontextschema'),(142,'extras','contact'),(23,'extras','contactassociation'),(10,'extras','customfield'),(113,'extras','customfieldchoice'),(114,'extras','customlink'),(51,'extras','dynamicgroup'),(137,'extras','dynamicgroupmembership'),(115,'extras','exporttemplate'),(141,'extras','externalintegration'),(129,'extras','fileattachment'),(130,'extras','fileproxy'),(116,'extras','gitrepository'),(126,'extras','graphqlquery'),(131,'extras','healthchecktestmodel'),(117,'extras','imageattachment'),(11,'extras','job'),(140,'extras','jobbutton'),(139,'extras','jobhook'),(136,'extras','joblogentry'),(150,'extras','jobqueue'),(151,'extras','jobqueueassignment'),(118,'extras','jobresult'),(147,'extras','metadatachoice'),(145,'extras','metadatatype'),(138,'extras','note'),(125,'extras','objectchange'),(146,'extras','objectmetadata'),(119,'extras','relationship'),(124,'extras','relationshipassociation'),(16,'extras','role'),(148,'extras','savedview'),(35,'extras','scheduledjob'),(132,'extras','scheduledjobs'),(133,'extras','secret'),(134,'extras','secretsgroup'),(135,'extras','secretsgroupassociation'),(144,'extras','staticgroupassociation'),(123,'extras','status'),(120,'extras','tag'),(122,'extras','taggeditem'),(143,'extras','team'),(149,'extras','usersavedviewassociation'),(121,'extras','webhook'),(22,'ipam','aggregate'),(6,'ipam','ipaddress'),(156,'ipam','ipaddresstointerface'),(159,'ipam','namespace'),(7,'ipam','prefix'),(161,'ipam','prefixlocationassignment'),(152,'ipam','rir'),(18,'ipam','role'),(153,'ipam','routetarget'),(155,'ipam','service'),(8,'ipam','vlan'),(154,'ipam','vlangroup'),(160,'ipam','vlanlocationassignment'),(28,'ipam','vrf'),(158,'ipam','vrfdeviceassignment'),(157,'ipam','vrfprefixassignment'),(162,'load_balancers','certificateprofile'),(163,'load_balancers','healthcheckmonitor'),(164,'load_balancers','loadbalancerpool'),(36,'load_balancers','loadbalancerpoolmember'),(167,'load_balancers','loadbalancerpoolmembercertificateprofileassignment'),(165,'load_balancers','virtualserver'),(166,'load_balancers','virtualservercertificateprofileassignment'),(42,'sessions','session'),(188,'silk','profile'),(189,'silk','request'),(190,'silk','response'),(191,'silk','sqlquery'),(43,'social_django','association'),(44,'social_django','code'),(45,'social_django','nonce'),(47,'social_django','partial'),(46,'social_django','usersocialauth'),(48,'taggit','tag'),(49,'taggit','taggeditem'),(169,'tenancy','tenant'),(168,'tenancy','tenantgroup'),(171,'users','admingroup'),(173,'users','objectpermission'),(172,'users','token'),(170,'users','user'),(174,'virtualization','cluster'),(175,'virtualization','clustergroup'),(176,'virtualization','clustertype'),(9,'virtualization','virtualmachine'),(12,'virtualization','vminterface'),(177,'vpn','vpn'),(178,'vpn','vpnphase1policy'),(179,'vpn','vpnphase2policy'),(180,'vpn','vpnprofile'),(182,'vpn','vpnprofilephase1policyassignment'),(181,'vpn','vpnprofilephase2policyassignment'),(37,'vpn','vpntunnel'),(38,'vpn','vpntunnelendpoint'),(187,'wireless','controllermanageddevicegroupradioprofileassignment'),(186,'wireless','controllermanageddevicegroupwirelessnetworkassignment'),(185,'wireless','radioprofile'),(184,'wireless','supporteddatarate'),(183,'wireless','wirelessnetwork');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3111,7 +3316,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=421 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=442 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3120,7 +3325,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2025-11-10 04:12:27.387855'),(2,'contenttypes','0002_remove_content_type_name','2025-11-10 04:12:27.422584'),(3,'auth','0001_initial','2025-11-10 04:12:27.523638'),(4,'auth','0002_alter_permission_name_max_length','2025-11-10 04:12:27.549516'),(5,'auth','0003_alter_user_email_max_length','2025-11-10 04:12:27.555095'),(6,'auth','0004_alter_user_username_opts','2025-11-10 04:12:27.560049'),(7,'auth','0005_alter_user_last_login_null','2025-11-10 04:12:27.564662'),(8,'auth','0006_require_contenttypes_0002','2025-11-10 04:12:27.566620'),(9,'auth','0007_alter_validators_add_error_messages','2025-11-10 04:12:27.571339'),(10,'auth','0008_alter_user_username_max_length','2025-11-10 04:12:27.575800'),(11,'auth','0009_alter_user_last_name_max_length','2025-11-10 04:12:27.581858'),(12,'auth','0010_alter_group_name_max_length','2025-11-10 04:12:27.597029'),(13,'auth','0011_update_proxy_permissions','2025-11-10 04:12:27.602617'),(14,'auth','0012_alter_user_first_name_max_length','2025-11-10 04:12:27.607723'),(15,'users','0001_initial','2025-11-10 04:12:27.955671'),(16,'admin','0001_initial','2025-11-10 04:12:28.018075'),(17,'admin','0002_logentry_remove_auto_add','2025-11-10 04:12:28.027640'),(18,'admin','0003_logentry_add_action_flag_choices','2025-11-10 04:12:28.036431'),(19,'extras','0001_initial_part_1','2025-11-10 04:12:28.610446'),(20,'tenancy','0001_initial','2025-11-10 04:12:28.712472'),(21,'dcim','0001_initial_part_1','2025-11-10 04:12:29.045560'),(22,'dcim','0002_initial_part_2','2025-11-10 04:12:29.533529'),(23,'ipam','0001_initial_part_1','2025-11-10 04:12:30.156645'),(24,'extras','0002_initial_part_2','2025-11-10 04:12:30.857970'),(25,'dcim','0003_initial_part_3','2025-11-10 04:12:34.936190'),(26,'virtualization','0001_initial','2025-11-10 04:12:35.803210'),(27,'dcim','0004_initial_part_4','2025-11-10 04:12:40.991879'),(28,'extras','0003_initial_part_3','2025-11-10 04:12:42.700197'),(29,'ipam','0002_initial_part_2','2025-11-10 04:12:45.026957'),(30,'circuits','0001_initial_part_1','2025-11-10 04:12:45.079165'),(31,'circuits','0002_initial_part_2','2025-11-10 04:12:46.411122'),(32,'extras','0004_populate_default_status_records','2025-11-10 04:12:46.620947'),(33,'extras','0005_configcontext_device_types','2025-11-10 04:12:46.745973'),(34,'extras','0006_graphqlquery','2025-11-10 04:12:46.761042'),(35,'extras','0007_configcontextschema','2025-11-10 04:12:46.982959'),(36,'virtualization','0002_virtualmachine_local_context_schema','2025-11-10 04:12:47.354355'),(37,'virtualization','0003_vminterface_verbose_name','2025-11-10 04:12:47.399709'),(38,'virtualization','0004_auto_slug','2025-11-10 04:12:47.469377'),(39,'virtualization','0005_add_natural_indexing','2025-11-10 04:12:47.645696'),(40,'extras','0008_jobresult__custom_field_data','2025-11-10 04:12:47.712211'),(41,'extras','0009_computedfield','2025-11-10 04:12:47.823067'),(42,'extras','0010_change_cf_validation_max_min_field_to_bigint','2025-11-10 04:12:47.993643'),(43,'extras','0011_fileattachment_fileproxy','2025-11-10 04:12:48.058403'),(44,'extras','0012_healthchecktestmodel','2025-11-10 04:12:48.071513'),(45,'extras','0013_default_fallback_value_computedfield','2025-11-10 04:12:48.108825'),(46,'extras','0014_auto_slug','2025-11-10 04:12:48.640971'),(47,'extras','0015_scheduled_job','2025-11-10 04:12:48.894501'),(48,'extras','0016_secret','2025-11-10 04:12:49.280158'),(49,'extras','0017_joblogentry','2025-11-10 04:12:49.385064'),(50,'extras','0018_joblog_data_migration','2025-11-10 04:12:49.731616'),(51,'extras','0019_joblogentry__meta_options__related_name','2025-11-10 04:12:49.815640'),(52,'extras','0020_customfield_changelog','2025-11-10 04:12:49.985421'),(53,'extras','0021_customfield_changelog_data','2025-11-10 04:12:50.064124'),(54,'extras','0022_objectchange_object_datav2','2025-11-10 04:12:50.122142'),(55,'extras','0023_job_model','2025-11-10 04:12:50.646502'),(56,'extras','0024_job_data_migration','2025-11-10 04:12:51.016419'),(57,'extras','0025_add_advanced_ui_boolean_to_customfield_conputedfield_and_relationship','2025-11-10 04:12:51.199028'),(58,'extras','0026_job_add_gitrepository_fk','2025-11-10 04:12:51.456071'),(59,'extras','0027_job_gitrepository_data_migration','2025-11-10 04:12:51.528636'),(60,'extras','0028_job_reduce_source','2025-11-10 04:12:51.629476'),(61,'extras','0029_dynamicgroup','2025-11-10 04:12:51.735625'),(62,'extras','0030_webhook_alter_unique_together','2025-11-10 04:12:51.795594'),(63,'extras','0031_tag_content_types','2025-11-10 04:12:51.921640'),(64,'extras','0032_tag_content_types_data_migration','2025-11-10 04:12:52.264320'),(65,'extras','0033_add__optimized_indexing','2025-11-10 04:12:53.106057'),(66,'virtualization','0006_vminterface_status','2025-11-10 04:12:53.478802'),(67,'virtualization','0007_vminterface_status_data_migration','2025-11-10 04:12:53.577769'),(68,'virtualization','0008_vminterface_parent','2025-11-10 04:12:53.810886'),(69,'extras','0034_alter_fileattachment_mimetype','2025-11-10 04:12:53.836831'),(70,'extras','0035_scheduledjob_crontab','2025-11-10 04:12:53.892743'),(71,'extras','0036_job_add_has_sensitive_variables','2025-11-10 04:12:54.084177'),(72,'extras','0037_configcontextschema__remove_name_unique__create_constraint_unique_name_owner','2025-11-10 04:12:54.196173'),(73,'dcim','0005_device_local_context_schema','2025-11-10 04:12:54.367176'),(74,'dcim','0006_auto_slug','2025-11-10 04:12:55.130780'),(75,'dcim','0007_device_secrets_group','2025-11-10 04:12:55.295540'),(76,'dcim','0008_increase_all_serial_lengths','2025-11-10 04:12:55.619546'),(77,'dcim','0009_add_natural_indexing','2025-11-10 04:12:58.140402'),(78,'dcim','0010_interface_status','2025-11-10 04:12:58.669165'),(79,'dcim','0011_interface_status_data_migration','2025-11-10 04:12:58.768080'),(80,'dcim','0012_interface_parent_bridge','2025-11-10 04:12:59.020375'),(81,'dcim','0013_location_location_type','2025-11-10 04:13:00.547612'),(82,'virtualization','0009_cluster_location','2025-11-10 04:13:00.675280'),(83,'virtualization','0010_vminterface_mac_address_data_migration','2025-11-10 04:13:00.754237'),(84,'virtualization','0011_alter_vminterface_mac_address','2025-11-10 04:13:00.832573'),(85,'extras','0038_configcontext_locations','2025-11-10 04:13:00.980287'),(86,'extras','0039_objectchange__add_change_context','2025-11-10 04:13:01.137786'),(87,'extras','0040_dynamicgroup__dynamicgroupmembership','2025-11-10 04:13:01.359199'),(88,'extras','0041_jobresult_job_kwargs','2025-11-10 04:13:01.683115'),(89,'extras','0042_job__add_is_job_hook_receiver','2025-11-10 04:13:01.775793'),(90,'extras','0043_note','2025-11-10 04:13:01.930161'),(91,'extras','0044_add_job_hook','2025-11-10 04:13:02.095616'),(92,'extras','0045_add_custom_field_slug','2025-11-10 04:13:02.169033'),(93,'extras','0046_populate_custom_field_slug_label','2025-11-10 04:13:02.250994'),(94,'extras','0047_enforce_custom_field_slug','2025-11-10 04:13:02.328140'),(95,'extras','0048_alter_objectchange_change_context_detail','2025-11-10 04:13:02.383082'),(96,'extras','0049_alter_tag_slug','2025-11-10 04:13:02.464076'),(97,'extras','0050_customfield_grouping','2025-11-10 04:13:02.538404'),(98,'extras','0051_add_job_task_queues','2025-11-10 04:13:03.005861'),(99,'dcim','0014_location_status_data_migration','2025-11-10 04:13:03.107494'),(100,'dcim','0015_device_components__changeloggedmodel','2025-11-10 04:13:05.907030'),(101,'dcim','0016_device_components__timestamp_data_migration','2025-11-10 04:13:05.996983'),(102,'dcim','0017_locationtype_nestable','2025-11-10 04:13:06.068214'),(103,'dcim','0018_device_redundancy_group','2025-11-10 04:13:06.566766'),(104,'extras','0052_configcontext_device_redundancy_groups','2025-11-10 04:13:06.723042'),(105,'extras','0053_relationship_required_on','2025-11-10 04:13:06.796892'),(106,'extras','0054_scheduledjob_kwargs_request_user_change','2025-11-10 04:13:06.881988'),(107,'extras','0055_configcontext_dynamic_groups','2025-11-10 04:13:07.034820'),(108,'extras','0056_objectchange_add_reverse_time_idx','2025-11-10 04:13:07.481081'),(109,'extras','0057_jobbutton','2025-11-10 04:13:07.740319'),(110,'extras','0058_jobresult_add_time_status_idxs','2025-11-10 04:13:08.108571'),(111,'extras','0059_joblogentry_scheduledjob_webhook_data_migration','2025-11-10 04:13:08.614137'),(112,'extras','0060_alter_joblogentry_scheduledjob_webhook_fields','2025-11-10 04:13:08.812523'),(113,'extras','0061_role_and_alter_status','2025-11-10 04:13:09.083287'),(114,'extras','0062_collect_roles_from_related_apps_roles','2025-11-10 04:13:09.216873'),(115,'virtualization','0012_alter_virtualmachine_role_add_new_role','2025-11-10 04:13:09.542950'),(116,'virtualization','0013_migrate_virtualmachine_role_data','2025-11-10 04:13:09.628976'),(117,'virtualization','0014_rename_virtualmachine_roles','2025-11-10 04:13:10.200660'),(118,'extras','0063_alter_role_options','2025-11-10 04:13:10.248301'),(119,'extras','0064_alter_configcontext_and_add_new_role','2025-11-10 04:13:10.476460'),(120,'extras','0065_configcontext_data_migrations','2025-11-10 04:13:10.564875'),(121,'extras','0066_rename_configcontext_role','2025-11-10 04:13:10.752743'),(122,'virtualization','0015_rename_foreignkey_fields','2025-11-10 04:13:12.042394'),(123,'ipam','0003_remove_max_length','2025-11-10 04:13:12.667900'),(124,'ipam','0004_fixup_p2p_broadcast','2025-11-10 04:13:12.761214'),(125,'ipam','0005_auto_slug','2025-11-10 04:13:12.800820'),(126,'ipam','0006_ipaddress_nat_outside_list','2025-11-10 04:13:13.038517'),(127,'ipam','0007_add_natural_indexing','2025-11-10 04:13:13.962974'),(128,'ipam','0008_prefix_vlan_vlangroup_location','2025-11-10 04:13:14.359037'),(129,'ipam','0009_alter_vlan_name','2025-11-10 04:13:14.468222'),(130,'ipam','0010_alter_ipam_role_add_new_role','2025-11-10 04:13:15.678042'),(131,'ipam','0011_migrate_ipam_role_data','2025-11-10 04:13:15.775803'),(132,'ipam','0012_rename_ipam_roles','2025-11-10 04:13:16.980821'),(133,'ipam','0013_delete_role','2025-11-10 04:13:16.991397'),(134,'ipam','0014_rename_foreign_keys_and_related_names','2025-11-10 04:13:17.355134'),(135,'ipam','0015_prefix_add_type','2025-11-10 04:13:17.446240'),(136,'dcim','0019_device_redundancy_group_data_migration','2025-11-10 04:13:17.832320'),(137,'dcim','0020_increase_device_asset_tag_size_limit','2025-11-10 04:13:18.003563'),(138,'dcim','0021_platform_network_driver','2025-11-10 04:13:18.065891'),(139,'dcim','0022_interface_redundancy_group','2025-11-10 04:13:19.045088'),(140,'dcim','0023_interface_redundancy_group_data_migration','2025-11-10 04:13:19.149151'),(141,'dcim','0024_move_site_fields_to_location_model','2025-11-10 04:13:20.767012'),(142,'dcim','0025_mptt_to_tree_queries','2025-11-10 04:13:22.143021'),(143,'dcim','0026_interface_mac_address_data_migration','2025-11-10 04:13:22.230350'),(144,'dcim','0027_alter_interface_mac_address','2025-11-10 04:13:22.377581'),(145,'dcim','0028_alter_device_and_rack_role_add_new_role','2025-11-10 04:13:23.581934'),(146,'dcim','0029_device_and_rack_roles_data_migrations','2025-11-10 04:13:23.936659'),(147,'dcim','0030_rename_device_and_rack_role','2025-11-10 04:13:24.766609'),(148,'dcim','0031_remove_device_role_and_rack_role','2025-11-10 04:13:24.791172'),(149,'dcim','0032_rename_foreignkey_fields','2025-11-10 04:13:26.029742'),(150,'circuits','0003_auto_slug','2025-11-10 04:13:26.084742'),(151,'circuits','0004_increase_provider_account_length','2025-11-10 04:13:26.161349'),(152,'circuits','0005_providernetwork','2025-11-10 04:13:27.293715'),(153,'circuits','0006_cache_circuit_terminations','2025-11-10 04:13:27.389634'),(154,'circuits','0007_circuitterminations_primary_model','2025-11-10 04:13:27.768125'),(155,'circuits','0008_add_natural_indexing','2025-11-10 04:13:27.833738'),(156,'circuits','0009_circuittermination_location','2025-11-10 04:13:28.242179'),(157,'dcim','0033_add_tree_managers_and_foreign_keys_pre_data_migration','2025-11-10 04:13:28.657059'),(158,'dcim','0034_migrate_region_and_site_data_to_locations','2025-11-10 04:13:28.750786'),(159,'virtualization','0016_remove_site_foreign_key_from_cluster_class','2025-11-10 04:13:28.904926'),(160,'virtualization','0017_created_datetime','2025-11-10 04:13:29.611253'),(161,'extras','0067_migrate_job_result_status','2025-11-10 04:13:29.702254'),(162,'extras','0068_jobresult__add_celery_fields','2025-11-10 04:13:31.866827'),(163,'extras','0069_created_datetime','2025-11-10 04:13:33.920011'),(164,'virtualization','0018_related_name_changes','2025-11-10 04:13:34.909574'),(165,'ipam','0016_prefix_type_data_migration','2025-11-10 04:13:35.003543'),(166,'ipam','0017_prefix_remove_is_pool','2025-11-10 04:13:35.092064'),(167,'tenancy','0002_auto_slug','2025-11-10 04:13:35.263497'),(168,'tenancy','0003_mptt_to_tree_queries','2025-11-10 04:13:35.788103'),(169,'tenancy','0004_change_tree_manager_on_tree_models','2025-11-10 04:13:35.803124'),(170,'tenancy','0005_rename_foreign_keys_and_related_names','2025-11-10 04:13:36.099201'),(171,'dcim','0035_rename_path_end_point_related_name','2025-11-10 04:13:36.926688'),(172,'dcim','0036_remove_site_foreign_key_from_dcim_models','2025-11-10 04:13:39.599138'),(173,'ipam','0018_remove_site_foreign_key_from_ipam_models','2025-11-10 04:13:40.481278'),(174,'ipam','0019_created_datetime','2025-11-10 04:13:41.567253'),(175,'ipam','0020_related_name_changes','2025-11-10 04:13:42.096416'),(176,'ipam','0021_prefix_add_rir_and_date_allocated','2025-11-10 04:13:42.705232'),(177,'ipam','0022_aggregate_to_prefix_data_migration','2025-11-10 04:13:42.812061'),(178,'ipam','0023_delete_aggregate','2025-11-10 04:13:42.826113'),(179,'extras','0070_remove_site_and_region_attributes_from_config_context','2025-11-10 04:13:43.026444'),(180,'django_celery_results','0001_initial','2025-11-10 04:13:43.048114'),(181,'django_celery_results','0002_add_task_name_args_kwargs','2025-11-10 04:13:43.111307'),(182,'django_celery_results','0003_auto_20181106_1101','2025-11-10 04:13:43.119177'),(183,'django_celery_results','0004_auto_20190516_0412','2025-11-10 04:13:43.191789'),(184,'django_celery_results','0005_taskresult_worker','2025-11-10 04:13:43.230014'),(185,'django_celery_results','0006_taskresult_date_created','2025-11-10 04:13:43.353758'),(186,'tenancy','0006_created_datetime','2025-11-10 04:13:43.900049'),(187,'dcim','0037_created_datetime','2025-11-10 04:13:47.156020'),(188,'dcim','0038_fixup_fks_and_related_names','2025-11-10 04:13:54.043892'),(189,'dcim','0039_related_name_changes','2025-11-10 04:13:55.626660'),(190,'circuits','0010_rename_foreign_keys_and_related_names','2025-11-10 04:13:56.411752'),(191,'circuits','0011_remove_site_foreign_key_from_circuit_termination_class','2025-11-10 04:13:56.548784'),(192,'dcim','0040_remove_region_and_site','2025-11-10 04:13:57.018616'),(193,'ipam','0024_interface_to_ipaddress_m2m','2025-11-10 04:13:57.441396'),(194,'virtualization','0019_vminterface_ip_addresses_m2m','2025-11-10 04:13:57.529057'),(195,'virtualization','0020_remove_clustergroup_clustertype_slug','2025-11-10 04:13:57.571905'),(196,'tenancy','0007_remove_tenant_tenantgroup_slug','2025-11-10 04:13:57.689893'),(197,'ipam','0025_interface_ipaddress_m2m_data_migration','2025-11-10 04:13:57.774804'),(198,'ipam','0026_ipaddress_remove_assigned_object','2025-11-10 04:13:58.035431'),(199,'ipam','0027_remove_rir_slug','2025-11-10 04:13:58.058190'),(200,'extras','0071_replace_related_names','2025-11-10 04:14:00.551280'),(201,'extras','0072_rename_model_fields','2025-11-10 04:14:01.076671'),(202,'extras','0073_job__unique_name_data_migration','2025-11-10 04:14:01.324497'),(203,'extras','0074_job__unique_name','2025-11-10 04:14:02.225885'),(204,'extras','0075_remove_gitrepository_fields','2025-11-10 04:14:02.354610'),(205,'extras','0076_rename_slug_to_key_for_custom_field','2025-11-10 04:14:02.518327'),(206,'extras','0077_migrate_custom_field_data','2025-11-10 04:14:02.618321'),(207,'extras','0078_remove_name_field_and_make_label_field_non_nullable','2025-11-10 04:14:03.050868'),(208,'dcim','0041_interface_ip_addresses_m2m','2025-11-10 04:14:03.138763'),(209,'dcim','0042_alter_location_managers','2025-11-10 04:14:03.192683'),(210,'dcim','0043_remove_slug','2025-11-10 04:14:03.335932'),(211,'circuits','0012_created_datetime','2025-11-10 04:14:03.687157'),(212,'circuits','0013_alter_circuittermination__path','2025-11-10 04:14:03.839196'),(213,'circuits','0014_related_name_changes','2025-11-10 04:14:03.923988'),(214,'circuits','0015_remove_circuittype_provider_slug','2025-11-10 04:14:04.006257'),(215,'extras','0079_remove_slug','2025-11-10 04:14:04.638580'),(216,'extras','0080_tagsfield','2025-11-10 04:14:04.882530'),(217,'virtualization','0021_tagsfield_and_vminterface_to_primarymodel','2025-11-10 04:14:05.532962'),(218,'virtualization','0022_vminterface_timestamps_data_migration','2025-11-10 04:14:05.618866'),(219,'ipam','0028_tagsfield','2025-11-10 04:14:06.382275'),(220,'dcim','0044_tagsfield','2025-11-10 04:14:08.454124'),(221,'ipam','0029_ip_address_to_interface_uniqueness_constraints','2025-11-10 04:14:08.490310'),(222,'ipam','0030_ipam__namespaces','2025-11-10 04:14:10.897202'),(223,'virtualization','0023_ipam__namespaces','2025-11-10 04:14:11.020271'),(224,'virtualization','0024_fixup_null_statuses','2025-11-10 04:14:11.111988'),(225,'extras','0081_rename_relationship_slug_to_key','2025-11-10 04:14:11.168565'),(226,'extras','0082_rename_relationship_name_to_label','2025-11-10 04:14:11.588322'),(227,'extras','0083_ensure_relationship_keys_are_unique','2025-11-10 04:14:11.676719'),(228,'extras','0084_rename_computed_field_slug_to_key','2025-11-10 04:14:11.768720'),(229,'virtualization','0025_status_nonnullable','2025-11-10 04:14:12.162261'),(230,'dcim','0045_ipam__namespaces','2025-11-10 04:14:12.307145'),(231,'ipam','0031_ipam___data_migrations','2025-11-10 04:14:12.797942'),(232,'ipam','0032_ipam__namespaces_finish','2025-11-10 04:14:14.115035'),(233,'ipam','0033_fixup_null_statuses','2025-11-10 04:14:14.206859'),(234,'ipam','0034_status_nonnullable','2025-11-10 04:14:14.809803'),(235,'ipam','0035_ensure_all_services_fit_uniqueness_constraint','2025-11-10 04:14:14.898024'),(236,'dcim','0046_fixup_null_statuses','2025-11-10 04:14:15.341699'),(237,'dcim','0047_status_nonnullable','2025-11-10 04:14:17.406557'),(238,'ipam','0036_add_uniqueness_constraints_to_service','2025-11-10 04:14:17.539544'),(239,'ipam','0037_data_migration_vlan_group_name_uniqueness','2025-11-10 04:14:17.630045'),(240,'ipam','0038_vlan_group_name_unique_remove_slug','2025-11-10 04:14:17.822477'),(241,'ipam','0039_alter_ipaddresstointerface_ip_address','2025-11-10 04:14:17.916033'),(242,'dcim','0048_ensure_virtual_chassis_names_are_unique_and_add_uniqueness_constraint','2025-11-10 04:14:18.398009'),(243,'dcim','0049_remove_slugs_and_change_device_primary_ip_fields','2025-11-10 04:14:19.562613'),(244,'dcim','0050_fix_interface_redundancy_group_association_created','2025-11-10 04:14:19.615402'),(245,'dcim','0051_interface_redundancy_group_nullable_status','2025-11-10 04:14:19.784584'),(246,'dcim','0052_fix_interface_redundancy_group_created','2025-11-10 04:14:20.506566'),(247,'ipam','0040_vlan_prefix_locations','2025-11-10 04:14:20.958994'),(248,'ipam','0041_vlan_prefix_locations_data_migration','2025-11-10 04:14:21.334129'),(249,'ipam','0042_remove_location_from_vlan_and_prefix','2025-11-10 04:14:21.693299'),(250,'ipam','0043_fixup_null_ip_version','2025-11-10 04:14:21.786963'),(251,'ipam','0044_ip_version_nonnullable','2025-11-10 04:14:22.047871'),(252,'ipam','0045_alter_vlangroup_options','2025-11-10 04:14:22.075953'),(253,'ipam','0046_update_all_charfields_max_length_to_255','2025-11-10 04:14:23.577331'),(254,'virtualization','0026_change_virtualmachine_primary_ip_fields','2025-11-10 04:14:24.011119'),(255,'tenancy','0008_tagsfield','2025-11-10 04:14:24.098739'),(256,'tenancy','0009_update_all_charfields_max_length_to_255','2025-11-10 04:14:24.524234'),(257,'extras','0085_taggeditem_cleanup','2025-11-10 04:14:24.925624'),(258,'extras','0086_taggeditem_uniqueness','2025-11-10 04:14:25.087807'),(259,'extras','0087_job__celery_task_fields__dryrun_support','2025-11-10 04:14:26.250127'),(260,'extras','0088_job__commit_default_data_migration','2025-11-10 04:14:26.336398'),(261,'extras','0089_joblogentry__log_level_default','2025-11-10 04:14:26.348545'),(262,'extras','0090_joblogentry__log_level_data_migration','2025-11-10 04:14:26.435047'),(263,'extras','0091_scheduledjob__data_migration','2025-11-10 04:14:26.520903'),(264,'extras','0092_uniqueness_data_migration','2025-11-10 04:14:26.687742'),(265,'extras','0093_uniqueness_fixup','2025-11-10 04:14:27.587884'),(266,'extras','0094_alter_objectchange_unique_together','2025-11-10 04:14:27.650358'),(267,'extras','0095_ensure_note_timestamps_are_unique','2025-11-10 04:14:27.737132'),(268,'extras','0096_remove_slugs','2025-11-10 04:14:27.939408'),(269,'extras','0097_alter_job_result_remove_result','2025-11-10 04:14:28.010708'),(270,'extras','0098_rename_data_jobresult_result','2025-11-10 04:14:28.045034'),(271,'extras','0099_remove_dangling_note_objects','2025-11-10 04:14:28.132422'),(272,'extras','0100_fileproxy_job_result','2025-11-10 04:14:28.525601'),(273,'extras','0101_externalintegration','2025-11-10 04:14:28.638985'),(274,'extras','0102_set_null_objectchange_contenttype','2025-11-10 04:14:28.897864'),(275,'extras','0103_add_db_indexes_to_object_change','2025-11-10 04:14:29.176503'),(276,'extras','0104_contact_contactassociation_team','2025-11-10 04:14:30.173601'),(277,'extras','0105_update_all_charfields_max_length_to_255','2025-11-10 04:14:34.539237'),(278,'extras','0106_populate_default_statuses_and_roles_for_contact_associations','2025-11-10 04:14:34.664414'),(279,'extras','0107_laxurlfield','2025-11-10 04:14:34.770676'),(280,'extras','0108_jobbutton_enabled','2025-11-10 04:14:34.842110'),(281,'extras','0109_dynamicgroup_group_type_dynamicgroup_tags_and_more','2025-11-10 04:14:35.648187'),(282,'dcim','0053_create_device_family_model','2025-11-10 04:14:35.878444'),(283,'dcim','0054_softwareimage_softwareversion','2025-11-10 04:14:37.352195'),(284,'dcim','0055_softwareimage_softwareversion_data_migration','2025-11-10 04:14:37.480511'),(285,'dcim','0056_update_all_charfields_max_length_to_255','2025-11-10 04:14:47.602709'),(286,'dcim','0057_controller_models','2025-11-10 04:14:48.578440'),(287,'dcim','0058_controller_data_migration','2025-11-10 04:14:48.703005'),(288,'dcim','0059_add_role_field_to_interface_models','2025-11-10 04:14:48.876167'),(289,'dcim','0060_alter_cable_status_alter_consoleport__path_and_more','2025-11-10 04:14:54.605028'),(290,'extras','0110_alter_configcontext_cluster_groups_and_more','2025-11-10 04:14:56.666211'),(291,'ipam','0047_alter_ipaddress_role_alter_ipaddress_status_and_more','2025-11-10 04:14:57.527397'),(292,'extras','0111_metadata','2025-11-10 04:14:58.319740'),(293,'extras','0112_dynamic_group_group_type_data_migration','2025-11-10 04:14:58.424173'),(294,'extras','0113_saved_views','2025-11-10 04:14:58.689996'),(295,'dcim','0061_module_models','2025-11-10 04:15:12.677519'),(296,'dcim','0062_module_data_migration','2025-11-10 04:15:12.810850'),(297,'cloud','0001_initial','2025-11-10 04:15:15.081358'),(298,'circuits','0016_tagsfield','2025-11-10 04:15:15.790279'),(299,'circuits','0017_fixup_null_statuses','2025-11-10 04:15:15.900642'),(300,'circuits','0018_status_nonnullable','2025-11-10 04:15:16.099206'),(301,'circuits','0019_remove_providernetwork_slug','2025-11-10 04:15:16.184598'),(302,'circuits','0020_update_all_charfields_max_length_to_255','2025-11-10 04:15:17.256443'),(303,'circuits','0021_alter_circuit_status_alter_circuittermination__path','2025-11-10 04:15:17.783069'),(304,'circuits','0022_circuittermination_cloud_network','2025-11-10 04:15:17.940133'),(305,'constance','0001_initial','2025-11-10 04:15:17.955661'),(306,'constance','0002_migrate_from_old_table','2025-11-10 04:15:18.064619'),(307,'constance','0003_drop_pickle','2025-11-10 04:15:18.175300'),(308,'extras','0114_computedfield_grouping','2025-11-10 04:15:18.249852'),(309,'extras','0115_scheduledjob_time_zone','2025-11-10 04:15:18.327814'),(310,'extras','0116_fix_dynamic_group_group_type_data_migration','2025-11-10 04:15:18.439633'),(311,'extras','0117_create_job_queue_model','2025-11-10 04:15:19.636399'),(312,'extras','0118_task_queue_to_job_queue_migration','2025-11-10 04:15:20.059984'),(313,'extras','0119_remove_task_queues_from_job_and_queue_from_scheduled_job','2025-11-10 04:15:20.441648'),(314,'extras','0120_job_is_singleton_job_is_singleton_override','2025-11-10 04:15:20.692583'),(315,'extras','0121_alter_team_contacts','2025-11-10 04:15:20.806637'),(316,'extras','0122_add_graphqlquery_owner_content_type','2025-11-10 04:15:21.280073'),(317,'ipam','0048_vrf_status','2025-11-10 04:15:21.458693'),(318,'ipam','0049_vrf_data_migration','2025-11-10 04:15:21.586401'),(319,'ipam','0050_vlangroup_range','2025-11-10 04:15:21.752868'),(320,'dcim','0063_interfacevdcassignment_virtualdevicecontext_and_more','2025-11-10 04:15:22.675150'),(321,'dcim','0064_virtualdevicecontext_status_data_migration','2025-11-10 04:15:22.802983'),(322,'dcim','0065_controller_capabilities_and_more','2025-11-10 04:15:23.104394'),(323,'wireless','0001_initial','2025-11-10 04:15:24.234553'),(324,'dcim','0066_controllermanageddevicegroup_radio_profiles_and_more','2025-11-10 04:15:24.467242'),(325,'dcim','0067_controllermanageddevicegroup_tenant','2025-11-10 04:15:24.965514'),(326,'dcim','0068_alter_softwareimagefile_download_url','2025-11-10 04:15:25.085673'),(327,'dcim','0069_softwareimagefile_external_integration','2025-11-10 04:15:25.237263'),(328,'dcim','0070_modulefamily_models','2025-11-10 04:15:26.235840'),(329,'dcim','0071_alter_consoleport_options_and_more','2025-11-10 04:15:27.180614'),(330,'dcim','0072_alter_powerfeed_options_and_more','2025-11-10 04:15:28.872273'),(331,'dcim','0073_alter_powerport_power_factor_and_more','2025-11-10 04:15:29.302395'),(332,'dcim','0074_alter_rack_u_height','2025-11-10 04:15:29.381545'),(333,'django_celery_beat','0001_initial','2025-11-10 04:15:29.476872'),(334,'django_celery_beat','0002_auto_20161118_0346','2025-11-10 04:15:29.524505'),(335,'django_celery_beat','0003_auto_20161209_0049','2025-11-10 04:15:29.548496'),(336,'django_celery_beat','0004_auto_20170221_0000','2025-11-10 04:15:29.558329'),(337,'django_celery_beat','0005_add_solarschedule_events_choices','2025-11-10 04:15:29.568413'),(338,'django_celery_beat','0006_auto_20180322_0932','2025-11-10 04:15:29.653252'),(339,'django_celery_beat','0007_auto_20180521_0826','2025-11-10 04:15:29.711507'),(340,'django_celery_beat','0008_auto_20180914_1922','2025-11-10 04:15:29.753408'),(341,'django_celery_beat','0006_auto_20180210_1226','2025-11-10 04:15:29.782957'),(342,'django_celery_beat','0006_periodictask_priority','2025-11-10 04:15:29.816433'),(343,'django_celery_beat','0009_periodictask_headers','2025-11-10 04:15:29.855939'),(344,'django_celery_beat','0010_auto_20190429_0326','2025-11-10 04:15:30.102952'),(345,'django_celery_beat','0011_auto_20190508_0153','2025-11-10 04:15:30.151695'),(346,'django_celery_beat','0012_periodictask_expire_seconds','2025-11-10 04:15:30.197865'),(347,'django_celery_beat','0013_auto_20200609_0727','2025-11-10 04:15:30.210965'),(348,'django_celery_beat','0014_remove_clockedschedule_enabled','2025-11-10 04:15:30.234609'),(349,'django_celery_beat','0015_edit_solarschedule_events_choices','2025-11-10 04:15:30.246514'),(350,'django_celery_beat','0016_alter_crontabschedule_timezone','2025-11-10 04:15:30.258676'),(351,'django_celery_beat','0017_alter_crontabschedule_month_of_year','2025-11-10 04:15:30.271061'),(352,'django_celery_beat','0018_improve_crontab_helptext','2025-11-10 04:15:30.282390'),(353,'django_celery_beat','0019_alter_periodictasks_options','2025-11-10 04:15:30.290066'),(354,'django_celery_results','0007_remove_taskresult_hidden','2025-11-10 04:15:30.315365'),(355,'django_celery_results','0008_chordcounter','2025-11-10 04:15:30.329020'),(356,'django_celery_results','0009_groupresult','2025-11-10 04:15:30.615423'),(357,'django_celery_results','0010_remove_duplicate_indices','2025-11-10 04:15:30.637085'),(358,'django_celery_results','0011_taskresult_periodic_task_name','2025-11-10 04:15:30.665591'),(359,'django_celery_results','0012_taskresult_date_started','2025-11-10 04:15:30.694795'),(360,'django_celery_results','0013_taskresult_django_cele_periodi_1993cf_idx','2025-11-10 04:15:30.713185'),(361,'django_celery_results','0014_alter_taskresult_status','2025-11-10 04:15:30.727281'),(362,'extras','0123_alter_joblogentry_created','2025-11-10 04:15:30.754124'),(363,'extras','0124_add_joblogentry_index','2025-11-10 04:15:30.779770'),(364,'extras','0125_jobresult_date_started','2025-11-10 04:15:30.853819'),(365,'virtualization','0027_virtualmachine_software_image','2025-11-10 04:15:31.227857'),(366,'virtualization','0028_update_all_charfields_max_length_to_255','2025-11-10 04:15:32.478831'),(367,'virtualization','0029_add_role_field_to_interface_models','2025-11-10 04:15:32.663707'),(368,'virtualization','0030_alter_virtualmachine_local_config_context_data_owner_content_type_and_more','2025-11-10 04:15:33.972755'),(369,'ipam','0051_added_optional_vrf_relationship_to_vdc','2025-11-10 04:15:34.303772'),(370,'ipam','0052_alter_ipaddress_index_together_and_more','2025-11-10 04:15:34.610328'),(371,'ipam','0053_alter_vrfdeviceassignment_options_and_more','2025-11-10 04:15:34.692337'),(372,'sessions','0001_initial','2025-11-10 04:15:34.713368'),(373,'silk','0001_initial','2025-11-10 04:15:34.934590'),(374,'silk','0002_auto_update_uuid4_id_field','2025-11-10 04:15:35.227467'),(375,'silk','0003_request_prof_file','2025-11-10 04:15:35.260558'),(376,'silk','0004_request_prof_file_storage','2025-11-10 04:15:35.273095'),(377,'silk','0005_increase_request_prof_file_length','2025-11-10 04:15:35.295375'),(378,'silk','0006_fix_request_prof_file_blank','2025-11-10 04:15:35.344774'),(379,'silk','0007_sqlquery_identifier','2025-11-10 04:15:35.379859'),(380,'silk','0008_sqlquery_analysis','2025-11-10 04:15:35.408098'),(381,'default','0001_initial','2025-11-10 04:15:35.660231'),(382,'social_auth','0001_initial','2025-11-10 04:15:35.663218'),(383,'default','0002_add_related_name','2025-11-10 04:15:35.786997'),(384,'social_auth','0002_add_related_name','2025-11-10 04:15:35.790430'),(385,'default','0003_alter_email_max_length','2025-11-10 04:15:35.805899'),(386,'social_auth','0003_alter_email_max_length','2025-11-10 04:15:35.808894'),(387,'default','0004_auto_20160423_0400','2025-11-10 04:15:35.831657'),(388,'social_auth','0004_auto_20160423_0400','2025-11-10 04:15:35.834778'),(389,'social_auth','0005_auto_20160727_2333','2025-11-10 04:15:35.851564'),(390,'social_django','0006_partial','2025-11-10 04:15:35.874207'),(391,'social_django','0007_code_timestamp','2025-11-10 04:15:35.907900'),(392,'social_django','0008_partial_timestamp','2025-11-10 04:15:35.940006'),(393,'social_django','0009_auto_20191118_0520','2025-11-10 04:15:36.017961'),(394,'social_django','0010_uid_db_index','2025-11-10 04:15:36.048653'),(395,'social_django','0011_alter_id_fields','2025-11-10 04:15:36.196730'),(396,'social_django','0012_usersocialauth_extra_data_new','2025-11-10 04:15:36.258391'),(397,'social_django','0013_migrate_extra_data','2025-11-10 04:15:36.386950'),(398,'social_django','0014_remove_usersocialauth_extra_data','2025-11-10 04:15:36.443526'),(399,'social_django','0015_rename_extra_data_new_usersocialauth_extra_data','2025-11-10 04:15:36.485190'),(400,'social_django','0016_alter_usersocialauth_extra_data','2025-11-10 04:15:36.508116'),(401,'taggit','0001_initial','2025-11-10 04:15:36.687775'),(402,'taggit','0002_auto_20150616_2121','2025-11-10 04:15:37.112363'),(403,'taggit','0003_taggeditem_add_unique_index','2025-11-10 04:15:37.172522'),(404,'taggit','0004_alter_taggeditem_content_type_alter_taggeditem_tag','2025-11-10 04:15:37.418252'),(405,'taggit','0005_auto_20220424_2025','2025-11-10 04:15:37.433078'),(406,'taggit','0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx','2025-11-10 04:15:37.549032'),(407,'users','0002_token_ordering_by_created','2025-11-10 04:15:37.571063'),(408,'users','0003_alter_user_options','2025-11-10 04:15:37.593545'),(409,'users','0004_alter_user_managers','2025-11-10 04:15:37.616203'),(410,'users','0005_ensure_object_permission_names_are_unique','2025-11-10 04:15:37.744181'),(411,'users','0006_make_object_permission_name_globally_unique','2025-11-10 04:15:37.816007'),(412,'users','0007_alter_objectpermission_object_types','2025-11-10 04:15:38.231986'),(413,'users','0008_make_object_permission_a_changelogged_model','2025-11-10 04:15:38.398226'),(414,'users','0009_update_all_charfields_max_length_to_255','2025-11-10 04:15:38.567091'),(415,'users','0010_user_default_saved_views','2025-11-10 04:15:38.689086'),(416,'social_django','0004_auto_20160423_0400','2025-11-10 04:15:38.699125'),(417,'social_django','0001_initial','2025-11-10 04:15:38.702172'),(418,'social_django','0005_auto_20160727_2333','2025-11-10 04:15:38.704968'),(419,'social_django','0003_alter_email_max_length','2025-11-10 04:15:38.707990'),(420,'social_django','0002_add_related_name','2025-11-10 04:15:38.711364');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2025-11-17 04:12:49.948713'),(2,'contenttypes','0002_remove_content_type_name','2025-11-17 04:12:49.975922'),(3,'auth','0001_initial','2025-11-17 04:12:50.058409'),(4,'auth','0002_alter_permission_name_max_length','2025-11-17 04:12:50.079543'),(5,'auth','0003_alter_user_email_max_length','2025-11-17 04:12:50.084656'),(6,'auth','0004_alter_user_username_opts','2025-11-17 04:12:50.089222'),(7,'auth','0005_alter_user_last_login_null','2025-11-17 04:12:50.093514'),(8,'auth','0006_require_contenttypes_0002','2025-11-17 04:12:50.095523'),(9,'auth','0007_alter_validators_add_error_messages','2025-11-17 04:12:50.099878'),(10,'auth','0008_alter_user_username_max_length','2025-11-17 04:12:50.104257'),(11,'auth','0009_alter_user_last_name_max_length','2025-11-17 04:12:50.109589'),(12,'auth','0010_alter_group_name_max_length','2025-11-17 04:12:50.119837'),(13,'auth','0011_update_proxy_permissions','2025-11-17 04:12:50.124976'),(14,'auth','0012_alter_user_first_name_max_length','2025-11-17 04:12:50.129696'),(15,'users','0001_initial','2025-11-17 04:12:50.388831'),(16,'admin','0001_initial','2025-11-17 04:12:50.441543'),(17,'admin','0002_logentry_remove_auto_add','2025-11-17 04:12:50.450943'),(18,'admin','0003_logentry_add_action_flag_choices','2025-11-17 04:12:50.459193'),(19,'extras','0001_initial_part_1','2025-11-17 04:12:50.879738'),(20,'tenancy','0001_initial','2025-11-17 04:12:50.951142'),(21,'dcim','0001_initial_part_1','2025-11-17 04:12:51.249121'),(22,'dcim','0002_initial_part_2','2025-11-17 04:12:51.887148'),(23,'ipam','0001_initial_part_1','2025-11-17 04:12:52.430583'),(24,'extras','0002_initial_part_2','2025-11-17 04:12:52.888978'),(25,'dcim','0003_initial_part_3','2025-11-17 04:12:56.773142'),(26,'virtualization','0001_initial','2025-11-17 04:12:57.548963'),(27,'dcim','0004_initial_part_4','2025-11-17 04:13:02.785206'),(28,'extras','0003_initial_part_3','2025-11-17 04:13:04.400035'),(29,'ipam','0002_initial_part_2','2025-11-17 04:13:06.298897'),(30,'circuits','0001_initial_part_1','2025-11-17 04:13:06.341991'),(31,'circuits','0002_initial_part_2','2025-11-17 04:13:07.644488'),(32,'extras','0004_populate_default_status_records','2025-11-17 04:13:07.852642'),(33,'extras','0005_configcontext_device_types','2025-11-17 04:13:07.970389'),(34,'extras','0006_graphqlquery','2025-11-17 04:13:08.327401'),(35,'extras','0007_configcontextschema','2025-11-17 04:13:08.536486'),(36,'virtualization','0002_virtualmachine_local_context_schema','2025-11-17 04:13:08.647030'),(37,'virtualization','0003_vminterface_verbose_name','2025-11-17 04:13:08.691208'),(38,'virtualization','0004_auto_slug','2025-11-17 04:13:08.761678'),(39,'virtualization','0005_add_natural_indexing','2025-11-17 04:13:08.937315'),(40,'extras','0008_jobresult__custom_field_data','2025-11-17 04:13:08.996497'),(41,'extras','0009_computedfield','2025-11-17 04:13:09.093404'),(42,'extras','0010_change_cf_validation_max_min_field_to_bigint','2025-11-17 04:13:09.243152'),(43,'extras','0011_fileattachment_fileproxy','2025-11-17 04:13:09.299649'),(44,'extras','0012_healthchecktestmodel','2025-11-17 04:13:09.310589'),(45,'extras','0013_default_fallback_value_computedfield','2025-11-17 04:13:09.345988'),(46,'extras','0014_auto_slug','2025-11-17 04:13:09.890326'),(47,'extras','0015_scheduled_job','2025-11-17 04:13:10.111772'),(48,'extras','0016_secret','2025-11-17 04:13:10.452270'),(49,'extras','0017_joblogentry','2025-11-17 04:13:10.542118'),(50,'extras','0018_joblog_data_migration','2025-11-17 04:13:10.612700'),(51,'extras','0019_joblogentry__meta_options__related_name','2025-11-17 04:13:10.976303'),(52,'extras','0020_customfield_changelog','2025-11-17 04:13:11.123499'),(53,'extras','0021_customfield_changelog_data','2025-11-17 04:13:11.196766'),(54,'extras','0022_objectchange_object_datav2','2025-11-17 04:13:11.251964'),(55,'extras','0023_job_model','2025-11-17 04:13:11.738148'),(56,'extras','0024_job_data_migration','2025-11-17 04:13:11.818105'),(57,'extras','0025_add_advanced_ui_boolean_to_customfield_conputedfield_and_relationship','2025-11-17 04:13:12.301933'),(58,'extras','0026_job_add_gitrepository_fk','2025-11-17 04:13:12.528384'),(59,'extras','0027_job_gitrepository_data_migration','2025-11-17 04:13:12.601361'),(60,'extras','0028_job_reduce_source','2025-11-17 04:13:12.679240'),(61,'extras','0029_dynamicgroup','2025-11-17 04:13:12.777821'),(62,'extras','0030_webhook_alter_unique_together','2025-11-17 04:13:12.836446'),(63,'extras','0031_tag_content_types','2025-11-17 04:13:12.950556'),(64,'extras','0032_tag_content_types_data_migration','2025-11-17 04:13:13.034536'),(65,'extras','0033_add__optimized_indexing','2025-11-17 04:13:14.163209'),(66,'virtualization','0006_vminterface_status','2025-11-17 04:13:14.279866'),(67,'virtualization','0007_vminterface_status_data_migration','2025-11-17 04:13:14.374535'),(68,'virtualization','0008_vminterface_parent','2025-11-17 04:13:14.880529'),(69,'extras','0034_alter_fileattachment_mimetype','2025-11-17 04:13:14.899897'),(70,'extras','0035_scheduledjob_crontab','2025-11-17 04:13:14.948885'),(71,'extras','0036_job_add_has_sensitive_variables','2025-11-17 04:13:15.119843'),(72,'extras','0037_configcontextschema__remove_name_unique__create_constraint_unique_name_owner','2025-11-17 04:13:15.225209'),(73,'dcim','0005_device_local_context_schema','2025-11-17 04:13:15.376870'),(74,'dcim','0006_auto_slug','2025-11-17 04:13:15.762848'),(75,'dcim','0007_device_secrets_group','2025-11-17 04:13:16.256342'),(76,'dcim','0008_increase_all_serial_lengths','2025-11-17 04:13:16.551025'),(77,'dcim','0009_add_natural_indexing','2025-11-17 04:13:19.065401'),(78,'dcim','0010_interface_status','2025-11-17 04:13:19.202634'),(79,'dcim','0011_interface_status_data_migration','2025-11-17 04:13:19.298310'),(80,'dcim','0012_interface_parent_bridge','2025-11-17 04:13:19.520399'),(81,'dcim','0013_location_location_type','2025-11-17 04:13:20.916237'),(82,'virtualization','0009_cluster_location','2025-11-17 04:13:21.027938'),(83,'virtualization','0010_vminterface_mac_address_data_migration','2025-11-17 04:13:21.100665'),(84,'virtualization','0011_alter_vminterface_mac_address','2025-11-17 04:13:21.168590'),(85,'extras','0038_configcontext_locations','2025-11-17 04:13:21.292417'),(86,'extras','0039_objectchange__add_change_context','2025-11-17 04:13:21.426024'),(87,'extras','0040_dynamicgroup__dynamicgroupmembership','2025-11-17 04:13:21.907793'),(88,'extras','0041_jobresult_job_kwargs','2025-11-17 04:13:21.970865'),(89,'extras','0042_job__add_is_job_hook_receiver','2025-11-17 04:13:22.058930'),(90,'extras','0043_note','2025-11-17 04:13:22.190973'),(91,'extras','0044_add_job_hook','2025-11-17 04:13:22.337696'),(92,'extras','0045_add_custom_field_slug','2025-11-17 04:13:22.398993'),(93,'extras','0046_populate_custom_field_slug_label','2025-11-17 04:13:22.474975'),(94,'extras','0047_enforce_custom_field_slug','2025-11-17 04:13:22.545748'),(95,'extras','0048_alter_objectchange_change_context_detail','2025-11-17 04:13:22.597701'),(96,'extras','0049_alter_tag_slug','2025-11-17 04:13:22.673146'),(97,'extras','0050_customfield_grouping','2025-11-17 04:13:22.740978'),(98,'extras','0051_add_job_task_queues','2025-11-17 04:13:23.188498'),(99,'dcim','0014_location_status_data_migration','2025-11-17 04:13:23.284805'),(100,'dcim','0015_device_components__changeloggedmodel','2025-11-17 04:13:25.530339'),(101,'dcim','0016_device_components__timestamp_data_migration','2025-11-17 04:13:25.614008'),(102,'dcim','0017_locationtype_nestable','2025-11-17 04:13:25.980790'),(103,'dcim','0018_device_redundancy_group','2025-11-17 04:13:26.437388'),(104,'extras','0052_configcontext_device_redundancy_groups','2025-11-17 04:13:26.572303'),(105,'extras','0053_relationship_required_on','2025-11-17 04:13:26.639359'),(106,'extras','0054_scheduledjob_kwargs_request_user_change','2025-11-17 04:13:26.718399'),(107,'extras','0055_configcontext_dynamic_groups','2025-11-17 04:13:26.851068'),(108,'extras','0056_objectchange_add_reverse_time_idx','2025-11-17 04:13:26.904867'),(109,'extras','0057_jobbutton','2025-11-17 04:13:27.150091'),(110,'extras','0058_jobresult_add_time_status_idxs','2025-11-17 04:13:27.942833'),(111,'extras','0059_joblogentry_scheduledjob_webhook_data_migration','2025-11-17 04:13:28.174285'),(112,'extras','0060_alter_joblogentry_scheduledjob_webhook_fields','2025-11-17 04:13:28.355544'),(113,'extras','0061_role_and_alter_status','2025-11-17 04:13:28.584791'),(114,'extras','0062_collect_roles_from_related_apps_roles','2025-11-17 04:13:28.710571'),(115,'virtualization','0012_alter_virtualmachine_role_add_new_role','2025-11-17 04:13:29.304826'),(116,'virtualization','0013_migrate_virtualmachine_role_data','2025-11-17 04:13:29.385852'),(117,'virtualization','0014_rename_virtualmachine_roles','2025-11-17 04:13:29.709296'),(118,'extras','0063_alter_role_options','2025-11-17 04:13:29.754887'),(119,'extras','0064_alter_configcontext_and_add_new_role','2025-11-17 04:13:29.965642'),(120,'extras','0065_configcontext_data_migrations','2025-11-17 04:13:30.051836'),(121,'extras','0066_rename_configcontext_role','2025-11-17 04:13:30.501677'),(122,'virtualization','0015_rename_foreignkey_fields','2025-11-17 04:13:31.510572'),(123,'ipam','0003_remove_max_length','2025-11-17 04:13:32.181562'),(124,'ipam','0004_fixup_p2p_broadcast','2025-11-17 04:13:32.272986'),(125,'ipam','0005_auto_slug','2025-11-17 04:13:32.310430'),(126,'ipam','0006_ipaddress_nat_outside_list','2025-11-17 04:13:32.550571'),(127,'ipam','0007_add_natural_indexing','2025-11-17 04:13:33.484848'),(128,'ipam','0008_prefix_vlan_vlangroup_location','2025-11-17 04:13:33.841337'),(129,'ipam','0009_alter_vlan_name','2025-11-17 04:13:33.946418'),(130,'ipam','0010_alter_ipam_role_add_new_role','2025-11-17 04:13:35.137157'),(131,'ipam','0011_migrate_ipam_role_data','2025-11-17 04:13:35.233650'),(132,'ipam','0012_rename_ipam_roles','2025-11-17 04:13:36.416858'),(133,'ipam','0013_delete_role','2025-11-17 04:13:36.425890'),(134,'ipam','0014_rename_foreign_keys_and_related_names','2025-11-17 04:13:36.787496'),(135,'ipam','0015_prefix_add_type','2025-11-17 04:13:36.869577'),(136,'dcim','0019_device_redundancy_group_data_migration','2025-11-17 04:13:36.972125'),(137,'dcim','0020_increase_device_asset_tag_size_limit','2025-11-17 04:13:37.135139'),(138,'dcim','0021_platform_network_driver','2025-11-17 04:13:37.188703'),(139,'dcim','0022_interface_redundancy_group','2025-11-17 04:13:38.135668'),(140,'dcim','0023_interface_redundancy_group_data_migration','2025-11-17 04:13:38.236379'),(141,'dcim','0024_move_site_fields_to_location_model','2025-11-17 04:13:39.720723'),(142,'dcim','0025_mptt_to_tree_queries','2025-11-17 04:13:40.937505'),(143,'dcim','0026_interface_mac_address_data_migration','2025-11-17 04:13:41.022768'),(144,'dcim','0027_alter_interface_mac_address','2025-11-17 04:13:41.153712'),(145,'dcim','0028_alter_device_and_rack_role_add_new_role','2025-11-17 04:13:42.621528'),(146,'dcim','0029_device_and_rack_roles_data_migrations','2025-11-17 04:13:42.711102'),(147,'dcim','0030_rename_device_and_rack_role','2025-11-17 04:13:43.587581'),(148,'dcim','0031_remove_device_role_and_rack_role','2025-11-17 04:13:43.602204'),(149,'dcim','0032_rename_foreignkey_fields','2025-11-17 04:13:44.893348'),(150,'circuits','0003_auto_slug','2025-11-17 04:13:44.947815'),(151,'circuits','0004_increase_provider_account_length','2025-11-17 04:13:45.014926'),(152,'circuits','0005_providernetwork','2025-11-17 04:13:46.095888'),(153,'circuits','0006_cache_circuit_terminations','2025-11-17 04:13:46.185699'),(154,'circuits','0007_circuitterminations_primary_model','2025-11-17 04:13:46.531056'),(155,'circuits','0008_add_natural_indexing','2025-11-17 04:13:46.590465'),(156,'circuits','0009_circuittermination_location','2025-11-17 04:13:47.001154'),(157,'dcim','0033_add_tree_managers_and_foreign_keys_pre_data_migration','2025-11-17 04:13:47.395529'),(158,'dcim','0034_migrate_region_and_site_data_to_locations','2025-11-17 04:13:47.487244'),(159,'virtualization','0016_remove_site_foreign_key_from_cluster_class','2025-11-17 04:13:47.638642'),(160,'virtualization','0017_created_datetime','2025-11-17 04:13:48.326898'),(161,'extras','0067_migrate_job_result_status','2025-11-17 04:13:48.413536'),(162,'extras','0068_jobresult__add_celery_fields','2025-11-17 04:13:50.205681'),(163,'extras','0069_created_datetime','2025-11-17 04:13:52.511912'),(164,'virtualization','0018_related_name_changes','2025-11-17 04:13:53.136359'),(165,'ipam','0016_prefix_type_data_migration','2025-11-17 04:13:53.581523'),(166,'ipam','0017_prefix_remove_is_pool','2025-11-17 04:13:53.660225'),(167,'tenancy','0002_auto_slug','2025-11-17 04:13:53.825443'),(168,'tenancy','0003_mptt_to_tree_queries','2025-11-17 04:13:54.026933'),(169,'tenancy','0004_change_tree_manager_on_tree_models','2025-11-17 04:13:54.039666'),(170,'tenancy','0005_rename_foreign_keys_and_related_names','2025-11-17 04:13:54.317967'),(171,'dcim','0035_rename_path_end_point_related_name','2025-11-17 04:13:55.100794'),(172,'dcim','0036_remove_site_foreign_key_from_dcim_models','2025-11-17 04:13:57.844603'),(173,'ipam','0018_remove_site_foreign_key_from_ipam_models','2025-11-17 04:13:58.760730'),(174,'ipam','0019_created_datetime','2025-11-17 04:13:59.747027'),(175,'ipam','0020_related_name_changes','2025-11-17 04:14:00.235013'),(176,'ipam','0021_prefix_add_rir_and_date_allocated','2025-11-17 04:14:00.810876'),(177,'ipam','0022_aggregate_to_prefix_data_migration','2025-11-17 04:14:00.911175'),(178,'ipam','0023_delete_aggregate','2025-11-17 04:14:00.923791'),(179,'extras','0070_remove_site_and_region_attributes_from_config_context','2025-11-17 04:14:01.114743'),(180,'django_celery_results','0001_initial','2025-11-17 04:14:01.133014'),(181,'django_celery_results','0002_add_task_name_args_kwargs','2025-11-17 04:14:01.174531'),(182,'django_celery_results','0003_auto_20181106_1101','2025-11-17 04:14:01.180891'),(183,'django_celery_results','0004_auto_20190516_0412','2025-11-17 04:14:01.242753'),(184,'django_celery_results','0005_taskresult_worker','2025-11-17 04:14:01.268167'),(185,'django_celery_results','0006_taskresult_date_created','2025-11-17 04:14:01.378445'),(186,'tenancy','0006_created_datetime','2025-11-17 04:14:01.606332'),(187,'dcim','0037_created_datetime','2025-11-17 04:14:04.900792'),(188,'dcim','0038_fixup_fks_and_related_names','2025-11-17 04:14:11.253087'),(189,'dcim','0039_related_name_changes','2025-11-17 04:14:12.871606'),(190,'circuits','0010_rename_foreign_keys_and_related_names','2025-11-17 04:14:13.405022'),(191,'circuits','0011_remove_site_foreign_key_from_circuit_termination_class','2025-11-17 04:14:13.836648'),(192,'dcim','0040_remove_region_and_site','2025-11-17 04:14:14.285160'),(193,'ipam','0024_interface_to_ipaddress_m2m','2025-11-17 04:14:14.420863'),(194,'virtualization','0019_vminterface_ip_addresses_m2m','2025-11-17 04:14:14.504714'),(195,'virtualization','0020_remove_clustergroup_clustertype_slug','2025-11-17 04:14:14.544000'),(196,'tenancy','0007_remove_tenant_tenantgroup_slug','2025-11-17 04:14:14.655017'),(197,'ipam','0025_interface_ipaddress_m2m_data_migration','2025-11-17 04:14:14.744087'),(198,'ipam','0026_ipaddress_remove_assigned_object','2025-11-17 04:14:15.274372'),(199,'ipam','0027_remove_rir_slug','2025-11-17 04:14:15.296356'),(200,'extras','0071_replace_related_names','2025-11-17 04:14:17.387339'),(201,'extras','0072_rename_model_fields','2025-11-17 04:14:17.871293'),(202,'extras','0073_job__unique_name_data_migration','2025-11-17 04:14:18.396076'),(203,'extras','0074_job__unique_name','2025-11-17 04:14:18.935904'),(204,'extras','0075_remove_gitrepository_fields','2025-11-17 04:14:19.056922'),(205,'extras','0076_rename_slug_to_key_for_custom_field','2025-11-17 04:14:19.206714'),(206,'extras','0077_migrate_custom_field_data','2025-11-17 04:14:19.623736'),(207,'extras','0078_remove_name_field_and_make_label_field_non_nullable','2025-11-17 04:14:19.788673'),(208,'dcim','0041_interface_ip_addresses_m2m','2025-11-17 04:14:19.875961'),(209,'dcim','0042_alter_location_managers','2025-11-17 04:14:19.928593'),(210,'dcim','0043_remove_slug','2025-11-17 04:14:20.059327'),(211,'circuits','0012_created_datetime','2025-11-17 04:14:20.378337'),(212,'circuits','0013_alter_circuittermination__path','2025-11-17 04:14:20.528088'),(213,'circuits','0014_related_name_changes','2025-11-17 04:14:20.612400'),(214,'circuits','0015_remove_circuittype_provider_slug','2025-11-17 04:14:21.043486'),(215,'extras','0079_remove_slug','2025-11-17 04:14:21.363928'),(216,'extras','0080_tagsfield','2025-11-17 04:14:21.611690'),(217,'virtualization','0021_tagsfield_and_vminterface_to_primarymodel','2025-11-17 04:14:22.350053'),(218,'virtualization','0022_vminterface_timestamps_data_migration','2025-11-17 04:14:22.428986'),(219,'ipam','0028_tagsfield','2025-11-17 04:14:22.908702'),(220,'dcim','0044_tagsfield','2025-11-17 04:14:25.438438'),(221,'ipam','0029_ip_address_to_interface_uniqueness_constraints','2025-11-17 04:14:25.474352'),(222,'ipam','0030_ipam__namespaces','2025-11-17 04:14:27.917673'),(223,'virtualization','0023_ipam__namespaces','2025-11-17 04:14:28.037391'),(224,'virtualization','0024_fixup_null_statuses','2025-11-17 04:14:28.126828'),(225,'extras','0081_rename_relationship_slug_to_key','2025-11-17 04:14:28.181129'),(226,'extras','0082_rename_relationship_name_to_label','2025-11-17 04:14:28.311719'),(227,'extras','0083_ensure_relationship_keys_are_unique','2025-11-17 04:14:28.392861'),(228,'extras','0084_rename_computed_field_slug_to_key','2025-11-17 04:14:28.479454'),(229,'virtualization','0025_status_nonnullable','2025-11-17 04:14:29.136574'),(230,'dcim','0045_ipam__namespaces','2025-11-17 04:14:29.267481'),(231,'ipam','0031_ipam___data_migrations','2025-11-17 04:14:29.469888'),(232,'ipam','0032_ipam__namespaces_finish','2025-11-17 04:14:30.786918'),(233,'ipam','0033_fixup_null_statuses','2025-11-17 04:14:30.874792'),(234,'ipam','0034_status_nonnullable','2025-11-17 04:14:31.450105'),(235,'ipam','0035_ensure_all_services_fit_uniqueness_constraint','2025-11-17 04:14:31.837697'),(236,'dcim','0046_fixup_null_statuses','2025-11-17 04:14:32.020553'),(237,'dcim','0047_status_nonnullable','2025-11-17 04:14:34.108277'),(238,'ipam','0036_add_uniqueness_constraints_to_service','2025-11-17 04:14:34.229481'),(239,'ipam','0037_data_migration_vlan_group_name_uniqueness','2025-11-17 04:14:34.314740'),(240,'ipam','0038_vlan_group_name_unique_remove_slug','2025-11-17 04:14:34.520108'),(241,'ipam','0039_alter_ipaddresstointerface_ip_address','2025-11-17 04:14:34.610492'),(242,'dcim','0048_ensure_virtual_chassis_names_are_unique_and_add_uniqueness_constraint','2025-11-17 04:14:34.775527'),(243,'dcim','0049_remove_slugs_and_change_device_primary_ip_fields','2025-11-17 04:14:36.321206'),(244,'dcim','0050_fix_interface_redundancy_group_association_created','2025-11-17 04:14:36.357825'),(245,'dcim','0051_interface_redundancy_group_nullable_status','2025-11-17 04:14:36.522366'),(246,'dcim','0052_fix_interface_redundancy_group_created','2025-11-17 04:14:37.302347'),(247,'ipam','0040_vlan_prefix_locations','2025-11-17 04:14:37.714423'),(248,'ipam','0041_vlan_prefix_locations_data_migration','2025-11-17 04:14:37.809270'),(249,'ipam','0042_remove_location_from_vlan_and_prefix','2025-11-17 04:14:38.473254'),(250,'ipam','0043_fixup_null_ip_version','2025-11-17 04:14:38.562958'),(251,'ipam','0044_ip_version_nonnullable','2025-11-17 04:14:38.803943'),(252,'ipam','0045_alter_vlangroup_options','2025-11-17 04:14:38.832169'),(253,'ipam','0046_update_all_charfields_max_length_to_255','2025-11-17 04:14:40.039088'),(254,'virtualization','0026_change_virtualmachine_primary_ip_fields','2025-11-17 04:14:40.503791'),(255,'tenancy','0008_tagsfield','2025-11-17 04:14:40.588052'),(256,'tenancy','0009_update_all_charfields_max_length_to_255','2025-11-17 04:14:41.346467'),(257,'extras','0085_taggeditem_cleanup','2025-11-17 04:14:41.432357'),(258,'extras','0086_taggeditem_uniqueness','2025-11-17 04:14:41.588842'),(259,'extras','0087_job__celery_task_fields__dryrun_support','2025-11-17 04:14:42.680999'),(260,'extras','0088_job__commit_default_data_migration','2025-11-17 04:14:42.768262'),(261,'extras','0089_joblogentry__log_level_default','2025-11-17 04:14:42.781685'),(262,'extras','0090_joblogentry__log_level_data_migration','2025-11-17 04:14:42.866201'),(263,'extras','0091_scheduledjob__data_migration','2025-11-17 04:14:42.949754'),(264,'extras','0092_uniqueness_data_migration','2025-11-17 04:14:43.111342'),(265,'extras','0093_uniqueness_fixup','2025-11-17 04:14:44.069688'),(266,'extras','0094_alter_objectchange_unique_together','2025-11-17 04:14:44.128193'),(267,'extras','0095_ensure_note_timestamps_are_unique','2025-11-17 04:14:44.215025'),(268,'extras','0096_remove_slugs','2025-11-17 04:14:44.399538'),(269,'extras','0097_alter_job_result_remove_result','2025-11-17 04:14:44.461293'),(270,'extras','0098_rename_data_jobresult_result','2025-11-17 04:14:44.494511'),(271,'extras','0099_remove_dangling_note_objects','2025-11-17 04:14:44.866832'),(272,'extras','0100_fileproxy_job_result','2025-11-17 04:14:44.976413'),(273,'extras','0101_externalintegration','2025-11-17 04:14:45.086707'),(274,'extras','0102_set_null_objectchange_contenttype','2025-11-17 04:14:45.333322'),(275,'extras','0103_add_db_indexes_to_object_change','2025-11-17 04:14:45.600907'),(276,'extras','0104_contact_contactassociation_team','2025-11-17 04:14:46.491951'),(277,'extras','0105_update_all_charfields_max_length_to_255','2025-11-17 04:14:50.706731'),(278,'extras','0106_populate_default_statuses_and_roles_for_contact_associations','2025-11-17 04:14:50.829755'),(279,'extras','0107_laxurlfield','2025-11-17 04:14:51.273235'),(280,'extras','0108_jobbutton_enabled','2025-11-17 04:14:51.338478'),(281,'extras','0109_dynamicgroup_group_type_dynamicgroup_tags_and_more','2025-11-17 04:14:51.823348'),(282,'dcim','0053_create_device_family_model','2025-11-17 04:14:52.044396'),(283,'dcim','0054_softwareimage_softwareversion','2025-11-17 04:14:53.450427'),(284,'dcim','0055_softwareimage_softwareversion_data_migration','2025-11-17 04:14:53.896318'),(285,'dcim','0056_update_all_charfields_max_length_to_255','2025-11-17 04:15:03.513246'),(286,'dcim','0057_controller_models','2025-11-17 04:15:04.121539'),(287,'dcim','0058_controller_data_migration','2025-11-17 04:15:04.238540'),(288,'dcim','0059_add_role_field_to_interface_models','2025-11-17 04:15:04.401554'),(289,'dcim','0060_alter_cable_status_alter_consoleport__path_and_more','2025-11-17 04:15:09.872278'),(290,'extras','0110_alter_configcontext_cluster_groups_and_more','2025-11-17 04:15:11.897180'),(291,'ipam','0047_alter_ipaddress_role_alter_ipaddress_status_and_more','2025-11-17 04:15:12.806027'),(292,'extras','0111_metadata','2025-11-17 04:15:13.248416'),(293,'extras','0112_dynamic_group_group_type_data_migration','2025-11-17 04:15:13.347939'),(294,'extras','0113_saved_views','2025-11-17 04:15:13.957515'),(295,'dcim','0061_module_models','2025-11-17 04:15:27.437993'),(296,'dcim','0062_module_data_migration','2025-11-17 04:15:27.563194'),(297,'cloud','0001_initial','2025-11-17 04:15:29.871056'),(298,'circuits','0016_tagsfield','2025-11-17 04:15:30.275174'),(299,'circuits','0017_fixup_null_statuses','2025-11-17 04:15:30.663553'),(300,'circuits','0018_status_nonnullable','2025-11-17 04:15:30.853264'),(301,'circuits','0019_remove_providernetwork_slug','2025-11-17 04:15:30.931319'),(302,'circuits','0020_update_all_charfields_max_length_to_255','2025-11-17 04:15:31.940036'),(303,'circuits','0021_alter_circuit_status_alter_circuittermination__path','2025-11-17 04:15:32.153831'),(304,'circuits','0022_circuittermination_cloud_network','2025-11-17 04:15:32.292976'),(305,'constance','0001_initial','2025-11-17 04:15:32.306271'),(306,'constance','0002_migrate_from_old_table','2025-11-17 04:15:32.408832'),(307,'constance','0003_drop_pickle','2025-11-17 04:15:32.511968'),(308,'extras','0114_computedfield_grouping','2025-11-17 04:15:32.576630'),(309,'extras','0115_scheduledjob_time_zone','2025-11-17 04:15:32.647362'),(310,'extras','0116_fix_dynamic_group_group_type_data_migration','2025-11-17 04:15:33.079194'),(311,'extras','0117_create_job_queue_model','2025-11-17 04:15:34.270876'),(312,'extras','0118_task_queue_to_job_queue_migration','2025-11-17 04:15:34.387808'),(313,'extras','0119_remove_task_queues_from_job_and_queue_from_scheduled_job','2025-11-17 04:15:34.733494'),(314,'extras','0120_job_is_singleton_job_is_singleton_override','2025-11-17 04:15:34.964923'),(315,'extras','0121_alter_team_contacts','2025-11-17 04:15:35.076051'),(316,'extras','0122_add_graphqlquery_owner_content_type','2025-11-17 04:15:35.638294'),(317,'extras','0123_alter_joblogentry_created','2025-11-17 04:15:35.663220'),(318,'extras','0124_add_joblogentry_index','2025-11-17 04:15:35.683890'),(319,'django_celery_results','0007_remove_taskresult_hidden','2025-11-17 04:15:35.706146'),(320,'django_celery_results','0008_chordcounter','2025-11-17 04:15:35.718555'),(321,'django_celery_results','0009_groupresult','2025-11-17 04:15:35.935372'),(322,'django_celery_results','0010_remove_duplicate_indices','2025-11-17 04:15:35.953106'),(323,'django_celery_results','0011_taskresult_periodic_task_name','2025-11-17 04:15:35.976381'),(324,'django_celery_results','0012_taskresult_date_started','2025-11-17 04:15:35.998689'),(325,'extras','0125_jobresult_date_started','2025-11-17 04:15:36.060769'),(326,'extras','0126_approval_workflow_pre_check','2025-11-17 04:15:36.175273'),(327,'extras','0127_approval_workflow_models','2025-11-17 04:15:37.613174'),(328,'data_validation','0001_initial','2025-11-17 04:15:38.651866'),(329,'data_validation','0002_data_migration_from_app','2025-11-17 04:15:38.995407'),(330,'virtualization','0027_virtualmachine_software_image','2025-11-17 04:15:39.672991'),(331,'virtualization','0028_update_all_charfields_max_length_to_255','2025-11-17 04:15:40.458522'),(332,'virtualization','0029_add_role_field_to_interface_models','2025-11-17 04:15:40.943247'),(333,'virtualization','0030_alter_virtualmachine_local_config_context_data_owner_content_type_and_more','2025-11-17 04:15:41.942280'),(334,'ipam','0048_vrf_status','2025-11-17 04:15:42.107354'),(335,'ipam','0049_vrf_data_migration','2025-11-17 04:15:42.241461'),(336,'ipam','0050_vlangroup_range','2025-11-17 04:15:42.400492'),(337,'dcim','0063_interfacevdcassignment_virtualdevicecontext_and_more','2025-11-17 04:15:43.247114'),(338,'dcim','0064_virtualdevicecontext_status_data_migration','2025-11-17 04:15:43.375365'),(339,'dcim','0065_controller_capabilities_and_more','2025-11-17 04:15:43.649187'),(340,'wireless','0001_initial','2025-11-17 04:15:44.682386'),(341,'dcim','0066_controllermanageddevicegroup_radio_profiles_and_more','2025-11-17 04:15:44.920756'),(342,'dcim','0067_controllermanageddevicegroup_tenant','2025-11-17 04:15:45.372792'),(343,'dcim','0068_alter_softwareimagefile_download_url','2025-11-17 04:15:45.494916'),(344,'dcim','0069_softwareimagefile_external_integration','2025-11-17 04:15:45.643815'),(345,'dcim','0070_modulefamily_models','2025-11-17 04:15:46.631185'),(346,'dcim','0071_alter_consoleport_options_and_more','2025-11-17 04:15:47.538346'),(347,'dcim','0072_alter_powerfeed_options_and_more','2025-11-17 04:15:49.183226'),(348,'dcim','0073_alter_powerport_power_factor_and_more','2025-11-17 04:15:49.302822'),(349,'dcim','0074_alter_rack_u_height','2025-11-17 04:15:49.380082'),(350,'dcim','0075_interface_duplex_interface_speed_and_more','2025-11-17 04:15:50.025910'),(351,'dcim','0076_add_deviceclusterassignment','2025-11-17 04:15:50.316327'),(352,'dcim','0077_device_cluster_to_clusters_data_migration','2025-11-17 04:15:50.441318'),(353,'dcim','0078_remove_device_cluster','2025-11-17 04:15:50.773697'),(354,'dcim','0079_remove_device_location_tenant_name_uniqueness','2025-11-17 04:15:51.552326'),(355,'dcim','0080_device_name_data_migration','2025-11-17 04:15:51.680214'),(356,'dcim','0081_alter_device_device_redundancy_group_priority_and_more','2025-11-17 04:15:52.047506'),(357,'django_celery_beat','0001_initial','2025-11-17 04:15:52.130053'),(358,'django_celery_beat','0002_auto_20161118_0346','2025-11-17 04:15:52.170302'),(359,'django_celery_beat','0003_auto_20161209_0049','2025-11-17 04:15:52.192588'),(360,'django_celery_beat','0004_auto_20170221_0000','2025-11-17 04:15:52.203264'),(361,'django_celery_beat','0005_add_solarschedule_events_choices','2025-11-17 04:15:52.213361'),(362,'django_celery_beat','0006_auto_20180322_0932','2025-11-17 04:15:52.285790'),(363,'django_celery_beat','0007_auto_20180521_0826','2025-11-17 04:15:52.339706'),(364,'django_celery_beat','0008_auto_20180914_1922','2025-11-17 04:15:52.384178'),(365,'django_celery_beat','0006_auto_20180210_1226','2025-11-17 04:15:52.413789'),(366,'django_celery_beat','0006_periodictask_priority','2025-11-17 04:15:52.447527'),(367,'django_celery_beat','0009_periodictask_headers','2025-11-17 04:15:52.481127'),(368,'django_celery_beat','0010_auto_20190429_0326','2025-11-17 04:15:52.733521'),(369,'django_celery_beat','0011_auto_20190508_0153','2025-11-17 04:15:52.786048'),(370,'django_celery_beat','0012_periodictask_expire_seconds','2025-11-17 04:15:52.823496'),(371,'django_celery_beat','0013_auto_20200609_0727','2025-11-17 04:15:52.836775'),(372,'django_celery_beat','0014_remove_clockedschedule_enabled','2025-11-17 04:15:52.856735'),(373,'django_celery_beat','0015_edit_solarschedule_events_choices','2025-11-17 04:15:52.868243'),(374,'django_celery_beat','0016_alter_crontabschedule_timezone','2025-11-17 04:15:52.879918'),(375,'django_celery_beat','0017_alter_crontabschedule_month_of_year','2025-11-17 04:15:52.890990'),(376,'django_celery_beat','0018_improve_crontab_helptext','2025-11-17 04:15:52.903401'),(377,'django_celery_beat','0019_alter_periodictasks_options','2025-11-17 04:15:52.911731'),(378,'django_celery_results','0013_taskresult_django_cele_periodi_1993cf_idx','2025-11-17 04:15:52.928334'),(379,'django_celery_results','0014_alter_taskresult_status','2025-11-17 04:15:52.939776'),(380,'extras','0128_remove_job_approval_required_and_more','2025-11-17 04:15:53.664286'),(381,'extras','0129_jobresult_debug_log_count_jobresult_error_log_count_and_more','2025-11-17 04:15:53.975140'),(382,'extras','0130_jobresult_generate_log_entry_counts','2025-11-17 04:15:54.104438'),(383,'extras','0131_configcontext_device_families','2025-11-17 04:15:54.282251'),(384,'extras','0132_approval_workflow_seed_data','2025-11-17 04:15:54.456201'),(385,'ipam','0051_added_optional_vrf_relationship_to_vdc','2025-11-17 04:15:55.170512'),(386,'ipam','0052_alter_ipaddress_index_together_and_more','2025-11-17 04:15:55.477884'),(387,'ipam','0053_alter_vrfdeviceassignment_options_and_more','2025-11-17 04:15:55.559645'),(388,'ipam','0054_namespace_tenant','2025-11-17 04:15:55.714590'),(389,'load_balancers','0001_initial','2025-11-17 04:16:00.882302'),(390,'load_balancers','0002_create_default_statuses_pool_members','2025-11-17 04:16:01.031085'),(391,'sessions','0001_initial','2025-11-17 04:16:01.046058'),(392,'silk','0001_initial','2025-11-17 04:16:01.205580'),(393,'silk','0002_auto_update_uuid4_id_field','2025-11-17 04:16:01.227443'),(394,'silk','0003_request_prof_file','2025-11-17 04:16:01.255682'),(395,'silk','0004_request_prof_file_storage','2025-11-17 04:16:01.268121'),(396,'silk','0005_increase_request_prof_file_length','2025-11-17 04:16:01.286669'),(397,'silk','0006_fix_request_prof_file_blank','2025-11-17 04:16:01.333806'),(398,'silk','0007_sqlquery_identifier','2025-11-17 04:16:01.360976'),(399,'silk','0008_sqlquery_analysis','2025-11-17 04:16:01.382598'),(400,'default','0001_initial','2025-11-17 04:16:01.611921'),(401,'social_auth','0001_initial','2025-11-17 04:16:01.614898'),(402,'default','0002_add_related_name','2025-11-17 04:16:01.742531'),(403,'social_auth','0002_add_related_name','2025-11-17 04:16:01.746669'),(404,'default','0003_alter_email_max_length','2025-11-17 04:16:01.762500'),(405,'social_auth','0003_alter_email_max_length','2025-11-17 04:16:01.765117'),(406,'default','0004_auto_20160423_0400','2025-11-17 04:16:01.788346'),(407,'social_auth','0004_auto_20160423_0400','2025-11-17 04:16:01.790956'),(408,'social_auth','0005_auto_20160727_2333','2025-11-17 04:16:01.804500'),(409,'social_django','0006_partial','2025-11-17 04:16:01.820558'),(410,'social_django','0007_code_timestamp','2025-11-17 04:16:01.848043'),(411,'social_django','0008_partial_timestamp','2025-11-17 04:16:01.877266'),(412,'social_django','0009_auto_20191118_0520','2025-11-17 04:16:01.945344'),(413,'social_django','0010_uid_db_index','2025-11-17 04:16:01.976876'),(414,'social_django','0011_alter_id_fields','2025-11-17 04:16:02.090006'),(415,'social_django','0012_usersocialauth_extra_data_new','2025-11-17 04:16:02.146137'),(416,'social_django','0013_migrate_extra_data','2025-11-17 04:16:02.565950'),(417,'social_django','0014_remove_usersocialauth_extra_data','2025-11-17 04:16:02.614823'),(418,'social_django','0015_rename_extra_data_new_usersocialauth_extra_data','2025-11-17 04:16:02.655096'),(419,'social_django','0016_alter_usersocialauth_extra_data','2025-11-17 04:16:02.678152'),(420,'taggit','0001_initial','2025-11-17 04:16:02.858665'),(421,'taggit','0002_auto_20150616_2121','2025-11-17 04:16:02.920444'),(422,'taggit','0003_taggeditem_add_unique_index','2025-11-17 04:16:02.981274'),(423,'taggit','0004_alter_taggeditem_content_type_alter_taggeditem_tag','2025-11-17 04:16:03.237345'),(424,'taggit','0005_auto_20220424_2025','2025-11-17 04:16:03.249010'),(425,'taggit','0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx','2025-11-17 04:16:03.660640'),(426,'users','0002_token_ordering_by_created','2025-11-17 04:16:03.682554'),(427,'users','0003_alter_user_options','2025-11-17 04:16:03.704112'),(428,'users','0004_alter_user_managers','2025-11-17 04:16:03.725856'),(429,'users','0005_ensure_object_permission_names_are_unique','2025-11-17 04:16:03.862985'),(430,'users','0006_make_object_permission_name_globally_unique','2025-11-17 04:16:03.948116'),(431,'users','0007_alter_objectpermission_object_types','2025-11-17 04:16:04.079371'),(432,'users','0008_make_object_permission_a_changelogged_model','2025-11-17 04:16:04.241789'),(433,'users','0009_update_all_charfields_max_length_to_255','2025-11-17 04:16:04.416110'),(434,'users','0010_user_default_saved_views','2025-11-17 04:16:04.861699'),(435,'vpn','0001_initial','2025-11-17 04:16:07.719835'),(436,'vpn','0002_populate_defaults','2025-11-17 04:16:08.095780'),(437,'social_django','0004_auto_20160423_0400','2025-11-17 04:16:08.104465'),(438,'social_django','0005_auto_20160727_2333','2025-11-17 04:16:08.107241'),(439,'social_django','0001_initial','2025-11-17 04:16:08.110296'),(440,'social_django','0003_alter_email_max_length','2025-11-17 04:16:08.112813'),(441,'social_django','0002_add_related_name','2025-11-17 04:16:08.116179');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3147,6 +3352,181 @@ CREATE TABLE `django_session` (
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras_approvaluserresponse`
+--
+
+DROP TABLE IF EXISTS `extras_approvaluserresponse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras_approvaluserresponse` (
+  `id` char(32) NOT NULL,
+  `comments` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `approval_workflow_stage_id` char(32) NOT NULL,
+  `user_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `extras_approvaluserr_approval_workflow_st_ee56bc0c_fk_extras_ap` (`approval_workflow_stage_id`),
+  KEY `extras_approvaluserresponse_user_id_13bb9039_fk_auth_user_id` (`user_id`),
+  CONSTRAINT `extras_approvaluserr_approval_workflow_st_ee56bc0c_fk_extras_ap` FOREIGN KEY (`approval_workflow_stage_id`) REFERENCES `extras_approvalworkflowstage` (`id`),
+  CONSTRAINT `extras_approvaluserresponse_user_id_13bb9039_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras_approvaluserresponse`
+--
+
+LOCK TABLES `extras_approvaluserresponse` WRITE;
+/*!40000 ALTER TABLE `extras_approvaluserresponse` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extras_approvaluserresponse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras_approvalworkflow`
+--
+
+DROP TABLE IF EXISTS `extras_approvalworkflow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras_approvalworkflow` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `object_under_review_object_id` char(32) NOT NULL,
+  `current_state` varchar(255) NOT NULL,
+  `decision_date` datetime(6) DEFAULT NULL,
+  `user_name` varchar(150) NOT NULL,
+  `approval_workflow_definition_id` char(32) NOT NULL,
+  `object_under_review_content_type_id` int NOT NULL,
+  `user_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `extras_approvalworkflow_approval_workflow_defini_1ab9fae5_uniq` (`approval_workflow_definition_id`,`object_under_review_content_type_id`,`object_under_review_object_id`),
+  KEY `extras_approvalworkf_object_under_review__99ff4617_fk_django_co` (`object_under_review_content_type_id`),
+  KEY `extras_approvalworkflow_user_id_f2506f51_fk_auth_user_id` (`user_id`),
+  KEY `extras_approvalworkflow_object_under_review_object_id_2d64d1d5` (`object_under_review_object_id`),
+  KEY `extras_approvalworkflow_user_name_adc14745` (`user_name`),
+  CONSTRAINT `extras_approvalworkf_approval_workflow_de_d39a7459_fk_extras_ap` FOREIGN KEY (`approval_workflow_definition_id`) REFERENCES `extras_approvalworkflowdefinition` (`id`),
+  CONSTRAINT `extras_approvalworkf_object_under_review__99ff4617_fk_django_co` FOREIGN KEY (`object_under_review_content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `extras_approvalworkflow_user_id_f2506f51_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras_approvalworkflow`
+--
+
+LOCK TABLES `extras_approvalworkflow` WRITE;
+/*!40000 ALTER TABLE `extras_approvalworkflow` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extras_approvalworkflow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras_approvalworkflowdefinition`
+--
+
+DROP TABLE IF EXISTS `extras_approvalworkflowdefinition`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras_approvalworkflowdefinition` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `model_constraints` json NOT NULL,
+  `weight` int NOT NULL,
+  `model_content_type_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `extras_approvalworkflowd_model_content_type_id_we_a7156a7e_uniq` (`model_content_type_id`,`weight`),
+  CONSTRAINT `extras_approvalworkf_model_content_type_i_3a0eb629_fk_django_co` FOREIGN KEY (`model_content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras_approvalworkflowdefinition`
+--
+
+LOCK TABLES `extras_approvalworkflowdefinition` WRITE;
+/*!40000 ALTER TABLE `extras_approvalworkflowdefinition` DISABLE KEYS */;
+INSERT INTO `extras_approvalworkflowdefinition` VALUES ('93fd20445d6c4008bf5aef2b7b6d4387','2025-11-17 04:15:54.426379','2025-11-17 04:15:54.426412','{}','Scheduled Jobs Approval - Example','{\"job_model__job_class_name\": \"JobThatDoesNotExist\"}',100,35);
+/*!40000 ALTER TABLE `extras_approvalworkflowdefinition` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras_approvalworkflowstage`
+--
+
+DROP TABLE IF EXISTS `extras_approvalworkflowstage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras_approvalworkflowstage` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `decision_date` datetime(6) DEFAULT NULL,
+  `approval_workflow_id` char(32) NOT NULL,
+  `approval_workflow_stage_definition_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `extras_approvalworkflows_approval_workflow_id_app_42233e40_uniq` (`approval_workflow_id`,`approval_workflow_stage_definition_id`),
+  KEY `extras_approvalworkf_approval_workflow_st_e96ca568_fk_extras_ap` (`approval_workflow_stage_definition_id`),
+  CONSTRAINT `extras_approvalworkf_approval_workflow_id_fb35e65a_fk_extras_ap` FOREIGN KEY (`approval_workflow_id`) REFERENCES `extras_approvalworkflow` (`id`),
+  CONSTRAINT `extras_approvalworkf_approval_workflow_st_e96ca568_fk_extras_ap` FOREIGN KEY (`approval_workflow_stage_definition_id`) REFERENCES `extras_approvalworkflowstagedefinition` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras_approvalworkflowstage`
+--
+
+LOCK TABLES `extras_approvalworkflowstage` WRITE;
+/*!40000 ALTER TABLE `extras_approvalworkflowstage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extras_approvalworkflowstage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras_approvalworkflowstagedefinition`
+--
+
+DROP TABLE IF EXISTS `extras_approvalworkflowstagedefinition`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras_approvalworkflowstagedefinition` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `sequence` int unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `min_approvers` int unsigned NOT NULL,
+  `denial_message` varchar(255) NOT NULL,
+  `approval_workflow_definition_id` char(32) NOT NULL,
+  `approver_group_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `extras_approvalworkflows_approval_workflow_defini_83c5e3bf_uniq` (`approval_workflow_definition_id`,`sequence`),
+  UNIQUE KEY `extras_approvalworkflows_approval_workflow_defini_4ca372ff_uniq` (`approval_workflow_definition_id`,`name`),
+  KEY `extras_approvalworkf_approver_group_id_150265c8_fk_auth_grou` (`approver_group_id`),
+  CONSTRAINT `extras_approvalworkf_approval_workflow_de_f2706272_fk_extras_ap` FOREIGN KEY (`approval_workflow_definition_id`) REFERENCES `extras_approvalworkflowdefinition` (`id`),
+  CONSTRAINT `extras_approvalworkf_approver_group_id_150265c8_fk_auth_grou` FOREIGN KEY (`approver_group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `extras_approvalworkflowstagedefinition_chk_1` CHECK ((`sequence` >= 0)),
+  CONSTRAINT `extras_approvalworkflowstagedefinition_chk_2` CHECK ((`min_approvers` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras_approvalworkflowstagedefinition`
+--
+
+LOCK TABLES `extras_approvalworkflowstagedefinition` WRITE;
+/*!40000 ALTER TABLE `extras_approvalworkflowstagedefinition` DISABLE KEYS */;
+INSERT INTO `extras_approvalworkflowstagedefinition` VALUES ('a7fb74f3270f43d1b8940ebbf826f270','2025-11-17 04:15:54.429311','2025-11-17 04:15:54.429334','{}',10,'Approval by nautobot-default-scheduledjob-approver',1,'This Job requires an approval from nautobot-default-scheduledjob-approver.','93fd20445d6c4008bf5aef2b7b6d4387',1);
+/*!40000 ALTER TABLE `extras_approvalworkflowstagedefinition` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -3278,6 +3658,34 @@ CREATE TABLE `extras_configcontext_clusters` (
 LOCK TABLES `extras_configcontext_clusters` WRITE;
 /*!40000 ALTER TABLE `extras_configcontext_clusters` DISABLE KEYS */;
 /*!40000 ALTER TABLE `extras_configcontext_clusters` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `extras_configcontext_device_families`
+--
+
+DROP TABLE IF EXISTS `extras_configcontext_device_families`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `extras_configcontext_device_families` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `configcontext_id` char(32) NOT NULL,
+  `devicefamily_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `extras_configcontext_dev_configcontext_id_devicef_97bff8b9_uniq` (`configcontext_id`,`devicefamily_id`),
+  KEY `extras_configcontext_devicefamily_id_5f12186f_fk_dcim_devi` (`devicefamily_id`),
+  CONSTRAINT `extras_configcontext_configcontext_id_e1adebb5_fk_extras_co` FOREIGN KEY (`configcontext_id`) REFERENCES `extras_configcontext` (`id`),
+  CONSTRAINT `extras_configcontext_devicefamily_id_5f12186f_fk_dcim_devi` FOREIGN KEY (`devicefamily_id`) REFERENCES `dcim_devicefamily` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `extras_configcontext_device_families`
+--
+
+LOCK TABLES `extras_configcontext_device_families` WRITE;
+/*!40000 ALTER TABLE `extras_configcontext_device_families` DISABLE KEYS */;
+/*!40000 ALTER TABLE `extras_configcontext_device_families` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -4116,7 +4524,6 @@ CREATE TABLE `extras_job` (
   `dryrun_default` tinyint(1) NOT NULL,
   `hidden` tinyint(1) NOT NULL,
   `read_only` tinyint(1) NOT NULL,
-  `approval_required` tinyint(1) NOT NULL,
   `soft_time_limit` double NOT NULL,
   `time_limit` double NOT NULL,
   `grouping_override` tinyint(1) NOT NULL,
@@ -4124,7 +4531,6 @@ CREATE TABLE `extras_job` (
   `description_override` tinyint(1) NOT NULL,
   `dryrun_default_override` tinyint(1) NOT NULL,
   `hidden_override` tinyint(1) NOT NULL,
-  `approval_required_override` tinyint(1) NOT NULL,
   `soft_time_limit_override` tinyint(1) NOT NULL,
   `time_limit_override` tinyint(1) NOT NULL,
   `has_sensitive_variables` tinyint(1) NOT NULL,
@@ -4156,7 +4562,7 @@ CREATE TABLE `extras_job` (
 
 LOCK TABLES `extras_job` WRITE;
 /*!40000 ALTER TABLE `extras_job` DISABLE KEYS */;
-INSERT INTO `extras_job` VALUES ('323612f8ce08456ab4e08c076a53531c','2025-11-10 04:15:38.946409','2025-11-10 04:15:38.949940','{}','nautobot.core.jobs','GitRepositoryDryRun','System Jobs','Git Repository: Dry-Run','Dry run of Git repository sync - will not update data sourced from this repository.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('48f77aec1473404f93f0b4695cd2ccc0','2025-11-10 04:15:38.982079','2025-11-10 04:15:38.985713','{}','nautobot.core.jobs.groups','RefreshDynamicGroupCacheJobButtonReceiver','System Jobs','Refresh Dynamic Group Cache (Job Button Receiver)','Re-calculate and re-cache the membership list of a given Dynamic Group.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('4aa6df84b20f4e7ca4ea27a9ea710060','2025-11-10 04:15:38.991565','2025-11-10 04:15:38.995480','{}','nautobot.ipam.jobs.cleanup','FixIPAMParents','System Jobs','Check/Fix IPAM Parents','Check for and/or fix incorrect \'parent\' values on IP Address and/or Prefix records.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('900b8a4e80364649b69e88a71ee9f012','2025-11-10 04:15:38.955334','2025-11-10 04:15:38.959130','{}','nautobot.core.jobs','ImportObjects','System Jobs','Import Objects','Import objects from CSV-formatted data.',1,1,0,0,0,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('c0c07fd16b174a0c939ad67d165df237','2025-11-10 04:15:38.964129','2025-11-10 04:15:38.968053','{}','nautobot.core.jobs.cleanup','LogsCleanup','System Jobs','Logs Cleanup','Delete ObjectChange and/or JobResult/JobLogEntry records older than a specified cutoff.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('c4562078862a42b7a01ecb891720e826','2025-11-10 04:15:38.928068','2025-11-10 04:15:38.931722','{}','nautobot.core.jobs','ExportObjectList','System Jobs','Export Object List','Export a list of objects to CSV or YAML, or render a specified Export Template.',1,1,0,0,0,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('ce3ba8cf122b483db9afb1b77f0edb5e','2025-11-10 04:15:38.908967','2025-11-10 04:15:38.913532','{}','nautobot.core.jobs.bulk_actions','BulkDeleteObjects','System Jobs','Bulk Delete Objects','Bulk delete objects.',1,1,0,1,0,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('d063b0e0f3574dd2b280b27bd3d1e8fe','2025-11-10 04:15:38.919207','2025-11-10 04:15:38.923031','{}','nautobot.core.jobs.bulk_actions','BulkEditObjects','System Jobs','Bulk Edit Objects','Bulk edit objects.',1,1,0,1,0,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('df5eb435842d4eb29afcbdee99715924','2025-11-10 04:15:38.937282','2025-11-10 04:15:38.940870','{}','nautobot.core.jobs','GitRepositorySync','System Jobs','Git Repository: Sync','Clone and/or pull a Git repository, then refresh data sourced from this repository.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0),('f811471b1be84244a74b18b0b48bc5fb','2025-11-10 04:15:38.973346','2025-11-10 04:15:38.977072','{}','nautobot.core.jobs.groups','RefreshDynamicGroupCaches','System Jobs','Refresh Dynamic Group Caches','Re-calculate and re-cache the membership lists of Dynamic Groups.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'f315ce421f754c6f8051b333b7f821cf',0,0);
+INSERT INTO `extras_job` VALUES ('09432293183b486c962e04435d7d7307','2025-11-17 04:16:08.371667','2025-11-17 04:16:08.375321','{}','nautobot.core.jobs.cleanup','LogsCleanup','System Jobs','Logs Cleanup','Delete ObjectChange and/or JobResult/JobLogEntry records older than a specified cutoff.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('0d07efe2a78d40db96bc5cdb18038ec9','2025-11-17 04:16:08.332101','2025-11-17 04:16:08.335917','{}','nautobot.core.jobs','ExportObjectList','System Jobs','Export Object List','Export a list of objects to CSV or YAML, or render a specified Export Template.',1,1,0,0,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('2060293e81a643308c1d9c19735d0774','2025-11-17 04:16:08.323218','2025-11-17 04:16:08.327196','{}','nautobot.core.jobs.bulk_actions','BulkEditObjects','System Jobs','Bulk Edit Objects','Bulk edit objects.',1,1,0,1,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('21941ea6ba91490088d541a33aa3a5e3','2025-11-17 04:16:08.341241','2025-11-17 04:16:08.345075','{}','nautobot.core.jobs','GitRepositorySync','System Jobs','Git Repository: Sync','Clone and/or pull a Git repository, then refresh data sourced from this repository.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('35f1a5b53e3747228f325689e2102d2f','2025-11-17 04:16:08.312546','2025-11-17 04:16:08.318080','{}','nautobot.core.jobs.bulk_actions','BulkDeleteObjects','System Jobs','Bulk Delete Objects','Bulk delete objects.',1,1,0,1,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('38b33fb04f804019a9936f14cab6a189','2025-11-17 04:16:08.389225','2025-11-17 04:16:08.393217','{}','nautobot.core.jobs.groups','RefreshDynamicGroupCacheJobButtonReceiver','System Jobs','Refresh Dynamic Group Cache (Job Button Receiver)','Re-calculate and re-cache the membership list of a given Dynamic Group.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,'d29487ce8758446587059d098525d563',0,0),('5fa71f6000154d37a985af9d00dc245c','2025-11-17 04:16:08.362897','2025-11-17 04:16:08.366707','{}','nautobot.core.jobs','ImportObjects','System Jobs','Import Objects','Import objects from CSV-formatted data.',1,1,0,0,0,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('69b529218b514410a58e2b79fdd83b38','2025-11-17 04:16:08.425157','2025-11-17 04:16:08.429223','{}','nautobot.ipam.jobs.cleanup','FixIPAMParents','System Jobs','Check/Fix IPAM Parents','Check for and/or fix incorrect \'parent\' values on IP Address and/or Prefix records.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,'d29487ce8758446587059d098525d563',0,0),('bf9e743ba8194feba963485fdc04ef4e','2025-11-17 04:16:08.416237','2025-11-17 04:16:08.419929','{}','nautobot.core.jobs','ValidateModelData','System Jobs','Validate Model Data','Run `full_clean()` against all records of a given type(s) to check for data validity.',1,1,0,0,1,1800,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('c9f9dbd7a9c44b499f3e83cbf2653c36','2025-11-17 04:16:08.402207','2025-11-17 04:16:08.408254','{}','nautobot.core.jobs','RunRegisteredDataComplianceRules','System Jobs','Run Registered Data Compliance Rules','Runs selected Data Compliance rule classes.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('dab44989d1c04a68b3d854d03894dcae','2025-11-17 04:16:08.380401','2025-11-17 04:16:08.384202','{}','nautobot.core.jobs.groups','RefreshDynamicGroupCaches','System Jobs','Refresh Dynamic Group Caches','Re-calculate and re-cache the membership lists of Dynamic Groups.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0),('de3a399bfb1d44d196c2867c7d690ec2','2025-11-17 04:16:08.350020','2025-11-17 04:16:08.355787','{}','nautobot.core.jobs','GitRepositoryDryRun','System Jobs','Git Repository: Dry-Run','Dry run of Git repository sync - will not update data sourced from this repository.',1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'d29487ce8758446587059d098525d563',0,0);
 /*!40000 ALTER TABLE `extras_job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4193,7 +4599,7 @@ CREATE TABLE `extras_jobbutton` (
 
 LOCK TABLES `extras_jobbutton` WRITE;
 /*!40000 ALTER TABLE `extras_jobbutton` DISABLE KEYS */;
-INSERT INTO `extras_jobbutton` VALUES ('e8cc1f87c6ee4219b09183525e4a7527','2025-11-10 04:15:39.004826','2025-11-10 04:15:39.004854','Refresh Dynamic Group Members Cache','Refresh Members',100,'','warning',1,'48f77aec1473404f93f0b4695cd2ccc0',1);
+INSERT INTO `extras_jobbutton` VALUES ('e011ba71c2b84f3faf0c687ca1192229','2025-11-17 04:16:08.437668','2025-11-17 04:16:08.437691','Refresh Dynamic Group Members Cache','Refresh Members',100,'','warning',1,'38b33fb04f804019a9936f14cab6a189',1);
 /*!40000 ALTER TABLE `extras_jobbutton` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4222,7 +4628,7 @@ CREATE TABLE `extras_jobbutton_content_types` (
 
 LOCK TABLES `extras_jobbutton_content_types` WRITE;
 /*!40000 ALTER TABLE `extras_jobbutton_content_types` DISABLE KEYS */;
-INSERT INTO `extras_jobbutton_content_types` VALUES (1,'e8cc1f87c6ee4219b09183525e4a7527',42);
+INSERT INTO `extras_jobbutton_content_types` VALUES (1,'e011ba71c2b84f3faf0c687ca1192229',51);
 /*!40000 ALTER TABLE `extras_jobbutton_content_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4350,7 +4756,7 @@ CREATE TABLE `extras_jobqueue` (
 
 LOCK TABLES `extras_jobqueue` WRITE;
 /*!40000 ALTER TABLE `extras_jobqueue` DISABLE KEYS */;
-INSERT INTO `extras_jobqueue` VALUES ('f315ce421f754c6f8051b333b7f821cf','2025-11-10 04:15:20.050344','2025-11-10 04:15:20.050376','{}','default','','celery',NULL);
+INSERT INTO `extras_jobqueue` VALUES ('d29487ce8758446587059d098525d563','2025-11-17 04:15:34.378901','2025-11-17 04:15:34.378931','{}','default','','celery',NULL);
 /*!40000 ALTER TABLE `extras_jobqueue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4379,7 +4785,7 @@ CREATE TABLE `extras_jobqueueassignment` (
 
 LOCK TABLES `extras_jobqueueassignment` WRITE;
 /*!40000 ALTER TABLE `extras_jobqueueassignment` DISABLE KEYS */;
-INSERT INTO `extras_jobqueueassignment` VALUES ('4d409bc3bb664cf58698f739adacb5d5','323612f8ce08456ab4e08c076a53531c','f315ce421f754c6f8051b333b7f821cf'),('52c6e89345c54940bc64fe978dbcb568','48f77aec1473404f93f0b4695cd2ccc0','f315ce421f754c6f8051b333b7f821cf'),('f543b0b6c8da4bdabcd89529edd06519','4aa6df84b20f4e7ca4ea27a9ea710060','f315ce421f754c6f8051b333b7f821cf'),('b305444e8e644fc298958756fde59129','900b8a4e80364649b69e88a71ee9f012','f315ce421f754c6f8051b333b7f821cf'),('a23482d00c544a26ac41e909dddb1994','c0c07fd16b174a0c939ad67d165df237','f315ce421f754c6f8051b333b7f821cf'),('ce90ac0e303f4620be8eeacda31b1c8c','c4562078862a42b7a01ecb891720e826','f315ce421f754c6f8051b333b7f821cf'),('517fc3af7b8145f787af74cd6072d97c','ce3ba8cf122b483db9afb1b77f0edb5e','f315ce421f754c6f8051b333b7f821cf'),('5cae0266e1514b608c9f55d7483685d6','d063b0e0f3574dd2b280b27bd3d1e8fe','f315ce421f754c6f8051b333b7f821cf'),('6de8beda55ec4c0294cd4d90413c5fee','df5eb435842d4eb29afcbdee99715924','f315ce421f754c6f8051b333b7f821cf'),('71a8454d89f243c080f569ca91bdba4f','f811471b1be84244a74b18b0b48bc5fb','f315ce421f754c6f8051b333b7f821cf');
+INSERT INTO `extras_jobqueueassignment` VALUES ('ce22ca8bd993497baf7465ee5a6ba264','09432293183b486c962e04435d7d7307','d29487ce8758446587059d098525d563'),('7dc7d1e9ab1545a2a4b0ce4a7d3c2dcb','0d07efe2a78d40db96bc5cdb18038ec9','d29487ce8758446587059d098525d563'),('1f459c873448400ca26690d43fd260d9','2060293e81a643308c1d9c19735d0774','d29487ce8758446587059d098525d563'),('85ff4ad713304aaa8d54eebd9a6ab015','21941ea6ba91490088d541a33aa3a5e3','d29487ce8758446587059d098525d563'),('1c5c8466e7eb44af8075131558dfc236','35f1a5b53e3747228f325689e2102d2f','d29487ce8758446587059d098525d563'),('ca09cc941cb249bca31b5b9d0ae6febf','38b33fb04f804019a9936f14cab6a189','d29487ce8758446587059d098525d563'),('2c69244d9a7344a1b4e80d7e9f946df8','5fa71f6000154d37a985af9d00dc245c','d29487ce8758446587059d098525d563'),('266ed4afc72d4d83b969b3f665f4c203','69b529218b514410a58e2b79fdd83b38','d29487ce8758446587059d098525d563'),('2c4f1f0955fb4894ac471dfc36c7ce02','bf9e743ba8194feba963485fdc04ef4e','d29487ce8758446587059d098525d563'),('d8fca942b58f40c1936ff12a3b9435b6','c9f9dbd7a9c44b499f3e83cbf2653c36','d29487ce8758446587059d098525d563'),('daa63a6b68104608a2cc501e12c022f0','dab44989d1c04a68b3d854d03894dcae','d29487ce8758446587059d098525d563'),('e8c4b45592a445b09d9b1dd426d06f8c','de3a399bfb1d44d196c2867c7d690ec2','d29487ce8758446587059d098525d563');
 /*!40000 ALTER TABLE `extras_jobqueueassignment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4409,6 +4815,11 @@ CREATE TABLE `extras_jobresult` (
   `worker` varchar(100) DEFAULT NULL,
   `celery_kwargs` json NOT NULL DEFAULT (_utf8mb4'{}'),
   `date_started` datetime(6) DEFAULT NULL,
+  `debug_log_count` int unsigned DEFAULT NULL,
+  `error_log_count` int unsigned DEFAULT NULL,
+  `info_log_count` int unsigned DEFAULT NULL,
+  `success_log_count` int unsigned DEFAULT NULL,
+  `warning_log_count` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `extras_jobresult_user_id_d35285ab_fk_auth_user_id` (`user_id`),
   KEY `extras_jobresult_job_model_id_d581ec7e_fk_extras_job_id` (`job_model_id`),
@@ -4425,7 +4836,12 @@ CREATE TABLE `extras_jobresult` (
   KEY `extras_jobresult_date_started_6992234b` (`date_started`),
   CONSTRAINT `extras_jobresult_job_model_id_d581ec7e_fk_extras_job_id` FOREIGN KEY (`job_model_id`) REFERENCES `extras_job` (`id`),
   CONSTRAINT `extras_jobresult_scheduled_job_id_0921f94c_fk_extras_sc` FOREIGN KEY (`scheduled_job_id`) REFERENCES `extras_scheduledjob` (`id`),
-  CONSTRAINT `extras_jobresult_user_id_d35285ab_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+  CONSTRAINT `extras_jobresult_user_id_d35285ab_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `extras_jobresult_chk_1` CHECK ((`debug_log_count` >= 0)),
+  CONSTRAINT `extras_jobresult_chk_2` CHECK ((`error_log_count` >= 0)),
+  CONSTRAINT `extras_jobresult_chk_3` CHECK ((`info_log_count` >= 0)),
+  CONSTRAINT `extras_jobresult_chk_4` CHECK ((`success_log_count` >= 0)),
+  CONSTRAINT `extras_jobresult_chk_5` CHECK ((`warning_log_count` >= 0))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -4760,7 +5176,7 @@ CREATE TABLE `extras_role` (
 
 LOCK TABLES `extras_role` WRITE;
 /*!40000 ALTER TABLE `extras_role` DISABLE KEYS */;
-INSERT INTO `extras_role` VALUES ('3c511c0b91a1402a86da7d7f1f4c4eb0','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.192820','{}','VIP','4caf50','',NULL),('5847ff84dc2a466c81cdd106e1001b43','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.191304','{}','Anycast','ffc107','',NULL),('707b452a7ee5480b96da261d95a4eda9','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.198824','{}','CARP','4caf50','',NULL),('75fee3f501d0472bacbafba34c05dc14','2025-11-10 04:14:34.651310','2025-11-10 04:14:34.651337','{}','Billing','4caf50','Unit plays a billing role',NULL),('7a8793919507416e8fc059c15d3dff8f','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.194320','{}','VRRP','4caf50','',NULL),('7c63015cbb104deab1d3aa5d9f74c8e8','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.189784','{}','Secondary','2196f3','',NULL),('7e5955fc8d3a431c97f5ae822174db45','2025-11-10 04:14:34.658827','2025-11-10 04:14:34.658852','{}','On Site','111111','Unit plays an on site role',NULL),('95efe17db8a54e4e911421ba3eed2bcd','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.197310','{}','GLBP','4caf50','',NULL),('e41390723b2248fba44cfcfd1a225cba','2025-11-10 04:14:34.654791','2025-11-10 04:14:34.654814','{}','Support','ffeb3b','Unit plays a support role',NULL),('f42538ed56c3466686232b5af85b8477','2025-11-10 04:14:34.646469','2025-11-10 04:14:34.646500','{}','Administrative','2196f3','Unit plays an administrative role',NULL),('f72a9e95ab8b4631b15565e0825ce00e','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.188214','{}','Loopback','9e9e9e','',NULL),('fc80f0869be7499b9552a7d08366a720','2025-11-10 00:00:00.000000','2025-11-10 04:13:09.195827','{}','HSRP','4caf50','',NULL);
+INSERT INTO `extras_role` VALUES ('1c0e2bfbe768427d963c184be6f710cc','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.694674','{}','CARP','4caf50','',NULL),('3786c8e671724a80bb4c807178fd1396','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.688696','{}','VIP','4caf50','',NULL),('3d10b217988e41a79406ef4e2981ec7e','2025-11-17 04:14:50.812556','2025-11-17 04:14:50.812584','{}','Administrative','2196f3','Unit plays an administrative role',NULL),('45987b13750a424282501330a2a72d97','2025-11-17 04:14:50.820818','2025-11-17 04:14:50.820841','{}','Support','ffeb3b','Unit plays a support role',NULL),('637a67cf84124812b2452be79807bf1e','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.684181','{}','Loopback','9e9e9e','',NULL),('69bc89a53ef64804896782c1eb15610a','2025-11-17 04:16:07.894731','2025-11-17 04:16:07.894763','{}','Spoke','8bc34a','Unit plays a Spoke role',NULL),('74a7346188684c17b71ee74c246e01e3','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.685722','{}','Secondary','2196f3','',NULL),('880c58c833714f5186562ddea40f22c0','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.691721','{}','HSRP','4caf50','',NULL),('8ccc80562af14b8f8ca4671678a7eb81','2025-11-17 04:16:07.890846','2025-11-17 04:16:07.890870','{}','Hub','2f6a31','Unit plays a Hub role',NULL),('8e0cb56520254589881943e33fa4c6e2','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.690140','{}','VRRP','4caf50','',NULL),('a6085e0542424989ab610feb1c26e66f','2025-11-17 04:14:50.824477','2025-11-17 04:14:50.824498','{}','On Site','111111','Unit plays an on site role',NULL),('d4b0e25976b44b4aa249ddea558e913b','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.693173','{}','GLBP','4caf50','',NULL),('df3b7d490367482181b8232fe0141d2e','2025-11-17 00:00:00.000000','2025-11-17 04:13:28.687229','{}','Anycast','ffc107','',NULL),('f7069aee54cf4b5ba4703f37ce98f12f','2025-11-17 04:16:07.887027','2025-11-17 04:16:07.887056','{}','Peer','ff9800','Unit plays a Peer role',NULL),('f9d179702a7640a087a605997b8dcc52','2025-11-17 04:14:50.817055','2025-11-17 04:14:50.817080','{}','Billing','4caf50','Unit plays a billing role',NULL);
 /*!40000 ALTER TABLE `extras_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4780,7 +5196,7 @@ CREATE TABLE `extras_role_content_types` (
   KEY `extras_role_content__contenttype_id_b8004814_fk_django_co` (`contenttype_id`),
   CONSTRAINT `extras_role_content__contenttype_id_b8004814_fk_django_co` FOREIGN KEY (`contenttype_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `extras_role_content_types_role_id_1db5d29d_fk_extras_role_id` FOREIGN KEY (`role_id`) REFERENCES `extras_role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4789,7 +5205,7 @@ CREATE TABLE `extras_role_content_types` (
 
 LOCK TABLES `extras_role_content_types` WRITE;
 /*!40000 ALTER TABLE `extras_role_content_types` DISABLE KEYS */;
-INSERT INTO `extras_role_content_types` VALUES (7,'3c511c0b91a1402a86da7d7f1f4c4eb0',6),(1,'5847ff84dc2a466c81cdd106e1001b43',6),(2,'707b452a7ee5480b96da261d95a4eda9',6),(10,'75fee3f501d0472bacbafba34c05dc14',23),(8,'7a8793919507416e8fc059c15d3dff8f',6),(6,'7c63015cbb104deab1d3aa5d9f74c8e8',6),(12,'7e5955fc8d3a431c97f5ae822174db45',23),(3,'95efe17db8a54e4e911421ba3eed2bcd',6),(11,'e41390723b2248fba44cfcfd1a225cba',23),(9,'f42538ed56c3466686232b5af85b8477',23),(5,'f72a9e95ab8b4631b15565e0825ce00e',6),(4,'fc80f0869be7499b9552a7d08366a720',6);
+INSERT INTO `extras_role_content_types` VALUES (2,'1c0e2bfbe768427d963c184be6f710cc',6),(7,'3786c8e671724a80bb4c807178fd1396',6),(9,'3d10b217988e41a79406ef4e2981ec7e',23),(11,'45987b13750a424282501330a2a72d97',23),(5,'637a67cf84124812b2452be79807bf1e',6),(15,'69bc89a53ef64804896782c1eb15610a',38),(6,'74a7346188684c17b71ee74c246e01e3',6),(4,'880c58c833714f5186562ddea40f22c0',6),(14,'8ccc80562af14b8f8ca4671678a7eb81',38),(8,'8e0cb56520254589881943e33fa4c6e2',6),(12,'a6085e0542424989ab610feb1c26e66f',23),(3,'d4b0e25976b44b4aa249ddea558e913b',6),(1,'df3b7d490367482181b8232fe0141d2e',6),(13,'f7069aee54cf4b5ba4703f37ce98f12f',38),(10,'f9d179702a7640a087a605997b8dcc52',23);
 /*!40000 ALTER TABLE `extras_role_content_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4847,8 +5263,7 @@ CREATE TABLE `extras_scheduledjob` (
   `date_changed` datetime(6) NOT NULL,
   `description` longtext NOT NULL,
   `approval_required` tinyint(1) NOT NULL,
-  `approved_at` datetime(6) DEFAULT NULL,
-  `approved_by_user_id` char(32) DEFAULT NULL,
+  `decision_date` datetime(6) DEFAULT NULL,
   `user_id` char(32) DEFAULT NULL,
   `job_model_id` char(32) DEFAULT NULL,
   `crontab` varchar(255) NOT NULL,
@@ -4857,12 +5272,10 @@ CREATE TABLE `extras_scheduledjob` (
   `job_queue_id` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `extras_scheduledjob_name_fcea52d7_uniq` (`name`),
-  KEY `extras_scheduledjob_approved_by_user_id_06b8fb0a_fk_auth_user_id` (`approved_by_user_id`),
   KEY `extras_scheduledjob_user_id_4d8034ff_fk_auth_user_id` (`user_id`),
   KEY `extras_scheduledjob_job_model_id_d4c0711e_fk_extras_job_id` (`job_model_id`),
   KEY `extras_scheduledjob_task_7eaf2d6d` (`task`),
   KEY `extras_scheduledjob_job_queue_id_d238dd34_fk_extras_jobqueue_id` (`job_queue_id`),
-  CONSTRAINT `extras_scheduledjob_approved_by_user_id_06b8fb0a_fk_auth_user_id` FOREIGN KEY (`approved_by_user_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `extras_scheduledjob_job_model_id_d4c0711e_fk_extras_job_id` FOREIGN KEY (`job_model_id`) REFERENCES `extras_job` (`id`),
   CONSTRAINT `extras_scheduledjob_job_queue_id_d238dd34_fk_extras_jobqueue_id` FOREIGN KEY (`job_queue_id`) REFERENCES `extras_jobqueue` (`id`),
   CONSTRAINT `extras_scheduledjob_user_id_4d8034ff_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
@@ -5050,7 +5463,7 @@ CREATE TABLE `extras_status` (
 
 LOCK TABLES `extras_status` WRITE;
 /*!40000 ALTER TABLE `extras_status` DISABLE KEYS */;
-INSERT INTO `extras_status` VALUES ('04dae6545d884a609322eb105d73c8f1','2025-11-10 00:00:00.000000','2025-11-10 04:13:03.093373','{}','Staging','2196f3','Location is in the process of being staged'),('06555ef447884c26a8260b08377fc070','2025-11-10 00:00:00.000000','2025-11-10 04:13:03.102263','{}','Retired','f44336','Location has been retired'),('1186df07cc0a467691656170cc6ea1b5','2025-11-10 04:14:34.638773','2025-11-10 04:14:34.638800','{}','Secondary','ffeb3b','Unit is secondary'),('17c34bbb24434923aceceaf576513b90','2025-11-10 00:00:00.000000','2025-11-10 04:12:53.567033','{}','Maintenance','9e9e9e','Unit is under maintenance'),('1ff75203a5e94ebe953d113bcb45888f','2025-11-10 04:15:21.578045','2025-11-10 04:15:21.578077','{}','Down','ffc107','VRF is down'),('20f8b926ef9e462483c25385394d4c3c','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.496784','{}','Deprovisioning','ffc107','Circuit is being deprovisioned'),('369af1bcf5ba4d8da45d03f66ec28c36','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.489587','{}','Active','4caf50','Unit is active'),('3be9af08819944cc90f808b937de07b3','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.500323','{}','Decommissioned','9e9e9e','Circuit has been decommissioned'),('54edfa8daf344f15a81814dfd64b2b40','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.557138','{}','Available','4caf50','Unit is available'),('5b595d96aa5f4bc49228f2629879a4e1','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.512139','{}','Decommissioning','ffc107','Unit is being decommissioned'),('6a60efa144be4886bf7d3c8c9427cec6','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.532493','{}','Inventory','9e9e9e','Device is in inventory'),('6e4a261f24d84b97b38f1c7280240e0e','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.553476','{}','Reserved','00bcd4','Unit is reserved'),('7c63c0790d1448369f0d1bd2aabc5bd1','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.485840','{}','Provisioning','2196f3','Circuit is being provisioned'),('7d62033d1b56439781a6df7a2582c366','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.525614','{}','Staged','2196f3','Unit has been staged'),('7e793fd947384d91893f7c8c3d1d33c9','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.529083','{}','Failed','f44336','Unit has failed'),('860ab3d3ee7044bab6dd903718270e9b','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.480191','{}','Planned','00bcd4','Unit has been planned'),('93e8440ea0a44a24a0c487f60fa056b7','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.493354','{}','Offline','ffc107','Unit is offline'),('9792329e01cf415eb5882d903a1104f9','2025-11-10 04:14:34.633853','2025-11-10 04:14:34.633883','{}','Primary','2196f3','Unit is primary'),('aa465e8eb77e4319b5fbea997cdaea43','2025-11-10 04:14:37.463617','2025-11-10 04:14:37.463643','{}','End-of-Life','f44336','Unit has reached end-of-life'),('b0de88934125465a9546c0f0cda99464','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.566377','{}','Deprecated','f44336','Unit has been deprecated'),('c5d9c34a98114f2a9e34992309bb5737','2025-11-10 04:14:37.459969','2025-11-10 04:14:37.460000','{}','Extended Support','00bcd4','Software is in extended support'),('e5c31d412006459bbcf5020be2b1cf60','2025-11-10 00:00:00.000000','2025-11-10 04:12:46.506054','{}','Connected','4caf50','Cable is connected');
+INSERT INTO `extras_status` VALUES ('05ea5aef081549e6a4f11c079762d3df','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.733419','{}','Decommissioned','9e9e9e','Circuit has been decommissioned'),('09d4f925f43840ba97f898bf53425beb','2025-11-17 00:00:00.000000','2025-11-17 04:13:23.280085','{}','Retired','f44336','Location has been retired'),('0e5afb5174d4418eb24dbd815d7b0c04','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.721012','{}','Active','4caf50','Unit is active'),('2309033660c84b8583453c87978ec3c2','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.790425','{}','Available','4caf50','Unit is available'),('2d0fa75edb564df080d2c07742530dc3','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.711879','{}','Planned','00bcd4','Unit has been planned'),('38bf2a69694d4d9db79b0c1a9bb4b58e','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.765798','{}','Inventory','9e9e9e','Device is in inventory'),('516460845a404c989711fadaa876b77d','2025-11-17 04:14:53.878155','2025-11-17 04:14:53.878183','{}','Extended Support','00bcd4','Software is in extended support'),('55c7eae3b9fc42c3b57a4c78e9c5eea5','2025-11-17 04:14:50.804975','2025-11-17 04:14:50.805003','{}','Secondary','ffeb3b','Unit is secondary'),('55dcdb41489c4f2a80680fbfdad32376','2025-11-17 04:14:53.881472','2025-11-17 04:14:53.881491','{}','End-of-Life','f44336','Unit has reached end-of-life'),('618ffb1a33694b058b7239d9f7c14650','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.724692','{}','Offline','ffc107','Unit is offline'),('66675550f63347ceaa54a9a0c868b8d7','2025-11-17 04:15:42.233585','2025-11-17 04:15:42.233636','{}','Down','ffc107','VRF is down'),('79378ae2a71248c19ead79e793974401','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.762343','{}','Failed','f44336','Unit has failed'),('7f9eeae0fcad4ff0ad03c7c21c61af56','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.745374','{}','Decommissioning','ffc107','Unit is being decommissioned'),('b59a9c356ca04a0baf9bc6f1f4c9e346','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.787060','{}','Reserved','00bcd4','Unit is reserved'),('b85694618b6340bf9081bf8e94c2f1f1','2025-11-17 00:00:00.000000','2025-11-17 04:13:14.364169','{}','Maintenance','9e9e9e','Unit is under maintenance'),('bae546df13de47959e2f6dcbb6773f0b','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.739220','{}','Connected','4caf50','Cable is connected'),('d0e735af2bdc4743bd3f3c13aef90f1c','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.717376','{}','Provisioning','2196f3','Circuit is being provisioned'),('d9d7ca7d371949b584e6a504d77ef947','2025-11-17 04:14:50.800265','2025-11-17 04:14:50.800296','{}','Primary','2196f3','Unit is primary'),('dd54f3ee67034c6792e92722ddd68d53','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.729229','{}','Deprovisioning','ffc107','Circuit is being deprovisioned'),('e0dd55482c2d4986bf9363527aab1b03','2025-11-17 00:00:00.000000','2025-11-17 04:13:23.271701','{}','Staging','2196f3','Location is in the process of being staged'),('f632a75dc4624b21944df3a0d7414911','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.798901','{}','Deprecated','f44336','Unit has been deprecated'),('fec596946e2e4d509419245442d3e6aa','2025-11-17 00:00:00.000000','2025-11-17 04:13:07.758843','{}','Staged','2196f3','Unit has been staged');
 /*!40000 ALTER TABLE `extras_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5070,7 +5483,7 @@ CREATE TABLE `extras_status_content_types` (
   KEY `extras_status_conten_contenttype_id_38503e74_fk_django_co` (`contenttype_id`),
   CONSTRAINT `extras_status_conten_contenttype_id_38503e74_fk_django_co` FOREIGN KEY (`contenttype_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `extras_status_conten_status_id_27c665c7_fk_extras_st` FOREIGN KEY (`status_id`) REFERENCES `extras_status` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5079,7 +5492,7 @@ CREATE TABLE `extras_status_content_types` (
 
 LOCK TABLES `extras_status_content_types` WRITE;
 /*!40000 ALTER TABLE `extras_status_content_types` DISABLE KEYS */;
-INSERT INTO `extras_status_content_types` VALUES (52,'04dae6545d884a609322eb105d73c8f1',14),(57,'04dae6545d884a609322eb105d73c8f1',19),(62,'04dae6545d884a609322eb105d73c8f1',20),(55,'06555ef447884c26a8260b08377fc070',14),(60,'06555ef447884c26a8260b08377fc070',19),(65,'06555ef447884c26a8260b08377fc070',20),(67,'1186df07cc0a467691656170cc6ea1b5',23),(44,'17c34bbb24434923aceceaf576513b90',12),(50,'17c34bbb24434923aceceaf576513b90',13),(90,'1ff75203a5e94ebe953d113bcb45888f',28),(5,'20f8b926ef9e462483c25385394d4c3c',1),(3,'369af1bcf5ba4d8da45d03f66ec28c36',1),(11,'369af1bcf5ba4d8da45d03f66ec28c36',3),(18,'369af1bcf5ba4d8da45d03f66ec28c36',4),(24,'369af1bcf5ba4d8da45d03f66ec28c36',5),(26,'369af1bcf5ba4d8da45d03f66ec28c36',6),(29,'369af1bcf5ba4d8da45d03f66ec28c36',7),(32,'369af1bcf5ba4d8da45d03f66ec28c36',8),(36,'369af1bcf5ba4d8da45d03f66ec28c36',9),(42,'369af1bcf5ba4d8da45d03f66ec28c36',12),(48,'369af1bcf5ba4d8da45d03f66ec28c36',13),(53,'369af1bcf5ba4d8da45d03f66ec28c36',14),(58,'369af1bcf5ba4d8da45d03f66ec28c36',19),(63,'369af1bcf5ba4d8da45d03f66ec28c36',20),(68,'369af1bcf5ba4d8da45d03f66ec28c36',23),(69,'369af1bcf5ba4d8da45d03f66ec28c36',24),(72,'369af1bcf5ba4d8da45d03f66ec28c36',25),(76,'369af1bcf5ba4d8da45d03f66ec28c36',26),(83,'369af1bcf5ba4d8da45d03f66ec28c36',27),(89,'369af1bcf5ba4d8da45d03f66ec28c36',28),(93,'369af1bcf5ba4d8da45d03f66ec28c36',29),(6,'3be9af08819944cc90f808b937de07b3',1),(22,'54edfa8daf344f15a81814dfd64b2b40',5),(9,'5b595d96aa5f4bc49228f2629879a4e1',2),(16,'5b595d96aa5f4bc49228f2629879a4e1',3),(40,'5b595d96aa5f4bc49228f2629879a4e1',9),(43,'5b595d96aa5f4bc49228f2629879a4e1',12),(49,'5b595d96aa5f4bc49228f2629879a4e1',13),(54,'5b595d96aa5f4bc49228f2629879a4e1',14),(59,'5b595d96aa5f4bc49228f2629879a4e1',19),(64,'5b595d96aa5f4bc49228f2629879a4e1',20),(81,'5b595d96aa5f4bc49228f2629879a4e1',26),(88,'5b595d96aa5f4bc49228f2629879a4e1',27),(15,'6a60efa144be4886bf7d3c8c9427cec6',3),(80,'6a60efa144be4886bf7d3c8c9427cec6',26),(87,'6a60efa144be4886bf7d3c8c9427cec6',27),(21,'6e4a261f24d84b97b38f1c7280240e0e',5),(27,'6e4a261f24d84b97b38f1c7280240e0e',6),(30,'6e4a261f24d84b97b38f1c7280240e0e',7),(33,'6e4a261f24d84b97b38f1c7280240e0e',8),(2,'7c63c0790d1448369f0d1bd2aabc5bd1',1),(13,'7d62033d1b56439781a6df7a2582c366',3),(38,'7d62033d1b56439781a6df7a2582c366',9),(78,'7d62033d1b56439781a6df7a2582c366',26),(85,'7d62033d1b56439781a6df7a2582c366',27),(14,'7e793fd947384d91893f7c8c3d1d33c9',3),(20,'7e793fd947384d91893f7c8c3d1d33c9',4),(39,'7e793fd947384d91893f7c8c3d1d33c9',9),(41,'7e793fd947384d91893f7c8c3d1d33c9',12),(47,'7e793fd947384d91893f7c8c3d1d33c9',13),(79,'7e793fd947384d91893f7c8c3d1d33c9',26),(86,'7e793fd947384d91893f7c8c3d1d33c9',27),(1,'860ab3d3ee7044bab6dd903718270e9b',1),(8,'860ab3d3ee7044bab6dd903718270e9b',2),(12,'860ab3d3ee7044bab6dd903718270e9b',3),(19,'860ab3d3ee7044bab6dd903718270e9b',4),(23,'860ab3d3ee7044bab6dd903718270e9b',5),(37,'860ab3d3ee7044bab6dd903718270e9b',9),(45,'860ab3d3ee7044bab6dd903718270e9b',12),(46,'860ab3d3ee7044bab6dd903718270e9b',13),(51,'860ab3d3ee7044bab6dd903718270e9b',14),(56,'860ab3d3ee7044bab6dd903718270e9b',19),(61,'860ab3d3ee7044bab6dd903718270e9b',20),(77,'860ab3d3ee7044bab6dd903718270e9b',26),(84,'860ab3d3ee7044bab6dd903718270e9b',27),(94,'860ab3d3ee7044bab6dd903718270e9b',29),(4,'93e8440ea0a44a24a0c487f60fa056b7',1),(10,'93e8440ea0a44a24a0c487f60fa056b7',3),(17,'93e8440ea0a44a24a0c487f60fa056b7',4),(35,'93e8440ea0a44a24a0c487f60fa056b7',9),(75,'93e8440ea0a44a24a0c487f60fa056b7',26),(82,'93e8440ea0a44a24a0c487f60fa056b7',27),(92,'93e8440ea0a44a24a0c487f60fa056b7',29),(66,'9792329e01cf415eb5882d903a1104f9',23),(71,'aa465e8eb77e4319b5fbea997cdaea43',24),(74,'aa465e8eb77e4319b5fbea997cdaea43',25),(25,'b0de88934125465a9546c0f0cda99464',5),(28,'b0de88934125465a9546c0f0cda99464',6),(31,'b0de88934125465a9546c0f0cda99464',7),(34,'b0de88934125465a9546c0f0cda99464',8),(91,'b0de88934125465a9546c0f0cda99464',28),(70,'c5d9c34a98114f2a9e34992309bb5737',24),(73,'c5d9c34a98114f2a9e34992309bb5737',25),(7,'e5c31d412006459bbcf5020be2b1cf60',2);
+INSERT INTO `extras_status_content_types` VALUES (6,'05ea5aef081549e6a4f11c079762d3df',1),(55,'09d4f925f43840ba97f898bf53425beb',14),(60,'09d4f925f43840ba97f898bf53425beb',19),(65,'09d4f925f43840ba97f898bf53425beb',20),(3,'0e5afb5174d4418eb24dbd815d7b0c04',1),(11,'0e5afb5174d4418eb24dbd815d7b0c04',3),(18,'0e5afb5174d4418eb24dbd815d7b0c04',4),(24,'0e5afb5174d4418eb24dbd815d7b0c04',5),(26,'0e5afb5174d4418eb24dbd815d7b0c04',6),(29,'0e5afb5174d4418eb24dbd815d7b0c04',7),(32,'0e5afb5174d4418eb24dbd815d7b0c04',8),(36,'0e5afb5174d4418eb24dbd815d7b0c04',9),(42,'0e5afb5174d4418eb24dbd815d7b0c04',12),(48,'0e5afb5174d4418eb24dbd815d7b0c04',13),(53,'0e5afb5174d4418eb24dbd815d7b0c04',14),(58,'0e5afb5174d4418eb24dbd815d7b0c04',19),(63,'0e5afb5174d4418eb24dbd815d7b0c04',20),(68,'0e5afb5174d4418eb24dbd815d7b0c04',23),(69,'0e5afb5174d4418eb24dbd815d7b0c04',24),(72,'0e5afb5174d4418eb24dbd815d7b0c04',25),(76,'0e5afb5174d4418eb24dbd815d7b0c04',26),(83,'0e5afb5174d4418eb24dbd815d7b0c04',27),(89,'0e5afb5174d4418eb24dbd815d7b0c04',28),(93,'0e5afb5174d4418eb24dbd815d7b0c04',29),(95,'0e5afb5174d4418eb24dbd815d7b0c04',36),(100,'0e5afb5174d4418eb24dbd815d7b0c04',37),(22,'2309033660c84b8583453c87978ec3c2',5),(1,'2d0fa75edb564df080d2c07742530dc3',1),(8,'2d0fa75edb564df080d2c07742530dc3',2),(12,'2d0fa75edb564df080d2c07742530dc3',3),(19,'2d0fa75edb564df080d2c07742530dc3',4),(23,'2d0fa75edb564df080d2c07742530dc3',5),(37,'2d0fa75edb564df080d2c07742530dc3',9),(45,'2d0fa75edb564df080d2c07742530dc3',12),(46,'2d0fa75edb564df080d2c07742530dc3',13),(51,'2d0fa75edb564df080d2c07742530dc3',14),(56,'2d0fa75edb564df080d2c07742530dc3',19),(61,'2d0fa75edb564df080d2c07742530dc3',20),(77,'2d0fa75edb564df080d2c07742530dc3',26),(84,'2d0fa75edb564df080d2c07742530dc3',27),(94,'2d0fa75edb564df080d2c07742530dc3',29),(97,'2d0fa75edb564df080d2c07742530dc3',36),(15,'38bf2a69694d4d9db79b0c1a9bb4b58e',3),(80,'38bf2a69694d4d9db79b0c1a9bb4b58e',26),(87,'38bf2a69694d4d9db79b0c1a9bb4b58e',27),(70,'516460845a404c989711fadaa876b77d',24),(73,'516460845a404c989711fadaa876b77d',25),(67,'55c7eae3b9fc42c3b57a4c78e9c5eea5',23),(71,'55dcdb41489c4f2a80680fbfdad32376',24),(74,'55dcdb41489c4f2a80680fbfdad32376',25),(4,'618ffb1a33694b058b7239d9f7c14650',1),(10,'618ffb1a33694b058b7239d9f7c14650',3),(17,'618ffb1a33694b058b7239d9f7c14650',4),(35,'618ffb1a33694b058b7239d9f7c14650',9),(75,'618ffb1a33694b058b7239d9f7c14650',26),(82,'618ffb1a33694b058b7239d9f7c14650',27),(92,'618ffb1a33694b058b7239d9f7c14650',29),(90,'66675550f63347ceaa54a9a0c868b8d7',28),(101,'66675550f63347ceaa54a9a0c868b8d7',37),(14,'79378ae2a71248c19ead79e793974401',3),(20,'79378ae2a71248c19ead79e793974401',4),(39,'79378ae2a71248c19ead79e793974401',9),(41,'79378ae2a71248c19ead79e793974401',12),(47,'79378ae2a71248c19ead79e793974401',13),(79,'79378ae2a71248c19ead79e793974401',26),(86,'79378ae2a71248c19ead79e793974401',27),(98,'79378ae2a71248c19ead79e793974401',36),(9,'7f9eeae0fcad4ff0ad03c7c21c61af56',2),(16,'7f9eeae0fcad4ff0ad03c7c21c61af56',3),(40,'7f9eeae0fcad4ff0ad03c7c21c61af56',9),(43,'7f9eeae0fcad4ff0ad03c7c21c61af56',12),(49,'7f9eeae0fcad4ff0ad03c7c21c61af56',13),(54,'7f9eeae0fcad4ff0ad03c7c21c61af56',14),(59,'7f9eeae0fcad4ff0ad03c7c21c61af56',19),(64,'7f9eeae0fcad4ff0ad03c7c21c61af56',20),(81,'7f9eeae0fcad4ff0ad03c7c21c61af56',26),(88,'7f9eeae0fcad4ff0ad03c7c21c61af56',27),(99,'7f9eeae0fcad4ff0ad03c7c21c61af56',36),(21,'b59a9c356ca04a0baf9bc6f1f4c9e346',5),(27,'b59a9c356ca04a0baf9bc6f1f4c9e346',6),(30,'b59a9c356ca04a0baf9bc6f1f4c9e346',7),(33,'b59a9c356ca04a0baf9bc6f1f4c9e346',8),(44,'b85694618b6340bf9081bf8e94c2f1f1',12),(50,'b85694618b6340bf9081bf8e94c2f1f1',13),(96,'b85694618b6340bf9081bf8e94c2f1f1',36),(7,'bae546df13de47959e2f6dcbb6773f0b',2),(2,'d0e735af2bdc4743bd3f3c13aef90f1c',1),(66,'d9d7ca7d371949b584e6a504d77ef947',23),(5,'dd54f3ee67034c6792e92722ddd68d53',1),(52,'e0dd55482c2d4986bf9363527aab1b03',14),(57,'e0dd55482c2d4986bf9363527aab1b03',19),(62,'e0dd55482c2d4986bf9363527aab1b03',20),(25,'f632a75dc4624b21944df3a0d7414911',5),(28,'f632a75dc4624b21944df3a0d7414911',6),(31,'f632a75dc4624b21944df3a0d7414911',7),(34,'f632a75dc4624b21944df3a0d7414911',8),(91,'f632a75dc4624b21944df3a0d7414911',28),(102,'f632a75dc4624b21944df3a0d7414911',37),(13,'fec596946e2e4d509419245442d3e6aa',3),(38,'fec596946e2e4d509419245442d3e6aa',9),(78,'fec596946e2e4d509419245442d3e6aa',26),(85,'fec596946e2e4d509419245442d3e6aa',27);
 /*!40000 ALTER TABLE `extras_status_content_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5433,10 +5846,13 @@ CREATE TABLE `ipam_namespace` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `location_id` char(32) DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `ipam_namespace_location_id_0ee18237_fk_dcim_location_id` (`location_id`),
-  CONSTRAINT `ipam_namespace_location_id_0ee18237_fk_dcim_location_id` FOREIGN KEY (`location_id`) REFERENCES `dcim_location` (`id`)
+  KEY `ipam_namespace_tenant_id_7f42e7b1_fk_tenancy_tenant_id` (`tenant_id`),
+  CONSTRAINT `ipam_namespace_location_id_0ee18237_fk_dcim_location_id` FOREIGN KEY (`location_id`) REFERENCES `dcim_location` (`id`),
+  CONSTRAINT `ipam_namespace_tenant_id_7f42e7b1_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5446,7 +5862,7 @@ CREATE TABLE `ipam_namespace` (
 
 LOCK TABLES `ipam_namespace` WRITE;
 /*!40000 ALTER TABLE `ipam_namespace` DISABLE KEYS */;
-INSERT INTO `ipam_namespace` VALUES ('20fd43958ac844f49f505143ba46be75','2025-11-10 04:14:09.236759','2025-11-10 04:14:09.236788','{}','Global','Default Global namespace. Created by Nautobot.',NULL);
+INSERT INTO `ipam_namespace` VALUES ('7926a8a2504c49a086a50b7bd298de67','2025-11-17 04:14:25.893743','2025-11-17 04:14:25.893774','{}','Global','Default Global namespace. Created by Nautobot.',NULL,NULL);
 /*!40000 ALTER TABLE `ipam_namespace` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5487,8 +5903,8 @@ CREATE TABLE `ipam_prefix` (
   KEY `ipam_prefix_new_role_id_528afd96` (`role_id`),
   KEY `ipam_prefix_rir_id_a009797a_fk_ipam_rir_id` (`rir_id`),
   KEY `ipam_prefix_parent_id_93c2aef8_fk_ipam_prefix_id` (`parent_id`),
-  KEY `ipam_prefix_namespace_id_network_broa_a2f7797d_idx` (`namespace_id`,`network`,`broadcast`,`prefix_length`),
   KEY `ipam_prefix_network_broadcast_prefix_length_cac86426_idx` (`network`,`broadcast`,`prefix_length`),
+  KEY `ipam_prefix_namespace_id_network_broa_a2f7797d_idx` (`namespace_id`,`network`,`broadcast`,`prefix_length`),
   KEY `ipam_prefix_ip_version_85fe83ba` (`ip_version`),
   KEY `ipam_prefix_namespace_id_ip_version_n_979b5b53_idx` (`namespace_id`,`ip_version`,`network`,`prefix_length`),
   CONSTRAINT `ipam_prefix_namespace_id_aaf034e9_fk_ipam_namespace_id` FOREIGN KEY (`namespace_id`) REFERENCES `ipam_namespace` (`id`),
@@ -5684,8 +6100,8 @@ CREATE TABLE `ipam_vlan` (
   `tenant_id` char(32) DEFAULT NULL,
   `role_id` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ipam_vlan_group_id_name_e53919df_uniq` (`vlan_group_id`,`name`),
   UNIQUE KEY `ipam_vlan_group_id_vid_5ca4cc47_uniq` (`vlan_group_id`,`vid`),
+  UNIQUE KEY `ipam_vlan_group_id_name_e53919df_uniq` (`vlan_group_id`,`name`),
   KEY `ipam_vlan_tenant_id_71a8290d_fk_tenancy_tenant_id` (`tenant_id`),
   KEY `ipam_vlan_status_id_898aa317` (`status_id`),
   KEY `ipam_vlan_name_a7671201` (`name`),
@@ -5926,6 +6342,274 @@ CREATE TABLE `ipam_vrfprefixassignment` (
 LOCK TABLES `ipam_vrfprefixassignment` WRITE;
 /*!40000 ALTER TABLE `ipam_vrfprefixassignment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ipam_vrfprefixassignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_certificateprofile`
+--
+
+DROP TABLE IF EXISTS `load_balancers_certificateprofile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_certificateprofile` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `certificate_type` varchar(255) NOT NULL,
+  `certificate_file_path` varchar(255) NOT NULL,
+  `chain_file_path` varchar(255) NOT NULL,
+  `key_file_path` varchar(255) NOT NULL,
+  `expiration_date` datetime(6) DEFAULT NULL,
+  `cipher` varchar(255) NOT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `load_balancers_certi_tenant_id_335ccfca_fk_tenancy_t` (`tenant_id`),
+  CONSTRAINT `load_balancers_certi_tenant_id_335ccfca_fk_tenancy_t` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_certificateprofile`
+--
+
+LOCK TABLES `load_balancers_certificateprofile` WRITE;
+/*!40000 ALTER TABLE `load_balancers_certificateprofile` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_certificateprofile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_healthcheckmonitor`
+--
+
+DROP TABLE IF EXISTS `load_balancers_healthcheckmonitor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_healthcheckmonitor` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `interval` int unsigned DEFAULT NULL,
+  `retry` int unsigned DEFAULT NULL,
+  `timeout` int unsigned DEFAULT NULL,
+  `port` int unsigned DEFAULT NULL,
+  `health_check_type` varchar(255) NOT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `load_balancers_healt_tenant_id_8c216871_fk_tenancy_t` (`tenant_id`),
+  CONSTRAINT `load_balancers_healt_tenant_id_8c216871_fk_tenancy_t` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `load_balancers_healthcheckmonitor_chk_1` CHECK ((`interval` >= 0)),
+  CONSTRAINT `load_balancers_healthcheckmonitor_chk_2` CHECK ((`retry` >= 0)),
+  CONSTRAINT `load_balancers_healthcheckmonitor_chk_3` CHECK ((`timeout` >= 0)),
+  CONSTRAINT `load_balancers_healthcheckmonitor_chk_4` CHECK ((`port` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_healthcheckmonitor`
+--
+
+LOCK TABLES `load_balancers_healthcheckmonitor` WRITE;
+/*!40000 ALTER TABLE `load_balancers_healthcheckmonitor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_healthcheckmonitor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_loadbalancerpool`
+--
+
+DROP TABLE IF EXISTS `load_balancers_loadbalancerpool`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_loadbalancerpool` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `load_balancing_algorithm` varchar(255) NOT NULL,
+  `health_check_monitor_id` char(32) DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `load_balancers_loadb_health_check_monitor_2b05fb98_fk_load_bala` (`health_check_monitor_id`),
+  KEY `load_balancers_loadb_tenant_id_96eafb33_fk_tenancy_t` (`tenant_id`),
+  CONSTRAINT `load_balancers_loadb_health_check_monitor_2b05fb98_fk_load_bala` FOREIGN KEY (`health_check_monitor_id`) REFERENCES `load_balancers_healthcheckmonitor` (`id`),
+  CONSTRAINT `load_balancers_loadb_tenant_id_96eafb33_fk_tenancy_t` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_loadbalancerpool`
+--
+
+LOCK TABLES `load_balancers_loadbalancerpool` WRITE;
+/*!40000 ALTER TABLE `load_balancers_loadbalancerpool` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_loadbalancerpool` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_loadbalancerpoolmember`
+--
+
+DROP TABLE IF EXISTS `load_balancers_loadbalancerpoolmember`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_loadbalancerpoolmember` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `port` int unsigned NOT NULL,
+  `ssl_offload` tinyint(1) NOT NULL,
+  `health_check_monitor_id` char(32) DEFAULT NULL,
+  `ip_address_id` char(32) NOT NULL,
+  `load_balancer_pool_id` char(32) NOT NULL,
+  `status_id` char(32) NOT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `load_balancers_loadbalan_ip_address_id_port_load__d0a951a0_uniq` (`ip_address_id`,`port`,`load_balancer_pool_id`),
+  KEY `load_balancers_loadb_health_check_monitor_54bb32d4_fk_load_bala` (`health_check_monitor_id`),
+  KEY `load_balancers_loadb_load_balancer_pool_i_c7debc4f_fk_load_bala` (`load_balancer_pool_id`),
+  KEY `load_balancers_loadb_tenant_id_96310c18_fk_tenancy_t` (`tenant_id`),
+  KEY `load_balancers_loadbalancerpoolmember_status_id_ed8abf82` (`status_id`),
+  CONSTRAINT `load_balancers_loadb_health_check_monitor_54bb32d4_fk_load_bala` FOREIGN KEY (`health_check_monitor_id`) REFERENCES `load_balancers_healthcheckmonitor` (`id`),
+  CONSTRAINT `load_balancers_loadb_ip_address_id_22e710ab_fk_ipam_ipad` FOREIGN KEY (`ip_address_id`) REFERENCES `ipam_ipaddress` (`id`),
+  CONSTRAINT `load_balancers_loadb_load_balancer_pool_i_c7debc4f_fk_load_bala` FOREIGN KEY (`load_balancer_pool_id`) REFERENCES `load_balancers_loadbalancerpool` (`id`),
+  CONSTRAINT `load_balancers_loadb_status_id_ed8abf82_fk_extras_st` FOREIGN KEY (`status_id`) REFERENCES `extras_status` (`id`),
+  CONSTRAINT `load_balancers_loadb_tenant_id_96310c18_fk_tenancy_t` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `load_balancers_loadbalancerpoolmember_chk_1` CHECK ((`port` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_loadbalancerpoolmember`
+--
+
+LOCK TABLES `load_balancers_loadbalancerpoolmember` WRITE;
+/*!40000 ALTER TABLE `load_balancers_loadbalancerpoolmember` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_loadbalancerpoolmember` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_loadbalancerpoolmembercertificateprofileassig0862`
+--
+
+DROP TABLE IF EXISTS `load_balancers_loadbalancerpoolmembercertificateprofileassig0862`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_loadbalancerpoolmembercertificateprofileassig0862` (
+  `id` char(32) NOT NULL,
+  `certificate_profile_id` char(32) NOT NULL,
+  `load_balancer_pool_member_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `load_balancers_loadbalan_load_balancer_pool_membe_d364e060_uniq` (`load_balancer_pool_member_id`,`certificate_profile_id`),
+  KEY `load_balancers_loadb_certificate_profile__e27eb08b_fk_load_bala` (`certificate_profile_id`),
+  CONSTRAINT `load_balancers_loadb_certificate_profile__e27eb08b_fk_load_bala` FOREIGN KEY (`certificate_profile_id`) REFERENCES `load_balancers_certificateprofile` (`id`),
+  CONSTRAINT `load_balancers_loadb_load_balancer_pool_m_96df0575_fk_load_bala` FOREIGN KEY (`load_balancer_pool_member_id`) REFERENCES `load_balancers_loadbalancerpoolmember` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_loadbalancerpoolmembercertificateprofileassig0862`
+--
+
+LOCK TABLES `load_balancers_loadbalancerpoolmembercertificateprofileassig0862` WRITE;
+/*!40000 ALTER TABLE `load_balancers_loadbalancerpoolmembercertificateprofileassig0862` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_loadbalancerpoolmembercertificateprofileassig0862` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_virtualserver`
+--
+
+DROP TABLE IF EXISTS `load_balancers_virtualserver`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_virtualserver` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `port` int unsigned DEFAULT NULL,
+  `protocol` varchar(255) NOT NULL,
+  `source_nat_type` varchar(255) NOT NULL,
+  `load_balancer_type` varchar(255) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  `ssl_offload` tinyint(1) NOT NULL,
+  `cloud_service_id` char(32) DEFAULT NULL,
+  `device_id` char(32) DEFAULT NULL,
+  `device_redundancy_group_id` char(32) DEFAULT NULL,
+  `health_check_monitor_id` char(32) DEFAULT NULL,
+  `load_balancer_pool_id` char(32) DEFAULT NULL,
+  `source_nat_pool_id` char(32) DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  `vip_id` char(32) NOT NULL,
+  `virtual_chassis_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `load_balancers_virtualserver_vip_id_port_protocol_26aef8c7_uniq` (`vip_id`,`port`,`protocol`),
+  KEY `load_balancers_virtu_cloud_service_id_55f55b13_fk_cloud_clo` (`cloud_service_id`),
+  KEY `load_balancers_virtu_device_id_ed6bd403_fk_dcim_devi` (`device_id`),
+  KEY `load_balancers_virtu_device_redundancy_gr_dacbdcdb_fk_dcim_devi` (`device_redundancy_group_id`),
+  KEY `load_balancers_virtu_health_check_monitor_df8d80e4_fk_load_bala` (`health_check_monitor_id`),
+  KEY `load_balancers_virtu_load_balancer_pool_i_1991938e_fk_load_bala` (`load_balancer_pool_id`),
+  KEY `load_balancers_virtu_source_nat_pool_id_d076d96c_fk_ipam_pref` (`source_nat_pool_id`),
+  KEY `load_balancers_virtu_tenant_id_49a13904_fk_tenancy_t` (`tenant_id`),
+  KEY `load_balancers_virtu_virtual_chassis_id_71f0a8e0_fk_dcim_virt` (`virtual_chassis_id`),
+  CONSTRAINT `load_balancers_virtu_cloud_service_id_55f55b13_fk_cloud_clo` FOREIGN KEY (`cloud_service_id`) REFERENCES `cloud_cloudservice` (`id`),
+  CONSTRAINT `load_balancers_virtu_device_id_ed6bd403_fk_dcim_devi` FOREIGN KEY (`device_id`) REFERENCES `dcim_device` (`id`),
+  CONSTRAINT `load_balancers_virtu_device_redundancy_gr_dacbdcdb_fk_dcim_devi` FOREIGN KEY (`device_redundancy_group_id`) REFERENCES `dcim_deviceredundancygroup` (`id`),
+  CONSTRAINT `load_balancers_virtu_health_check_monitor_df8d80e4_fk_load_bala` FOREIGN KEY (`health_check_monitor_id`) REFERENCES `load_balancers_healthcheckmonitor` (`id`),
+  CONSTRAINT `load_balancers_virtu_load_balancer_pool_i_1991938e_fk_load_bala` FOREIGN KEY (`load_balancer_pool_id`) REFERENCES `load_balancers_loadbalancerpool` (`id`),
+  CONSTRAINT `load_balancers_virtu_source_nat_pool_id_d076d96c_fk_ipam_pref` FOREIGN KEY (`source_nat_pool_id`) REFERENCES `ipam_prefix` (`id`),
+  CONSTRAINT `load_balancers_virtu_tenant_id_49a13904_fk_tenancy_t` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `load_balancers_virtu_vip_id_44d6cf83_fk_ipam_ipad` FOREIGN KEY (`vip_id`) REFERENCES `ipam_ipaddress` (`id`),
+  CONSTRAINT `load_balancers_virtu_virtual_chassis_id_71f0a8e0_fk_dcim_virt` FOREIGN KEY (`virtual_chassis_id`) REFERENCES `dcim_virtualchassis` (`id`),
+  CONSTRAINT `load_balancers_virtualserver_chk_1` CHECK ((`port` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_virtualserver`
+--
+
+LOCK TABLES `load_balancers_virtualserver` WRITE;
+/*!40000 ALTER TABLE `load_balancers_virtualserver` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_virtualserver` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `load_balancers_virtualservercertificateprofileassignment`
+--
+
+DROP TABLE IF EXISTS `load_balancers_virtualservercertificateprofileassignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `load_balancers_virtualservercertificateprofileassignment` (
+  `id` char(32) NOT NULL,
+  `certificate_profile_id` char(32) NOT NULL,
+  `virtual_server_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `load_balancers_virtualse_virtual_server_id_certif_46f4c3f7_uniq` (`virtual_server_id`,`certificate_profile_id`),
+  KEY `load_balancers_virtu_certificate_profile__ce33b9bb_fk_load_bala` (`certificate_profile_id`),
+  CONSTRAINT `load_balancers_virtu_certificate_profile__ce33b9bb_fk_load_bala` FOREIGN KEY (`certificate_profile_id`) REFERENCES `load_balancers_certificateprofile` (`id`),
+  CONSTRAINT `load_balancers_virtu_virtual_server_id_8c14d276_fk_load_bala` FOREIGN KEY (`virtual_server_id`) REFERENCES `load_balancers_virtualserver` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `load_balancers_virtualservercertificateprofileassignment`
+--
+
+LOCK TABLES `load_balancers_virtualservercertificateprofileassignment` WRITE;
+/*!40000 ALTER TABLE `load_balancers_virtualservercertificateprofileassignment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `load_balancers_virtualservercertificateprofileassignment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -6386,6 +7070,7 @@ CREATE TABLE `users_objectpermission` (
 
 LOCK TABLES `users_objectpermission` WRITE;
 /*!40000 ALTER TABLE `users_objectpermission` DISABLE KEYS */;
+INSERT INTO `users_objectpermission` VALUES ('1c2abffb08324dfca5d30ec4a85d779e','nautobot-default-scheduledjobs-operator-permissions','Nautobot added permission aligned to the Workflow Operator persona.',1,'[\"view\"]',NULL,'2025-11-17 04:16:04.144975','2025-11-17 04:16:04.223070'),('6d4c0b11137046bbbf36b8c81617e2cc','nautobot-default-scheduledjobs-approver-permissions','Nautobot added permission aligned to the Workflow Approver persona.',1,'[\"view\", \"change\"]',NULL,'2025-11-17 04:16:04.144975','2025-11-17 04:16:04.223070'),('f720a2fb25e342fb8a49bdd02a2e911a','nautobot-default-scheduledjobs-architect-permissions','Nautobot added permission aligned to the Workflow Architect persona.',1,'[\"view\", \"add\", \"change\", \"delete\"]',NULL,'2025-11-17 04:16:04.144975','2025-11-17 04:16:04.223070');
 /*!40000 ALTER TABLE `users_objectpermission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6405,7 +7090,7 @@ CREATE TABLE `users_objectpermission_groups` (
   KEY `users_objectpermission_groups_group_id_fb7ba6e0_fk_auth_group_id` (`group_id`),
   CONSTRAINT `users_objectpermissi_objectpermission_id_2f7cc117_fk_users_obj` FOREIGN KEY (`objectpermission_id`) REFERENCES `users_objectpermission` (`id`),
   CONSTRAINT `users_objectpermission_groups_group_id_fb7ba6e0_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6414,6 +7099,7 @@ CREATE TABLE `users_objectpermission_groups` (
 
 LOCK TABLES `users_objectpermission_groups` WRITE;
 /*!40000 ALTER TABLE `users_objectpermission_groups` DISABLE KEYS */;
+INSERT INTO `users_objectpermission_groups` VALUES (3,'1c2abffb08324dfca5d30ec4a85d779e',1),(4,'1c2abffb08324dfca5d30ec4a85d779e',2),(5,'1c2abffb08324dfca5d30ec4a85d779e',3),(2,'6d4c0b11137046bbbf36b8c81617e2cc',1),(1,'f720a2fb25e342fb8a49bdd02a2e911a',3);
 /*!40000 ALTER TABLE `users_objectpermission_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6433,7 +7119,7 @@ CREATE TABLE `users_objectpermission_object_types` (
   KEY `users_objectpermissi_contenttype_id_594b1cc7_fk_django_co` (`contenttype_id`),
   CONSTRAINT `users_objectpermissi_contenttype_id_594b1cc7_fk_django_co` FOREIGN KEY (`contenttype_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `users_objectpermissi_objectpermission_id_38c7d8f5_fk_users_obj` FOREIGN KEY (`objectpermission_id`) REFERENCES `users_objectpermission` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6442,6 +7128,7 @@ CREATE TABLE `users_objectpermission_object_types` (
 
 LOCK TABLES `users_objectpermission_object_types` WRITE;
 /*!40000 ALTER TABLE `users_objectpermission_object_types` DISABLE KEYS */;
+INSERT INTO `users_objectpermission_object_types` VALUES (5,'1c2abffb08324dfca5d30ec4a85d779e',30),(6,'1c2abffb08324dfca5d30ec4a85d779e',31),(4,'1c2abffb08324dfca5d30ec4a85d779e',32),(3,'6d4c0b11137046bbbf36b8c81617e2cc',31),(1,'f720a2fb25e342fb8a49bdd02a2e911a',33),(2,'f720a2fb25e342fb8a49bdd02a2e911a',34);
 /*!40000 ALTER TABLE `users_objectpermission_object_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6779,6 +7466,385 @@ LOCK TABLES `virtualization_vminterface_tagged_vlans` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `vpn_vpn`
+--
+
+DROP TABLE IF EXISTS `vpn_vpn`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpn` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `vpn_id` varchar(255) NOT NULL,
+  `role_id` char(32) DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  `vpn_profile_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `vpn_vpn_vpn_profile_id_3227205a_fk_vpn_vpnprofile_id` (`vpn_profile_id`),
+  KEY `vpn_vpn_tenant_id_0facb2dc_fk_tenancy_tenant_id` (`tenant_id`),
+  KEY `vpn_vpn_role_id_fe533e76` (`role_id`),
+  CONSTRAINT `vpn_vpn_role_id_fe533e76_fk_extras_role_id` FOREIGN KEY (`role_id`) REFERENCES `extras_role` (`id`),
+  CONSTRAINT `vpn_vpn_tenant_id_0facb2dc_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `vpn_vpn_vpn_profile_id_3227205a_fk_vpn_vpnprofile_id` FOREIGN KEY (`vpn_profile_id`) REFERENCES `vpn_vpnprofile` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpn`
+--
+
+LOCK TABLES `vpn_vpn` WRITE;
+/*!40000 ALTER TABLE `vpn_vpn` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vpn_vpn` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpnphase1policy`
+--
+
+DROP TABLE IF EXISTS `vpn_vpnphase1policy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpnphase1policy` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `ike_version` varchar(255) NOT NULL,
+  `aggressive_mode` tinyint(1) NOT NULL,
+  `encryption_algorithm` json DEFAULT NULL,
+  `integrity_algorithm` json DEFAULT NULL,
+  `dh_group` json DEFAULT NULL,
+  `lifetime_seconds` int unsigned DEFAULT NULL,
+  `lifetime_kb` int unsigned DEFAULT NULL,
+  `authentication_method` varchar(255) NOT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `vpn_vpnphase1policy_tenant_id_8c24077c_fk_tenancy_tenant_id` (`tenant_id`),
+  CONSTRAINT `vpn_vpnphase1policy_tenant_id_8c24077c_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `vpn_vpnphase1policy_chk_1` CHECK ((`lifetime_seconds` >= 0)),
+  CONSTRAINT `vpn_vpnphase1policy_chk_2` CHECK ((`lifetime_kb` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpnphase1policy`
+--
+
+LOCK TABLES `vpn_vpnphase1policy` WRITE;
+/*!40000 ALTER TABLE `vpn_vpnphase1policy` DISABLE KEYS */;
+INSERT INTO `vpn_vpnphase1policy` VALUES ('4e90611de06d45848a8300e7e54edce8','2025-11-17 04:16:08.074131','2025-11-17 04:16:08.074160','{}','Performance-Oriented','Performance-Oriented for Site-to-Site','IKEv2',0,'[\"AES-128-CBC\"]','[\"SHA256\"]','[\"5\"]',86400,NULL,'',NULL),('69675cdc3b2f47fbbf0f861c1ed0bb13','2025-11-17 04:16:08.084185','2025-11-17 04:16:08.084204','{}','High-Security','High-Security Policy for Site-to-Site','IKEv2',0,'[\"AES-256-GCM\"]','[\"SHA512\"]','[\"21\"]',86400,NULL,'',NULL),('abd37cce8b8d4df68786086ce73aaa21','2025-11-17 04:16:08.062895','2025-11-17 04:16:08.062922','{}','Remote Access','Policy dedicated for Remote Access VPN (IKEv2)','IKEv2',0,'[\"AES-256-CBC\"]','[\"SHA256\"]','[\"19\"]',28800,NULL,'',NULL),('d3dea043c3414a96a854d71e211a8313','2025-11-17 04:16:08.044863','2025-11-17 04:16:08.044895','{}','Standard Policy','Standard Phase 1 Policy dedicated for Standard Site-to-Site VPN','IKEv2',0,'[\"AES-256-CBC\"]','[\"SHA256\"]','[\"14\"]',86400,NULL,'',NULL);
+/*!40000 ALTER TABLE `vpn_vpnphase1policy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpnphase2policy`
+--
+
+DROP TABLE IF EXISTS `vpn_vpnphase2policy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpnphase2policy` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `encryption_algorithm` json DEFAULT NULL,
+  `integrity_algorithm` json DEFAULT NULL,
+  `pfs_group` json DEFAULT NULL,
+  `lifetime` int unsigned DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `vpn_vpnphase2policy_tenant_id_7869b5cd_fk_tenancy_tenant_id` (`tenant_id`),
+  CONSTRAINT `vpn_vpnphase2policy_tenant_id_7869b5cd_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `vpn_vpnphase2policy_chk_1` CHECK ((`lifetime` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpnphase2policy`
+--
+
+LOCK TABLES `vpn_vpnphase2policy` WRITE;
+/*!40000 ALTER TABLE `vpn_vpnphase2policy` DISABLE KEYS */;
+INSERT INTO `vpn_vpnphase2policy` VALUES ('22e42b49a18f4f4cb005456a19d027c0','2025-11-17 04:16:08.048091','2025-11-17 04:16:08.048112','{}','Standard Policy','Standard Phase 2 Policy dedicated for Standard Site-to-Site VPN','[\"AES-256-CBC\"]','[\"SHA256\"]','[\"14\"]',3600,NULL),('728da274c15f4e74a8056b9dada303c9','2025-11-17 04:16:08.075935','2025-11-17 04:16:08.075954','{}','Performance-Oriented','Performance-Oriented for Site-to-Site','[\"AES-128-CBC\"]','[\"SHA256\"]',NULL,3600,NULL),('cc49887b8ba94c8dbcb7d756ce6ebeca','2025-11-17 04:16:08.065032','2025-11-17 04:16:08.065052','{}','Remote Access','Policy dedicated for Remote Access VPN (IKEv2)','[\"AES-256-CBC\"]','[\"SHA256\"]','[\"19\"]',3600,NULL),('f104b3cee6b14186a266b1a7fd4a97a9','2025-11-17 04:16:08.085992','2025-11-17 04:16:08.086010','{}','High-Security','High-Security Policy for Site-to-Site','[\"AES-256-GCM\"]','[\"SHA512\"]','[\"21\"]',1800,NULL);
+/*!40000 ALTER TABLE `vpn_vpnphase2policy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpnprofile`
+--
+
+DROP TABLE IF EXISTS `vpn_vpnprofile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpnprofile` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `keepalive_enabled` tinyint(1) NOT NULL,
+  `keepalive_interval` int unsigned DEFAULT NULL,
+  `keepalive_retries` int unsigned DEFAULT NULL,
+  `nat_traversal` tinyint(1) NOT NULL,
+  `extra_options` json DEFAULT NULL,
+  `role_id` char(32) DEFAULT NULL,
+  `secrets_group_id` char(32) DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `vpn_vpnprofile_secrets_group_id_ab204c2a_fk_extras_se` (`secrets_group_id`),
+  KEY `vpn_vpnprofile_tenant_id_0217ddf4_fk_tenancy_tenant_id` (`tenant_id`),
+  KEY `vpn_vpnprofile_role_id_0aca02b3` (`role_id`),
+  CONSTRAINT `vpn_vpnprofile_role_id_0aca02b3_fk_extras_role_id` FOREIGN KEY (`role_id`) REFERENCES `extras_role` (`id`),
+  CONSTRAINT `vpn_vpnprofile_secrets_group_id_ab204c2a_fk_extras_se` FOREIGN KEY (`secrets_group_id`) REFERENCES `extras_secretsgroup` (`id`),
+  CONSTRAINT `vpn_vpnprofile_tenant_id_0217ddf4_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `vpn_vpnprofile_chk_1` CHECK ((`keepalive_interval` >= 0)),
+  CONSTRAINT `vpn_vpnprofile_chk_2` CHECK ((`keepalive_retries` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpnprofile`
+--
+
+LOCK TABLES `vpn_vpnprofile` WRITE;
+/*!40000 ALTER TABLE `vpn_vpnprofile` DISABLE KEYS */;
+INSERT INTO `vpn_vpnprofile` VALUES ('8b4f690968f741468da62dabfa5395ca','2025-11-17 04:16:08.087741','2025-11-17 04:16:08.087759','{}','High-Security Site-to-Site','High-Security Site-to-Site',1,15,4,0,NULL,NULL,NULL,NULL),('b12eb024e3594ceb81bab5ec3d500b79','2025-11-17 04:16:08.051574','2025-11-17 04:16:08.051595','{}','Standard Site-to-Site VPN','Standard Site-to-Site VPN',1,10,3,0,NULL,NULL,NULL,NULL),('c48d27c5bf974625a34374f5a71ba290','2025-11-17 04:16:08.077726','2025-11-17 04:16:08.077743','{}','Performance-Oriented Site-to-Site','Performance-Oriented Site-to-Site',1,5,2,0,NULL,NULL,NULL,NULL),('e104ad68c0ab4a938d06ec81bd0a846d','2025-11-17 04:16:08.066865','2025-11-17 04:16:08.066883','{}','Remote Access VPN (IKEv2)','Remote Access VPN (IKEv2)',1,30,5,0,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `vpn_vpnprofile` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpnprofilephase1policyassignment`
+--
+
+DROP TABLE IF EXISTS `vpn_vpnprofilephase1policyassignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpnprofilephase1policyassignment` (
+  `id` char(32) NOT NULL,
+  `weight` int unsigned NOT NULL,
+  `vpn_phase1_policy_id` char(32) NOT NULL,
+  `vpn_profile_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `vpn_vpnprofilephase1poli_vpn_profile_id_vpn_phase_b2f97cd9_uniq` (`vpn_profile_id`,`vpn_phase1_policy_id`),
+  KEY `vpn_vpnprofilephase1_vpn_phase1_policy_id_d346ff83_fk_vpn_vpnph` (`vpn_phase1_policy_id`),
+  CONSTRAINT `vpn_vpnprofilephase1_vpn_phase1_policy_id_d346ff83_fk_vpn_vpnph` FOREIGN KEY (`vpn_phase1_policy_id`) REFERENCES `vpn_vpnphase1policy` (`id`),
+  CONSTRAINT `vpn_vpnprofilephase1_vpn_profile_id_dc2e1220_fk_vpn_vpnpr` FOREIGN KEY (`vpn_profile_id`) REFERENCES `vpn_vpnprofile` (`id`),
+  CONSTRAINT `vpn_vpnprofilephase1policyassignment_chk_1` CHECK ((`weight` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpnprofilephase1policyassignment`
+--
+
+LOCK TABLES `vpn_vpnprofilephase1policyassignment` WRITE;
+/*!40000 ALTER TABLE `vpn_vpnprofilephase1policyassignment` DISABLE KEYS */;
+INSERT INTO `vpn_vpnprofilephase1policyassignment` VALUES ('0373ddd757fc4647949d35b0d8d02f47',100,'69675cdc3b2f47fbbf0f861c1ed0bb13','8b4f690968f741468da62dabfa5395ca'),('8c5b156600a844809e0d2d158dcad59f',100,'d3dea043c3414a96a854d71e211a8313','b12eb024e3594ceb81bab5ec3d500b79'),('9f85a56eb61349729e69c348a4818606',100,'4e90611de06d45848a8300e7e54edce8','c48d27c5bf974625a34374f5a71ba290'),('a4d203f7086840ffb7b3f919421414ca',100,'abd37cce8b8d4df68786086ce73aaa21','e104ad68c0ab4a938d06ec81bd0a846d');
+/*!40000 ALTER TABLE `vpn_vpnprofilephase1policyassignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpnprofilephase2policyassignment`
+--
+
+DROP TABLE IF EXISTS `vpn_vpnprofilephase2policyassignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpnprofilephase2policyassignment` (
+  `id` char(32) NOT NULL,
+  `weight` int unsigned NOT NULL,
+  `vpn_phase2_policy_id` char(32) NOT NULL,
+  `vpn_profile_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `vpn_vpnprofilephase2poli_vpn_profile_id_vpn_phase_3868c393_uniq` (`vpn_profile_id`,`vpn_phase2_policy_id`),
+  KEY `vpn_vpnprofilephase2_vpn_phase2_policy_id_7e2a8157_fk_vpn_vpnph` (`vpn_phase2_policy_id`),
+  CONSTRAINT `vpn_vpnprofilephase2_vpn_phase2_policy_id_7e2a8157_fk_vpn_vpnph` FOREIGN KEY (`vpn_phase2_policy_id`) REFERENCES `vpn_vpnphase2policy` (`id`),
+  CONSTRAINT `vpn_vpnprofilephase2_vpn_profile_id_a4ca60d0_fk_vpn_vpnpr` FOREIGN KEY (`vpn_profile_id`) REFERENCES `vpn_vpnprofile` (`id`),
+  CONSTRAINT `vpn_vpnprofilephase2policyassignment_chk_1` CHECK ((`weight` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpnprofilephase2policyassignment`
+--
+
+LOCK TABLES `vpn_vpnprofilephase2policyassignment` WRITE;
+/*!40000 ALTER TABLE `vpn_vpnprofilephase2policyassignment` DISABLE KEYS */;
+INSERT INTO `vpn_vpnprofilephase2policyassignment` VALUES ('26b0262e659a4c7a94384abf05157ca1',100,'f104b3cee6b14186a266b1a7fd4a97a9','8b4f690968f741468da62dabfa5395ca'),('2e685d4e829a4916acef794912c59a10',100,'728da274c15f4e74a8056b9dada303c9','c48d27c5bf974625a34374f5a71ba290'),('a85cf667c9df458ea8e4081c87dae0cb',100,'22e42b49a18f4f4cb005456a19d027c0','b12eb024e3594ceb81bab5ec3d500b79'),('d30a3eb8777f416eb4a97a857c9b295e',100,'cc49887b8ba94c8dbcb7d756ce6ebeca','e104ad68c0ab4a938d06ec81bd0a846d');
+/*!40000 ALTER TABLE `vpn_vpnprofilephase2policyassignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpntunnel`
+--
+
+DROP TABLE IF EXISTS `vpn_vpntunnel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpntunnel` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `tunnel_id` varchar(255) NOT NULL,
+  `encapsulation` varchar(255) NOT NULL,
+  `endpoint_a_id` char(32) DEFAULT NULL,
+  `endpoint_z_id` char(32) DEFAULT NULL,
+  `role_id` char(32) DEFAULT NULL,
+  `status_id` char(32) NOT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  `vpn_id` char(32) DEFAULT NULL,
+  `vpn_profile_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `vpn_vpntunnel_endpoint_a_id_267e0323_fk_vpn_vpntunnelendpoint_id` (`endpoint_a_id`),
+  KEY `vpn_vpntunnel_endpoint_z_id_5b5e9784_fk_vpn_vpntunnelendpoint_id` (`endpoint_z_id`),
+  KEY `vpn_vpntunnel_tenant_id_c06d4a64_fk_tenancy_tenant_id` (`tenant_id`),
+  KEY `vpn_vpntunnel_vpn_id_f0853583_fk_vpn_vpn_id` (`vpn_id`),
+  KEY `vpn_vpntunnel_vpn_profile_id_4719feb0_fk_vpn_vpnprofile_id` (`vpn_profile_id`),
+  KEY `vpn_vpntunnel_role_id_bb259bff` (`role_id`),
+  KEY `vpn_vpntunnel_status_id_b26b610e` (`status_id`),
+  CONSTRAINT `vpn_vpntunnel_endpoint_a_id_267e0323_fk_vpn_vpntunnelendpoint_id` FOREIGN KEY (`endpoint_a_id`) REFERENCES `vpn_vpntunnelendpoint` (`id`),
+  CONSTRAINT `vpn_vpntunnel_endpoint_z_id_5b5e9784_fk_vpn_vpntunnelendpoint_id` FOREIGN KEY (`endpoint_z_id`) REFERENCES `vpn_vpntunnelendpoint` (`id`),
+  CONSTRAINT `vpn_vpntunnel_role_id_bb259bff_fk_extras_role_id` FOREIGN KEY (`role_id`) REFERENCES `extras_role` (`id`),
+  CONSTRAINT `vpn_vpntunnel_status_id_b26b610e_fk_extras_status_id` FOREIGN KEY (`status_id`) REFERENCES `extras_status` (`id`),
+  CONSTRAINT `vpn_vpntunnel_tenant_id_c06d4a64_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`),
+  CONSTRAINT `vpn_vpntunnel_vpn_id_f0853583_fk_vpn_vpn_id` FOREIGN KEY (`vpn_id`) REFERENCES `vpn_vpn` (`id`),
+  CONSTRAINT `vpn_vpntunnel_vpn_profile_id_4719feb0_fk_vpn_vpnprofile_id` FOREIGN KEY (`vpn_profile_id`) REFERENCES `vpn_vpnprofile` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpntunnel`
+--
+
+LOCK TABLES `vpn_vpntunnel` WRITE;
+/*!40000 ALTER TABLE `vpn_vpntunnel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vpn_vpntunnel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpntunnelendpoint`
+--
+
+DROP TABLE IF EXISTS `vpn_vpntunnelendpoint`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpntunnelendpoint` (
+  `id` char(32) NOT NULL,
+  `created` datetime(6) DEFAULT NULL,
+  `last_updated` datetime(6) DEFAULT NULL,
+  `_custom_field_data` json NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `source_fqdn` varchar(255) NOT NULL,
+  `device_id` char(32) DEFAULT NULL,
+  `role_id` char(32) DEFAULT NULL,
+  `source_interface_id` char(32) DEFAULT NULL,
+  `source_ipaddress_id` char(32) DEFAULT NULL,
+  `tenant_id` char(32) DEFAULT NULL,
+  `tunnel_interface_id` char(32) DEFAULT NULL,
+  `vpn_profile_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `source_interface_id` (`source_interface_id`),
+  UNIQUE KEY `tunnel_interface_id` (`tunnel_interface_id`),
+  KEY `vpn_vpntunnelendpoint_device_id_2cdc3904_fk_dcim_device_id` (`device_id`),
+  KEY `vpn_vpntunnelendpoin_source_ipaddress_id_f04d428d_fk_ipam_ipad` (`source_ipaddress_id`),
+  KEY `vpn_vpntunnelendpoint_tenant_id_fa61b98a_fk_tenancy_tenant_id` (`tenant_id`),
+  KEY `vpn_vpntunnelendpoin_vpn_profile_id_86a7fbbf_fk_vpn_vpnpr` (`vpn_profile_id`),
+  KEY `vpn_vpntunnelendpoint_role_id_4dc5896c` (`role_id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_source_interface_id_81358fc8_fk_dcim_inte` FOREIGN KEY (`source_interface_id`) REFERENCES `dcim_interface` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_source_ipaddress_id_f04d428d_fk_ipam_ipad` FOREIGN KEY (`source_ipaddress_id`) REFERENCES `ipam_ipaddress` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_tunnel_interface_id_1d658d75_fk_dcim_inte` FOREIGN KEY (`tunnel_interface_id`) REFERENCES `dcim_interface` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_vpn_profile_id_86a7fbbf_fk_vpn_vpnpr` FOREIGN KEY (`vpn_profile_id`) REFERENCES `vpn_vpnprofile` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoint_device_id_2cdc3904_fk_dcim_device_id` FOREIGN KEY (`device_id`) REFERENCES `dcim_device` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoint_role_id_4dc5896c_fk_extras_role_id` FOREIGN KEY (`role_id`) REFERENCES `extras_role` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoint_tenant_id_fa61b98a_fk_tenancy_tenant_id` FOREIGN KEY (`tenant_id`) REFERENCES `tenancy_tenant` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpntunnelendpoint`
+--
+
+LOCK TABLES `vpn_vpntunnelendpoint` WRITE;
+/*!40000 ALTER TABLE `vpn_vpntunnelendpoint` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vpn_vpntunnelendpoint` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpntunnelendpoint_protected_prefixes`
+--
+
+DROP TABLE IF EXISTS `vpn_vpntunnelendpoint_protected_prefixes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpntunnelendpoint_protected_prefixes` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `vpntunnelendpoint_id` char(32) NOT NULL,
+  `prefix_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `vpn_vpntunnelendpoint_pr_vpntunnelendpoint_id_pre_ba6c2165_uniq` (`vpntunnelendpoint_id`,`prefix_id`),
+  KEY `vpn_vpntunnelendpoin_prefix_id_33d5d3f8_fk_ipam_pref` (`prefix_id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_prefix_id_33d5d3f8_fk_ipam_pref` FOREIGN KEY (`prefix_id`) REFERENCES `ipam_prefix` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_vpntunnelendpoint_id_0fd7ff77_fk_vpn_vpntu` FOREIGN KEY (`vpntunnelendpoint_id`) REFERENCES `vpn_vpntunnelendpoint` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpntunnelendpoint_protected_prefixes`
+--
+
+LOCK TABLES `vpn_vpntunnelendpoint_protected_prefixes` WRITE;
+/*!40000 ALTER TABLE `vpn_vpntunnelendpoint_protected_prefixes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vpn_vpntunnelendpoint_protected_prefixes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `vpn_vpntunnelendpoint_protected_prefixes_dg`
+--
+
+DROP TABLE IF EXISTS `vpn_vpntunnelendpoint_protected_prefixes_dg`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vpn_vpntunnelendpoint_protected_prefixes_dg` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `vpntunnelendpoint_id` char(32) NOT NULL,
+  `dynamicgroup_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `vpn_vpntunnelendpoint_pr_vpntunnelendpoint_id_dyn_6a094019_uniq` (`vpntunnelendpoint_id`,`dynamicgroup_id`),
+  KEY `vpn_vpntunnelendpoin_dynamicgroup_id_16f7dcdc_fk_extras_dy` (`dynamicgroup_id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_dynamicgroup_id_16f7dcdc_fk_extras_dy` FOREIGN KEY (`dynamicgroup_id`) REFERENCES `extras_dynamicgroup` (`id`),
+  CONSTRAINT `vpn_vpntunnelendpoin_vpntunnelendpoint_id_2d286f58_fk_vpn_vpntu` FOREIGN KEY (`vpntunnelendpoint_id`) REFERENCES `vpn_vpntunnelendpoint` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vpn_vpntunnelendpoint_protected_prefixes_dg`
+--
+
+LOCK TABLES `vpn_vpntunnelendpoint_protected_prefixes_dg` WRITE;
+/*!40000 ALTER TABLE `vpn_vpntunnelendpoint_protected_prefixes_dg` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vpn_vpntunnelendpoint_protected_prefixes_dg` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `wireless_controllermanageddevicegroupradioprofileassignment`
 --
 
@@ -6977,4 +8043,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-10  4:15:41
+-- Dump completed on 2025-11-17  4:16:11

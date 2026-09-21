@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict J7oUjMgxHHAEaVX9KIHIwgEdreqRsc3erK3743ih3Yjb8OeBdyBexldAJs2yxoI
+\restrict zhIEpSw8MJvKUnhn2VTd7He1GN01euswWOVbqd8WLGDCHKfhQ8qwPs4a4qEO3kQ
 
 -- Dumped from database version 17.11
 -- Dumped by pg_dump version 17.11
@@ -212,12 +212,16 @@ ALTER TABLE public.circuits_circuit OWNER TO nautobot;
 
 CREATE TABLE public.circuits_circuittermination (
     id uuid NOT NULL,
+    _cable_peer_id uuid,
     term_side character varying(1) NOT NULL,
     port_speed integer,
     upstream_speed integer,
     xconnect_id character varying(255) NOT NULL,
     pp_info character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     circuit_id uuid NOT NULL,
     provider_network_id uuid,
     _custom_field_data jsonb NOT NULL,
@@ -554,14 +558,19 @@ CREATE TABLE public.dcim_cable (
     created timestamp with time zone,
     last_updated timestamp with time zone,
     _custom_field_data jsonb NOT NULL,
+    termination_a_id uuid NOT NULL,
+    termination_b_id uuid NOT NULL,
     type character varying(50) NOT NULL,
     label character varying(255) NOT NULL,
     color character varying(6) NOT NULL,
     length smallint,
     length_unit character varying(50) NOT NULL,
-    _abs_length numeric(13,4),
+    _abs_length numeric(10,4),
+    _termination_a_device_id uuid,
+    _termination_b_device_id uuid,
     status_id uuid NOT NULL,
-    cable_type_id uuid,
+    termination_a_type_id integer NOT NULL,
+    termination_b_type_id integer NOT NULL,
     CONSTRAINT dcim_cable_length_check CHECK ((length >= 0))
 );
 
@@ -580,70 +589,11 @@ CREATE TABLE public.dcim_cablepath (
     is_active boolean NOT NULL,
     is_split boolean NOT NULL,
     destination_type_id integer,
-    origin_type_id integer NOT NULL,
-    peer_connector smallint NOT NULL,
-    destination_fans_out boolean NOT NULL,
-    origin_fans_out boolean NOT NULL,
-    CONSTRAINT dcim_cablepath_peer_connector_check CHECK ((peer_connector >= 0))
+    origin_type_id integer NOT NULL
 );
 
 
 ALTER TABLE public.dcim_cablepath OWNER TO nautobot;
-
---
--- Name: dcim_cabletocabletermination; Type: TABLE; Schema: public; Owner: nautobot
---
-
-CREATE TABLE public.dcim_cabletocabletermination (
-    id uuid NOT NULL,
-    cable_end character varying(1) NOT NULL,
-    connector smallint NOT NULL,
-    cable_id uuid NOT NULL,
-    circuit_termination_id uuid,
-    console_port_id uuid,
-    console_server_port_id uuid,
-    front_port_id uuid,
-    interface_id uuid,
-    power_feed_id uuid,
-    power_outlet_id uuid,
-    power_port_id uuid,
-    rear_port_id uuid,
-    CONSTRAINT dcim_cabletocabletermination_at_most_one_termination CHECK ((((circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((circuit_termination_id IS NOT NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((console_port_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((console_server_port_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((front_port_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((interface_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((power_feed_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((power_outlet_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_port_id IS NULL) AND (rear_port_id IS NULL)) OR ((power_port_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (rear_port_id IS NULL)) OR ((rear_port_id IS NOT NULL) AND (circuit_termination_id IS NULL) AND (console_port_id IS NULL) AND (console_server_port_id IS NULL) AND (front_port_id IS NULL) AND (interface_id IS NULL) AND (power_feed_id IS NULL) AND (power_outlet_id IS NULL) AND (power_port_id IS NULL)))),
-    CONSTRAINT dcim_cabletocabletermination_connector_check CHECK ((connector >= 0))
-);
-
-
-ALTER TABLE public.dcim_cabletocabletermination OWNER TO nautobot;
-
---
--- Name: dcim_cabletype; Type: TABLE; Schema: public; Owner: nautobot
---
-
-CREATE TABLE public.dcim_cabletype (
-    id uuid NOT NULL,
-    created timestamp with time zone,
-    last_updated timestamp with time zone,
-    _custom_field_data jsonb NOT NULL,
-    name character varying(255) NOT NULL,
-    description character varying(255) NOT NULL,
-    manufacturer_id uuid,
-    part_number character varying(255) NOT NULL,
-    has_embedded_transceivers boolean NOT NULL,
-    a_connectors smallint NOT NULL,
-    b_connectors smallint NOT NULL,
-    total_lanes smallint NOT NULL,
-    mapping jsonb NOT NULL,
-    is_shuffle boolean NOT NULL,
-    strands_per_lane smallint NOT NULL,
-    polarity_method character varying(50) NOT NULL,
-    CONSTRAINT dcim_cabletype_a_connectors_check CHECK ((a_connectors >= 0)),
-    CONSTRAINT dcim_cabletype_b_connectors_check CHECK ((b_connectors >= 0)),
-    CONSTRAINT dcim_cabletype_strands_per_lane_check CHECK ((strands_per_lane >= 0)),
-    CONSTRAINT dcim_cabletype_total_lanes_check CHECK ((total_lanes >= 0))
-);
-
-
-ALTER TABLE public.dcim_cabletype OWNER TO nautobot;
 
 --
 -- Name: dcim_consoleport; Type: TABLE; Schema: public; Owner: nautobot
@@ -656,7 +606,11 @@ CREATE TABLE public.dcim_consoleport (
     _name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     type character varying(50) NOT NULL,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     device_id uuid,
     created timestamp with time zone,
     last_updated timestamp with time zone,
@@ -698,7 +652,11 @@ CREATE TABLE public.dcim_consoleserverport (
     _name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     type character varying(50) NOT NULL,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     device_id uuid,
     created timestamp with time zone,
     last_updated timestamp with time zone,
@@ -988,8 +946,11 @@ CREATE TABLE public.dcim_frontport (
     _name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     type character varying(50) NOT NULL,
     rear_port_position smallint NOT NULL,
+    _cable_peer_type_id integer,
+    cable_id uuid,
     device_id uuid,
     rear_port_id uuid NOT NULL,
     created timestamp with time zone,
@@ -1035,6 +996,7 @@ CREATE TABLE public.dcim_interface (
     name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     enabled boolean NOT NULL,
     mac_address character varying(18) NOT NULL,
     mtu integer,
@@ -1042,6 +1004,9 @@ CREATE TABLE public.dcim_interface (
     _name character varying(255) NOT NULL,
     type character varying(50) NOT NULL,
     mgmt_only boolean NOT NULL,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     device_id uuid,
     lag_id uuid,
     untagged_vlan_id uuid,
@@ -1056,8 +1021,6 @@ CREATE TABLE public.dcim_interface (
     duplex character varying(10) NOT NULL,
     speed integer,
     port_type character varying(50) NOT NULL,
-    breakout_position smallint,
-    CONSTRAINT dcim_interface_breakout_position_check CHECK ((breakout_position >= 0)),
     CONSTRAINT dcim_interface_mtu_check CHECK ((mtu >= 0)),
     CONSTRAINT dcim_interface_speed_check CHECK ((speed >= 0))
 );
@@ -1449,6 +1412,7 @@ CREATE TABLE public.dcim_powerfeed (
     created timestamp with time zone,
     last_updated timestamp with time zone,
     _custom_field_data jsonb NOT NULL,
+    _cable_peer_id uuid,
     name character varying(255) NOT NULL,
     type character varying(50) NOT NULL,
     supply character varying(50) NOT NULL,
@@ -1458,6 +1422,9 @@ CREATE TABLE public.dcim_powerfeed (
     max_utilization smallint NOT NULL,
     available_power integer NOT NULL,
     comments text NOT NULL,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     power_panel_id uuid NOT NULL,
     rack_id uuid,
     status_id uuid NOT NULL,
@@ -1486,8 +1453,12 @@ CREATE TABLE public.dcim_poweroutlet (
     _name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     type character varying(50) NOT NULL,
     feed_leg character varying(50) NOT NULL,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     device_id uuid,
     power_port_id uuid,
     created timestamp with time zone,
@@ -1553,9 +1524,13 @@ CREATE TABLE public.dcim_powerport (
     _name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     type character varying(50) NOT NULL,
     maximum_draw smallint,
     allocated_draw smallint,
+    _cable_peer_type_id integer,
+    _path_id uuid,
+    cable_id uuid,
     device_id uuid,
     created timestamp with time zone,
     last_updated timestamp with time zone,
@@ -1678,8 +1653,11 @@ CREATE TABLE public.dcim_rearport (
     _name character varying(255) NOT NULL,
     label character varying(255) NOT NULL,
     description character varying(255) NOT NULL,
+    _cable_peer_id uuid,
     type character varying(50) NOT NULL,
     positions smallint NOT NULL,
+    _cable_peer_type_id integer,
+    cable_id uuid,
     device_id uuid,
     created timestamp with time zone,
     last_updated timestamp with time zone,
@@ -1795,7 +1773,6 @@ CREATE TABLE public.dcim_virtualdevicecontext (
     status_id uuid NOT NULL,
     role_id uuid,
     tenant_id uuid,
-    controller_managed_device_group_id uuid,
     CONSTRAINT dcim_virtualdevicecontext_identifier_check CHECK ((identifier >= 0))
 );
 
@@ -2289,7 +2266,6 @@ CREATE TABLE public.extras_computedfield (
     content_type_id integer NOT NULL,
     advanced_ui boolean NOT NULL,
     "grouping" character varying(255) NOT NULL,
-    output_type character varying(50) NOT NULL,
     CONSTRAINT extras_computedfield_weight_check CHECK ((weight >= 0))
 );
 
@@ -3207,10 +3183,6 @@ CREATE TABLE public.extras_jobresult (
     info_log_count integer,
     success_log_count integer,
     warning_log_count integer,
-    cancel_type character varying(30) NOT NULL,
-    canceled_by_id uuid,
-    canceled_by_user_name character varying(150) NOT NULL,
-    date_canceled timestamp with time zone,
     CONSTRAINT extras_jobresult_debug_log_count_check CHECK ((debug_log_count >= 0)),
     CONSTRAINT extras_jobresult_error_log_count_check CHECK ((error_log_count >= 0)),
     CONSTRAINT extras_jobresult_info_log_count_check CHECK ((info_log_count >= 0)),
@@ -3336,7 +3308,7 @@ CREATE TABLE public.extras_objectmetadata (
     scoped_fields jsonb NOT NULL,
     _value jsonb,
     assigned_object_id uuid NOT NULL,
-    assigned_object_type_id integer NOT NULL,
+    assigned_object_type_id integer,
     contact_id uuid,
     metadata_type_id uuid NOT NULL,
     team_id uuid
@@ -3812,31 +3784,6 @@ CREATE TABLE public.ipam_ipaddress (
 
 
 ALTER TABLE public.ipam_ipaddress OWNER TO nautobot;
-
---
--- Name: ipam_ipaddressrange; Type: TABLE; Schema: public; Owner: nautobot
---
-
-CREATE TABLE public.ipam_ipaddressrange (
-    id uuid NOT NULL,
-    created timestamp with time zone,
-    last_updated timestamp with time zone,
-    _custom_field_data jsonb NOT NULL,
-    name character varying(255) NOT NULL,
-    start_host bytea NOT NULL,
-    end_host bytea NOT NULL,
-    ip_version integer NOT NULL,
-    description character varying(255) NOT NULL,
-    count_as_utilized boolean NOT NULL,
-    is_exclusive boolean NOT NULL,
-    parent_id uuid NOT NULL,
-    role_id uuid,
-    status_id uuid NOT NULL,
-    tenant_id uuid
-);
-
-
-ALTER TABLE public.ipam_ipaddressrange OWNER TO nautobot;
 
 --
 -- Name: ipam_ipaddresstointerface; Type: TABLE; Schema: public; Owner: nautobot
@@ -5356,280 +5303,280 @@ COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
 --
 
 COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
-1	Can add permission	40	add_permission
-2	Can change permission	40	change_permission
-3	Can delete permission	40	delete_permission
-4	Can view permission	40	view_permission
-5	Can add group	41	add_group
-6	Can change group	41	change_group
-7	Can delete group	41	delete_group
-8	Can view group	41	view_group
-9	Can add content type	42	add_contenttype
-10	Can change content type	42	change_contenttype
-11	Can delete content type	42	delete_contenttype
-12	Can view content type	42	view_contenttype
-13	Can add session	43	add_session
-14	Can change session	43	change_session
-15	Can delete session	43	delete_session
-16	Can view session	43	view_session
-17	Can add association	44	add_association
-18	Can change association	44	change_association
-19	Can delete association	44	delete_association
-20	Can view association	44	view_association
-21	Can add code	45	add_code
-22	Can change code	45	change_code
-23	Can delete code	45	delete_code
-24	Can view code	45	view_code
-25	Can add nonce	46	add_nonce
-26	Can change nonce	46	change_nonce
-27	Can delete nonce	46	delete_nonce
-28	Can view nonce	46	view_nonce
-29	Can add user social auth	47	add_usersocialauth
-30	Can change user social auth	47	change_usersocialauth
-31	Can delete user social auth	47	delete_usersocialauth
-32	Can view user social auth	47	view_usersocialauth
-33	Can add partial	48	add_partial
-34	Can change partial	48	change_partial
-35	Can delete partial	48	delete_partial
-36	Can view partial	48	view_partial
-37	Can add tag	49	add_tag
-38	Can change tag	49	change_tag
-39	Can delete tag	49	delete_tag
-40	Can view tag	49	view_tag
-41	Can add tagged item	50	add_taggeditem
-42	Can change tagged item	50	change_taggeditem
-43	Can delete tagged item	50	delete_taggeditem
-44	Can view tagged item	50	view_taggeditem
-45	Can add constance	51	add_constance
-46	Can change constance	51	change_constance
-47	Can delete constance	51	delete_constance
-48	Can view constance	51	view_constance
-49	Can change config	51	change_config
-50	Can view config	51	view_config
-51	Can add log entry	53	add_logentry
-52	Can change log entry	53	change_logentry
-53	Can delete log entry	53	delete_logentry
-54	Can view log entry	53	view_logentry
-55	Can add crontab	54	add_crontabschedule
-56	Can change crontab	54	change_crontabschedule
-57	Can delete crontab	54	delete_crontabschedule
-58	Can view crontab	54	view_crontabschedule
-59	Can add interval	55	add_intervalschedule
-60	Can change interval	55	change_intervalschedule
-61	Can delete interval	55	delete_intervalschedule
-62	Can view interval	55	view_intervalschedule
-63	Can add periodic task	56	add_periodictask
-64	Can change periodic task	56	change_periodictask
-65	Can delete periodic task	56	delete_periodictask
-66	Can view periodic task	56	view_periodictask
-67	Can add periodic task track	57	add_periodictasks
-68	Can change periodic task track	57	change_periodictasks
-69	Can delete periodic task track	57	delete_periodictasks
-70	Can view periodic task track	57	view_periodictasks
-71	Can add solar event	58	add_solarschedule
-72	Can change solar event	58	change_solarschedule
-73	Can delete solar event	58	delete_solarschedule
-74	Can view solar event	58	view_solarschedule
-75	Can add clocked	59	add_clockedschedule
-76	Can change clocked	59	change_clockedschedule
-77	Can delete clocked	59	delete_clockedschedule
-78	Can view clocked	59	view_clockedschedule
-79	Can add task result	60	add_taskresult
-80	Can change task result	60	change_taskresult
-81	Can delete task result	60	delete_taskresult
-82	Can view task result	60	view_taskresult
-83	Can add chord counter	61	add_chordcounter
-84	Can change chord counter	61	change_chordcounter
-85	Can delete chord counter	61	delete_chordcounter
-86	Can view chord counter	61	view_chordcounter
-87	Can add group result	62	add_groupresult
-88	Can change group result	62	change_groupresult
-89	Can delete group result	62	delete_groupresult
-90	Can view group result	62	view_groupresult
+1	Can add permission	39	add_permission
+2	Can change permission	39	change_permission
+3	Can delete permission	39	delete_permission
+4	Can view permission	39	view_permission
+5	Can add group	40	add_group
+6	Can change group	40	change_group
+7	Can delete group	40	delete_group
+8	Can view group	40	view_group
+9	Can add content type	41	add_contenttype
+10	Can change content type	41	change_contenttype
+11	Can delete content type	41	delete_contenttype
+12	Can view content type	41	view_contenttype
+13	Can add session	42	add_session
+14	Can change session	42	change_session
+15	Can delete session	42	delete_session
+16	Can view session	42	view_session
+17	Can add association	43	add_association
+18	Can change association	43	change_association
+19	Can delete association	43	delete_association
+20	Can view association	43	view_association
+21	Can add code	44	add_code
+22	Can change code	44	change_code
+23	Can delete code	44	delete_code
+24	Can view code	44	view_code
+25	Can add nonce	45	add_nonce
+26	Can change nonce	45	change_nonce
+27	Can delete nonce	45	delete_nonce
+28	Can view nonce	45	view_nonce
+29	Can add user social auth	46	add_usersocialauth
+30	Can change user social auth	46	change_usersocialauth
+31	Can delete user social auth	46	delete_usersocialauth
+32	Can view user social auth	46	view_usersocialauth
+33	Can add partial	47	add_partial
+34	Can change partial	47	change_partial
+35	Can delete partial	47	delete_partial
+36	Can view partial	47	view_partial
+37	Can add tag	48	add_tag
+38	Can change tag	48	change_tag
+39	Can delete tag	48	delete_tag
+40	Can view tag	48	view_tag
+41	Can add tagged item	49	add_taggeditem
+42	Can change tagged item	49	change_taggeditem
+43	Can delete tagged item	49	delete_taggeditem
+44	Can view tagged item	49	view_taggeditem
+45	Can add constance	50	add_constance
+46	Can change constance	50	change_constance
+47	Can delete constance	50	delete_constance
+48	Can view constance	50	view_constance
+49	Can change config	50	change_config
+50	Can view config	50	view_config
+51	Can add log entry	52	add_logentry
+52	Can change log entry	52	change_logentry
+53	Can delete log entry	52	delete_logentry
+54	Can view log entry	52	view_logentry
+55	Can add crontab	53	add_crontabschedule
+56	Can change crontab	53	change_crontabschedule
+57	Can delete crontab	53	delete_crontabschedule
+58	Can view crontab	53	view_crontabschedule
+59	Can add interval	54	add_intervalschedule
+60	Can change interval	54	change_intervalschedule
+61	Can delete interval	54	delete_intervalschedule
+62	Can view interval	54	view_intervalschedule
+63	Can add periodic task	55	add_periodictask
+64	Can change periodic task	55	change_periodictask
+65	Can delete periodic task	55	delete_periodictask
+66	Can view periodic task	55	view_periodictask
+67	Can add periodic task track	56	add_periodictasks
+68	Can change periodic task track	56	change_periodictasks
+69	Can delete periodic task track	56	delete_periodictasks
+70	Can view periodic task track	56	view_periodictasks
+71	Can add solar event	57	add_solarschedule
+72	Can change solar event	57	change_solarschedule
+73	Can delete solar event	57	delete_solarschedule
+74	Can view solar event	57	view_solarschedule
+75	Can add clocked	58	add_clockedschedule
+76	Can change clocked	58	change_clockedschedule
+77	Can delete clocked	58	delete_clockedschedule
+78	Can view clocked	58	view_clockedschedule
+79	Can add task result	59	add_taskresult
+80	Can change task result	59	change_taskresult
+81	Can delete task result	59	delete_taskresult
+82	Can view task result	59	view_taskresult
+83	Can add chord counter	60	add_chordcounter
+84	Can change chord counter	60	change_chordcounter
+85	Can delete chord counter	60	delete_chordcounter
+86	Can view chord counter	60	view_chordcounter
+87	Can add group result	61	add_groupresult
+88	Can change group result	61	change_groupresult
+89	Can delete group result	61	delete_groupresult
+90	Can view group result	61	view_groupresult
 91	Can add circuit	1	add_circuit
 92	Can change circuit	1	change_circuit
 93	Can delete circuit	1	delete_circuit
 94	Can view circuit	1	view_circuit
-95	Can add circuit termination	63	add_circuittermination
-96	Can change circuit termination	63	change_circuittermination
-97	Can delete circuit termination	63	delete_circuittermination
-98	Can view circuit termination	63	view_circuittermination
-99	Can add circuit type	64	add_circuittype
-100	Can change circuit type	64	change_circuittype
-101	Can delete circuit type	64	delete_circuittype
-102	Can view circuit type	64	view_circuittype
-103	Can add provider	65	add_provider
-104	Can change provider	65	change_provider
-105	Can delete provider	65	delete_provider
-106	Can view provider	65	view_provider
-107	Can add provider network	66	add_providernetwork
-108	Can change provider network	66	change_providernetwork
-109	Can delete provider network	66	delete_providernetwork
-110	Can view provider network	66	view_providernetwork
-111	Can add cloud account	67	add_cloudaccount
-112	Can change cloud account	67	change_cloudaccount
-113	Can delete cloud account	67	delete_cloudaccount
-114	Can view cloud account	67	view_cloudaccount
-115	Can add cloud network	68	add_cloudnetwork
-116	Can change cloud network	68	change_cloudnetwork
-117	Can delete cloud network	68	delete_cloudnetwork
-118	Can view cloud network	68	view_cloudnetwork
-119	Can add cloud resource type	69	add_cloudresourcetype
-120	Can change cloud resource type	69	change_cloudresourcetype
-121	Can delete cloud resource type	69	delete_cloudresourcetype
-122	Can view cloud resource type	69	view_cloudresourcetype
-123	Can add cloud service	70	add_cloudservice
-124	Can change cloud service	70	change_cloudservice
-125	Can delete cloud service	70	delete_cloudservice
-126	Can view cloud service	70	view_cloudservice
-127	Can add cloud network prefix assignment	71	add_cloudnetworkprefixassignment
-128	Can change cloud network prefix assignment	71	change_cloudnetworkprefixassignment
-129	Can delete cloud network prefix assignment	71	delete_cloudnetworkprefixassignment
-130	Can view cloud network prefix assignment	71	view_cloudnetworkprefixassignment
-131	Can add cloud service network assignment	72	add_cloudservicenetworkassignment
-132	Can change cloud service network assignment	72	change_cloudservicenetworkassignment
-133	Can delete cloud service network assignment	72	delete_cloudservicenetworkassignment
-134	Can view cloud service network assignment	72	view_cloudservicenetworkassignment
-135	Can add unique validation rule	73	add_uniquevalidationrule
-136	Can change unique validation rule	73	change_uniquevalidationrule
-137	Can delete unique validation rule	73	delete_uniquevalidationrule
-138	Can view unique validation rule	73	view_uniquevalidationrule
-139	Can add required validation rule	74	add_requiredvalidationrule
-140	Can change required validation rule	74	change_requiredvalidationrule
-141	Can delete required validation rule	74	delete_requiredvalidationrule
-142	Can view required validation rule	74	view_requiredvalidationrule
-143	Can add regular expression validation rule	75	add_regularexpressionvalidationrule
-144	Can change regular expression validation rule	75	change_regularexpressionvalidationrule
-145	Can delete regular expression validation rule	75	delete_regularexpressionvalidationrule
-146	Can view regular expression validation rule	75	view_regularexpressionvalidationrule
-147	Can add min max validation rule	76	add_minmaxvalidationrule
-148	Can change min max validation rule	76	change_minmaxvalidationrule
-149	Can delete min max validation rule	76	delete_minmaxvalidationrule
-150	Can view min max validation rule	76	view_minmaxvalidationrule
-151	Can add data compliance	77	add_datacompliance
-152	Can change data compliance	77	change_datacompliance
-153	Can delete data compliance	77	delete_datacompliance
-154	Can view data compliance	77	view_datacompliance
+95	Can add circuit termination	62	add_circuittermination
+96	Can change circuit termination	62	change_circuittermination
+97	Can delete circuit termination	62	delete_circuittermination
+98	Can view circuit termination	62	view_circuittermination
+99	Can add circuit type	63	add_circuittype
+100	Can change circuit type	63	change_circuittype
+101	Can delete circuit type	63	delete_circuittype
+102	Can view circuit type	63	view_circuittype
+103	Can add provider	64	add_provider
+104	Can change provider	64	change_provider
+105	Can delete provider	64	delete_provider
+106	Can view provider	64	view_provider
+107	Can add provider network	65	add_providernetwork
+108	Can change provider network	65	change_providernetwork
+109	Can delete provider network	65	delete_providernetwork
+110	Can view provider network	65	view_providernetwork
+111	Can add cloud account	66	add_cloudaccount
+112	Can change cloud account	66	change_cloudaccount
+113	Can delete cloud account	66	delete_cloudaccount
+114	Can view cloud account	66	view_cloudaccount
+115	Can add cloud network	67	add_cloudnetwork
+116	Can change cloud network	67	change_cloudnetwork
+117	Can delete cloud network	67	delete_cloudnetwork
+118	Can view cloud network	67	view_cloudnetwork
+119	Can add cloud resource type	68	add_cloudresourcetype
+120	Can change cloud resource type	68	change_cloudresourcetype
+121	Can delete cloud resource type	68	delete_cloudresourcetype
+122	Can view cloud resource type	68	view_cloudresourcetype
+123	Can add cloud service	69	add_cloudservice
+124	Can change cloud service	69	change_cloudservice
+125	Can delete cloud service	69	delete_cloudservice
+126	Can view cloud service	69	view_cloudservice
+127	Can add cloud network prefix assignment	70	add_cloudnetworkprefixassignment
+128	Can change cloud network prefix assignment	70	change_cloudnetworkprefixassignment
+129	Can delete cloud network prefix assignment	70	delete_cloudnetworkprefixassignment
+130	Can view cloud network prefix assignment	70	view_cloudnetworkprefixassignment
+131	Can add cloud service network assignment	71	add_cloudservicenetworkassignment
+132	Can change cloud service network assignment	71	change_cloudservicenetworkassignment
+133	Can delete cloud service network assignment	71	delete_cloudservicenetworkassignment
+134	Can view cloud service network assignment	71	view_cloudservicenetworkassignment
+135	Can add unique validation rule	72	add_uniquevalidationrule
+136	Can change unique validation rule	72	change_uniquevalidationrule
+137	Can delete unique validation rule	72	delete_uniquevalidationrule
+138	Can view unique validation rule	72	view_uniquevalidationrule
+139	Can add required validation rule	73	add_requiredvalidationrule
+140	Can change required validation rule	73	change_requiredvalidationrule
+141	Can delete required validation rule	73	delete_requiredvalidationrule
+142	Can view required validation rule	73	view_requiredvalidationrule
+143	Can add regular expression validation rule	74	add_regularexpressionvalidationrule
+144	Can change regular expression validation rule	74	change_regularexpressionvalidationrule
+145	Can delete regular expression validation rule	74	delete_regularexpressionvalidationrule
+146	Can view regular expression validation rule	74	view_regularexpressionvalidationrule
+147	Can add min max validation rule	75	add_minmaxvalidationrule
+148	Can change min max validation rule	75	change_minmaxvalidationrule
+149	Can delete min max validation rule	75	delete_minmaxvalidationrule
+150	Can view min max validation rule	75	view_minmaxvalidationrule
+151	Can add data compliance	76	add_datacompliance
+152	Can change data compliance	76	change_datacompliance
+153	Can delete data compliance	76	delete_datacompliance
+154	Can view data compliance	76	view_datacompliance
 155	Can add cable	2	add_cable
 156	Can change cable	2	change_cable
 157	Can delete cable	2	delete_cable
 158	Can view cable	2	view_cable
-159	Can add cable path	78	add_cablepath
-160	Can change cable path	78	change_cablepath
-161	Can delete cable path	78	delete_cablepath
-162	Can view cable path	78	view_cablepath
-163	Can add console port	79	add_consoleport
-164	Can change console port	79	change_consoleport
-165	Can delete console port	79	delete_consoleport
-166	Can view console port	79	view_consoleport
-167	Can add console port template	80	add_consoleporttemplate
-168	Can change console port template	80	change_consoleporttemplate
-169	Can delete console port template	80	delete_consoleporttemplate
-170	Can view console port template	80	view_consoleporttemplate
-171	Can add console server port	81	add_consoleserverport
-172	Can change console server port	81	change_consoleserverport
-173	Can delete console server port	81	delete_consoleserverport
-174	Can view console server port	81	view_consoleserverport
-175	Can add console server port template	82	add_consoleserverporttemplate
-176	Can change console server port template	82	change_consoleserverporttemplate
-177	Can delete console server port template	82	delete_consoleserverporttemplate
-178	Can view console server port template	82	view_consoleserverporttemplate
+159	Can add cable path	77	add_cablepath
+160	Can change cable path	77	change_cablepath
+161	Can delete cable path	77	delete_cablepath
+162	Can view cable path	77	view_cablepath
+163	Can add console port	78	add_consoleport
+164	Can change console port	78	change_consoleport
+165	Can delete console port	78	delete_consoleport
+166	Can view console port	78	view_consoleport
+167	Can add console port template	79	add_consoleporttemplate
+168	Can change console port template	79	change_consoleporttemplate
+169	Can delete console port template	79	delete_consoleporttemplate
+170	Can view console port template	79	view_consoleporttemplate
+171	Can add console server port	80	add_consoleserverport
+172	Can change console server port	80	change_consoleserverport
+173	Can delete console server port	80	delete_consoleserverport
+174	Can view console server port	80	view_consoleserverport
+175	Can add console server port template	81	add_consoleserverporttemplate
+176	Can change console server port template	81	change_consoleserverporttemplate
+177	Can delete console server port template	81	delete_consoleserverporttemplate
+178	Can view console server port template	81	view_consoleserverporttemplate
 179	Can add device	3	add_device
 180	Can change device	3	change_device
 181	Can delete device	3	delete_device
 182	Can view device	3	view_device
-183	Can add device bay	83	add_devicebay
-184	Can change device bay	83	change_devicebay
-185	Can delete device bay	83	delete_devicebay
-186	Can view device bay	83	view_devicebay
-187	Can add device bay template	84	add_devicebaytemplate
-188	Can change device bay template	84	change_devicebaytemplate
-189	Can delete device bay template	84	delete_devicebaytemplate
-190	Can view device bay template	84	view_devicebaytemplate
-191	Can add device type	85	add_devicetype
-192	Can change device type	85	change_devicetype
-193	Can delete device type	85	delete_devicetype
-194	Can view device type	85	view_devicetype
-195	Can add front port	86	add_frontport
-196	Can change front port	86	change_frontport
-197	Can delete front port	86	delete_frontport
-198	Can view front port	86	view_frontport
-199	Can add front port template	87	add_frontporttemplate
-200	Can change front port template	87	change_frontporttemplate
-201	Can delete front port template	87	delete_frontporttemplate
-202	Can view front port template	87	view_frontporttemplate
+183	Can add device bay	82	add_devicebay
+184	Can change device bay	82	change_devicebay
+185	Can delete device bay	82	delete_devicebay
+186	Can view device bay	82	view_devicebay
+187	Can add device bay template	83	add_devicebaytemplate
+188	Can change device bay template	83	change_devicebaytemplate
+189	Can delete device bay template	83	delete_devicebaytemplate
+190	Can view device bay template	83	view_devicebaytemplate
+191	Can add device type	84	add_devicetype
+192	Can change device type	84	change_devicetype
+193	Can delete device type	84	delete_devicetype
+194	Can view device type	84	view_devicetype
+195	Can add front port	85	add_frontport
+196	Can change front port	85	change_frontport
+197	Can delete front port	85	delete_frontport
+198	Can view front port	85	view_frontport
+199	Can add front port template	86	add_frontporttemplate
+200	Can change front port template	86	change_frontporttemplate
+201	Can delete front port template	86	delete_frontporttemplate
+202	Can view front port template	86	view_frontporttemplate
 203	Can add interface	13	add_interface
 204	Can change interface	13	change_interface
 205	Can delete interface	13	delete_interface
 206	Can view interface	13	view_interface
-207	Can add interface template	88	add_interfacetemplate
-208	Can change interface template	88	change_interfacetemplate
-209	Can delete interface template	88	delete_interfacetemplate
-210	Can view interface template	88	view_interfacetemplate
-211	Can add inventory item	89	add_inventoryitem
-212	Can change inventory item	89	change_inventoryitem
-213	Can delete inventory item	89	delete_inventoryitem
-214	Can view inventory item	89	view_inventoryitem
-215	Can add manufacturer	90	add_manufacturer
-216	Can change manufacturer	90	change_manufacturer
-217	Can delete manufacturer	90	delete_manufacturer
-218	Can view manufacturer	90	view_manufacturer
-219	Can add platform	91	add_platform
-220	Can change platform	91	change_platform
-221	Can delete platform	91	delete_platform
-222	Can view platform	91	view_platform
+207	Can add interface template	87	add_interfacetemplate
+208	Can change interface template	87	change_interfacetemplate
+209	Can delete interface template	87	delete_interfacetemplate
+210	Can view interface template	87	view_interfacetemplate
+211	Can add inventory item	88	add_inventoryitem
+212	Can change inventory item	88	change_inventoryitem
+213	Can delete inventory item	88	delete_inventoryitem
+214	Can view inventory item	88	view_inventoryitem
+215	Can add manufacturer	89	add_manufacturer
+216	Can change manufacturer	89	change_manufacturer
+217	Can delete manufacturer	89	delete_manufacturer
+218	Can view manufacturer	89	view_manufacturer
+219	Can add platform	90	add_platform
+220	Can change platform	90	change_platform
+221	Can delete platform	90	delete_platform
+222	Can view platform	90	view_platform
 223	Can add power feed	4	add_powerfeed
 224	Can change power feed	4	change_powerfeed
 225	Can delete power feed	4	delete_powerfeed
 226	Can view power feed	4	view_powerfeed
-227	Can add power outlet	92	add_poweroutlet
-228	Can change power outlet	92	change_poweroutlet
-229	Can delete power outlet	92	delete_poweroutlet
-230	Can view power outlet	92	view_poweroutlet
-231	Can add power outlet template	93	add_poweroutlettemplate
-232	Can change power outlet template	93	change_poweroutlettemplate
-233	Can delete power outlet template	93	delete_poweroutlettemplate
-234	Can view power outlet template	93	view_poweroutlettemplate
-235	Can add power panel	94	add_powerpanel
-236	Can change power panel	94	change_powerpanel
-237	Can delete power panel	94	delete_powerpanel
-238	Can view power panel	94	view_powerpanel
-239	Can add power port	95	add_powerport
-240	Can change power port	95	change_powerport
-241	Can delete power port	95	delete_powerport
-242	Can view power port	95	view_powerport
-243	Can add power port template	96	add_powerporttemplate
-244	Can change power port template	96	change_powerporttemplate
-245	Can delete power port template	96	delete_powerporttemplate
-246	Can view power port template	96	view_powerporttemplate
+227	Can add power outlet	91	add_poweroutlet
+228	Can change power outlet	91	change_poweroutlet
+229	Can delete power outlet	91	delete_poweroutlet
+230	Can view power outlet	91	view_poweroutlet
+231	Can add power outlet template	92	add_poweroutlettemplate
+232	Can change power outlet template	92	change_poweroutlettemplate
+233	Can delete power outlet template	92	delete_poweroutlettemplate
+234	Can view power outlet template	92	view_poweroutlettemplate
+235	Can add power panel	93	add_powerpanel
+236	Can change power panel	93	change_powerpanel
+237	Can delete power panel	93	delete_powerpanel
+238	Can view power panel	93	view_powerpanel
+239	Can add power port	94	add_powerport
+240	Can change power port	94	change_powerport
+241	Can delete power port	94	delete_powerport
+242	Can view power port	94	view_powerport
+243	Can add power port template	95	add_powerporttemplate
+244	Can change power port template	95	change_powerporttemplate
+245	Can delete power port template	95	delete_powerporttemplate
+246	Can view power port template	95	view_powerporttemplate
 247	Can add rack	5	add_rack
 248	Can change rack	5	change_rack
 249	Can delete rack	5	delete_rack
 250	Can view rack	5	view_rack
-251	Can add rack group	97	add_rackgroup
-252	Can change rack group	97	change_rackgroup
-253	Can delete rack group	97	delete_rackgroup
-254	Can view rack group	97	view_rackgroup
-255	Can add rack reservation	98	add_rackreservation
-256	Can change rack reservation	98	change_rackreservation
-257	Can delete rack reservation	98	delete_rackreservation
-258	Can view rack reservation	98	view_rackreservation
-259	Can add rear port	99	add_rearport
-260	Can change rear port	99	change_rearport
-261	Can delete rear port	99	delete_rearport
-262	Can view rear port	99	view_rearport
-263	Can add rear port template	100	add_rearporttemplate
-264	Can change rear port template	100	change_rearporttemplate
-265	Can delete rear port template	100	delete_rearporttemplate
-266	Can view rear port template	100	view_rearporttemplate
-267	Can add virtual chassis	101	add_virtualchassis
-268	Can change virtual chassis	101	change_virtualchassis
-269	Can delete virtual chassis	101	delete_virtualchassis
-270	Can view virtual chassis	101	view_virtualchassis
-271	Can add location type	102	add_locationtype
-272	Can change location type	102	change_locationtype
-273	Can delete location type	102	delete_locationtype
-274	Can view location type	102	view_locationtype
+251	Can add rack group	96	add_rackgroup
+252	Can change rack group	96	change_rackgroup
+253	Can delete rack group	96	delete_rackgroup
+254	Can view rack group	96	view_rackgroup
+255	Can add rack reservation	97	add_rackreservation
+256	Can change rack reservation	97	change_rackreservation
+257	Can delete rack reservation	97	delete_rackreservation
+258	Can view rack reservation	97	view_rackreservation
+259	Can add rear port	98	add_rearport
+260	Can change rear port	98	change_rearport
+261	Can delete rear port	98	delete_rearport
+262	Can view rear port	98	view_rearport
+263	Can add rear port template	99	add_rearporttemplate
+264	Can change rear port template	99	change_rearporttemplate
+265	Can delete rear port template	99	delete_rearporttemplate
+266	Can view rear port template	99	view_rearporttemplate
+267	Can add virtual chassis	100	add_virtualchassis
+268	Can change virtual chassis	100	change_virtualchassis
+269	Can delete virtual chassis	100	delete_virtualchassis
+270	Can view virtual chassis	100	view_virtualchassis
+271	Can add location type	101	add_locationtype
+272	Can change location type	101	change_locationtype
+273	Can delete location type	101	delete_locationtype
+274	Can view location type	101	view_locationtype
 275	Can add location	14	add_location
 276	Can change location	14	change_location
 277	Can delete location	14	delete_location
@@ -5642,14 +5589,14 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 284	Can change interface redundancy group	20	change_interfaceredundancygroup
 285	Can delete interface redundancy group	20	delete_interfaceredundancygroup
 286	Can view interface redundancy group	20	view_interfaceredundancygroup
-287	Can add interface redundancy group association	103	add_interfaceredundancygroupassociation
-288	Can change interface redundancy group association	103	change_interfaceredundancygroupassociation
-289	Can delete interface redundancy group association	103	delete_interfaceredundancygroupassociation
-290	Can view interface redundancy group association	103	view_interfaceredundancygroupassociation
-291	Can add device family	104	add_devicefamily
-292	Can change device family	104	change_devicefamily
-293	Can delete device family	104	delete_devicefamily
-294	Can view device family	104	view_devicefamily
+287	Can add interface redundancy group association	102	add_interfaceredundancygroupassociation
+288	Can change interface redundancy group association	102	change_interfaceredundancygroupassociation
+289	Can delete interface redundancy group association	102	delete_interfaceredundancygroupassociation
+290	Can view interface redundancy group association	102	view_interfaceredundancygroupassociation
+291	Can add device family	103	add_devicefamily
+292	Can change device family	103	change_devicefamily
+293	Can delete device family	103	delete_devicefamily
+294	Can view device family	103	view_devicefamily
 295	Can add software version	25	add_softwareversion
 296	Can change software version	25	change_softwareversion
 297	Can delete software version	25	delete_softwareversion
@@ -5658,470 +5605,458 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 300	Can change software image file	24	change_softwareimagefile
 301	Can delete software image file	24	delete_softwareimagefile
 302	Can view software image file	24	view_softwareimagefile
-303	Can add device type to software image file mapping	105	add_devicetypetosoftwareimagefile
-304	Can change device type to software image file mapping	105	change_devicetypetosoftwareimagefile
-305	Can delete device type to software image file mapping	105	delete_devicetypetosoftwareimagefile
-306	Can view device type to software image file mapping	105	view_devicetypetosoftwareimagefile
+303	Can add device type to software image file mapping	104	add_devicetypetosoftwareimagefile
+304	Can change device type to software image file mapping	104	change_devicetypetosoftwareimagefile
+305	Can delete device type to software image file mapping	104	delete_devicetypetosoftwareimagefile
+306	Can view device type to software image file mapping	104	view_devicetypetosoftwareimagefile
 307	Can add controller	26	add_controller
 308	Can change controller	26	change_controller
 309	Can delete controller	26	delete_controller
 310	Can view controller	26	view_controller
-311	Can add controller managed device group	106	add_controllermanageddevicegroup
-312	Can change controller managed device group	106	change_controllermanageddevicegroup
-313	Can delete controller managed device group	106	delete_controllermanageddevicegroup
-314	Can view controller managed device group	106	view_controllermanageddevicegroup
+311	Can add controller managed device group	105	add_controllermanageddevicegroup
+312	Can change controller managed device group	105	change_controllermanageddevicegroup
+313	Can delete controller managed device group	105	delete_controllermanageddevicegroup
+314	Can view controller managed device group	105	view_controllermanageddevicegroup
 315	Can add module	27	add_module
 316	Can change module	27	change_module
 317	Can delete module	27	delete_module
 318	Can view module	27	view_module
-319	Can add module bay	107	add_modulebay
-320	Can change module bay	107	change_modulebay
-321	Can delete module bay	107	delete_modulebay
-322	Can view module bay	107	view_modulebay
-323	Can add module bay template	108	add_modulebaytemplate
-324	Can change module bay template	108	change_modulebaytemplate
-325	Can delete module bay template	108	delete_modulebaytemplate
-326	Can view module bay template	108	view_modulebaytemplate
-327	Can add module type	109	add_moduletype
-328	Can change module type	109	change_moduletype
-329	Can delete module type	109	delete_moduletype
-330	Can view module type	109	view_moduletype
-331	Can add interface vdc assignment	110	add_interfacevdcassignment
-332	Can change interface vdc assignment	110	change_interfacevdcassignment
-333	Can delete interface vdc assignment	110	delete_interfacevdcassignment
-334	Can view interface vdc assignment	110	view_interfacevdcassignment
+319	Can add module bay	106	add_modulebay
+320	Can change module bay	106	change_modulebay
+321	Can delete module bay	106	delete_modulebay
+322	Can view module bay	106	view_modulebay
+323	Can add module bay template	107	add_modulebaytemplate
+324	Can change module bay template	107	change_modulebaytemplate
+325	Can delete module bay template	107	delete_modulebaytemplate
+326	Can view module bay template	107	view_modulebaytemplate
+327	Can add module type	108	add_moduletype
+328	Can change module type	108	change_moduletype
+329	Can delete module type	108	delete_moduletype
+330	Can view module type	108	view_moduletype
+331	Can add interface vdc assignment	109	add_interfacevdcassignment
+332	Can change interface vdc assignment	109	change_interfacevdcassignment
+333	Can delete interface vdc assignment	109	delete_interfacevdcassignment
+334	Can view interface vdc assignment	109	view_interfacevdcassignment
 335	Can add virtual device context	29	add_virtualdevicecontext
 336	Can change virtual device context	29	change_virtualdevicecontext
 337	Can delete virtual device context	29	delete_virtualdevicecontext
 338	Can view virtual device context	29	view_virtualdevicecontext
-339	Can add module family	111	add_modulefamily
-340	Can change module family	111	change_modulefamily
-341	Can delete module family	111	delete_modulefamily
-342	Can view module family	111	view_modulefamily
-343	Can add device cluster assignment	112	add_deviceclusterassignment
-344	Can change device cluster assignment	112	change_deviceclusterassignment
-345	Can delete device cluster assignment	112	delete_deviceclusterassignment
-346	Can view device cluster assignment	112	view_deviceclusterassignment
-347	Can add cable type	113	add_cabletype
-348	Can change cable type	113	change_cabletype
-349	Can delete cable type	113	delete_cabletype
-350	Can view cable type	113	view_cabletype
-351	Can add cable to cable termination	114	add_cabletocabletermination
-352	Can change cable to cable termination	114	change_cabletocabletermination
-353	Can delete cable to cable termination	114	delete_cabletocabletermination
-354	Can view cable to cable termination	114	view_cabletocabletermination
-355	Can add config context	115	add_configcontext
-356	Can change config context	115	change_configcontext
-357	Can delete config context	115	delete_configcontext
-358	Can view config context	115	view_configcontext
-359	Can add custom field	10	add_customfield
-360	Can change custom field	10	change_customfield
-361	Can delete custom field	10	delete_customfield
-362	Can view custom field	10	view_customfield
-363	Can add custom field choice	116	add_customfieldchoice
-364	Can change custom field choice	116	change_customfieldchoice
-365	Can delete custom field choice	116	delete_customfieldchoice
-366	Can view custom field choice	116	view_customfieldchoice
-367	Can add custom link	117	add_customlink
-368	Can change custom link	117	change_customlink
-369	Can delete custom link	117	delete_customlink
-370	Can view custom link	117	view_customlink
-371	Can add export template	118	add_exporttemplate
-372	Can change export template	118	change_exporttemplate
-373	Can delete export template	118	delete_exporttemplate
-374	Can view export template	118	view_exporttemplate
-375	Can add Git repository	119	add_gitrepository
-376	Can change Git repository	119	change_gitrepository
-377	Can delete Git repository	119	delete_gitrepository
-378	Can view Git repository	119	view_gitrepository
-379	Can add image attachment	120	add_imageattachment
-380	Can change image attachment	120	change_imageattachment
-381	Can delete image attachment	120	delete_imageattachment
-382	Can view image attachment	120	view_imageattachment
-383	Can add job result	121	add_jobresult
-384	Can change job result	121	change_jobresult
-385	Can delete job result	121	delete_jobresult
-386	Can view job result	121	view_jobresult
-387	Can add relationship	122	add_relationship
-388	Can change relationship	122	change_relationship
-389	Can delete relationship	122	delete_relationship
-390	Can view relationship	122	view_relationship
-391	Can add tag	123	add_tag
-392	Can change tag	123	change_tag
-393	Can delete tag	123	delete_tag
-394	Can view tag	123	view_tag
-395	Can add webhook	124	add_webhook
-396	Can change webhook	124	change_webhook
-397	Can delete webhook	124	delete_webhook
-398	Can view webhook	124	view_webhook
-399	Can add tagged item	125	add_taggeditem
-400	Can change tagged item	125	change_taggeditem
-401	Can delete tagged item	125	delete_taggeditem
-402	Can view tagged item	125	view_taggeditem
-403	Can add status	126	add_status
-404	Can change status	126	change_status
-405	Can delete status	126	delete_status
-406	Can view status	126	view_status
-407	Can add relationship association	127	add_relationshipassociation
-408	Can change relationship association	127	change_relationshipassociation
-409	Can delete relationship association	127	delete_relationshipassociation
-410	Can view relationship association	127	view_relationshipassociation
-411	Can add object change	128	add_objectchange
-412	Can change object change	128	change_objectchange
-413	Can delete object change	128	delete_objectchange
-414	Can view object change	128	view_objectchange
-415	Can add GraphQL query	129	add_graphqlquery
-416	Can change GraphQL query	129	change_graphqlquery
-417	Can delete GraphQL query	129	delete_graphqlquery
-418	Can view GraphQL query	129	view_graphqlquery
-419	Can add config context schema	130	add_configcontextschema
-420	Can change config context schema	130	change_configcontextschema
-421	Can delete config context schema	130	delete_configcontextschema
-422	Can view config context schema	130	view_configcontextschema
-423	Can add computed field	131	add_computedfield
-424	Can change computed field	131	change_computedfield
-425	Can delete computed field	131	delete_computedfield
-426	Can view computed field	131	view_computedfield
-427	Can add file attachment	132	add_fileattachment
-428	Can change file attachment	132	change_fileattachment
-429	Can delete file attachment	132	delete_fileattachment
-430	Can view file attachment	132	view_fileattachment
-431	Can add file proxy	133	add_fileproxy
-432	Can change file proxy	133	change_fileproxy
-433	Can delete file proxy	133	delete_fileproxy
-434	Can view file proxy	133	view_fileproxy
-435	Can add health check test model	134	add_healthchecktestmodel
-436	Can change health check test model	134	change_healthchecktestmodel
-437	Can delete health check test model	134	delete_healthchecktestmodel
-438	Can view health check test model	134	view_healthchecktestmodel
-439	Can add scheduled jobs	135	add_scheduledjobs
-440	Can change scheduled jobs	135	change_scheduledjobs
-441	Can delete scheduled jobs	135	delete_scheduledjobs
-442	Can view scheduled jobs	135	view_scheduledjobs
-443	Can add scheduled job	35	add_scheduledjob
-444	Can change scheduled job	35	change_scheduledjob
-445	Can delete scheduled job	35	delete_scheduledjob
-446	Can view scheduled job	35	view_scheduledjob
-447	Can add secret	136	add_secret
-448	Can change secret	136	change_secret
-449	Can delete secret	136	delete_secret
-450	Can view secret	136	view_secret
-451	Can add secrets group	137	add_secretsgroup
-452	Can change secrets group	137	change_secretsgroup
-453	Can delete secrets group	137	delete_secretsgroup
-454	Can view secrets group	137	view_secretsgroup
-455	Can add secrets group association	138	add_secretsgroupassociation
-456	Can change secrets group association	138	change_secretsgroupassociation
-457	Can delete secrets group association	138	delete_secretsgroupassociation
-458	Can view secrets group association	138	view_secretsgroupassociation
-459	Can add job log entry	139	add_joblogentry
-460	Can change job log entry	139	change_joblogentry
-461	Can delete job log entry	139	delete_joblogentry
-462	Can view job log entry	139	view_joblogentry
-463	Can add job	11	add_job
-464	Can change job	11	change_job
-465	Can delete job	11	delete_job
-466	Can view job	11	view_job
-467	Can add dynamic group	52	add_dynamicgroup
-468	Can change dynamic group	52	change_dynamicgroup
-469	Can delete dynamic group	52	delete_dynamicgroup
-470	Can view dynamic group	52	view_dynamicgroup
-471	Can add dynamic group membership	140	add_dynamicgroupmembership
-472	Can change dynamic group membership	140	change_dynamicgroupmembership
-473	Can delete dynamic group membership	140	delete_dynamicgroupmembership
-474	Can view dynamic group membership	140	view_dynamicgroupmembership
-475	Can add note	141	add_note
-476	Can change note	141	change_note
-477	Can delete note	141	delete_note
-478	Can view note	141	view_note
-479	Can add job hook	142	add_jobhook
-480	Can change job hook	142	change_jobhook
-481	Can delete job hook	142	delete_jobhook
-482	Can view job hook	142	view_jobhook
-483	Can add job button	143	add_jobbutton
-484	Can change job button	143	change_jobbutton
-485	Can delete job button	143	delete_jobbutton
-486	Can view job button	143	view_jobbutton
-487	Can add role	16	add_role
-488	Can change role	16	change_role
-489	Can delete role	16	delete_role
-490	Can view role	16	view_role
-491	Can add external integration	144	add_externalintegration
-492	Can change external integration	144	change_externalintegration
-493	Can delete external integration	144	delete_externalintegration
-494	Can view external integration	144	view_externalintegration
-495	Can add contact	145	add_contact
-496	Can change contact	145	change_contact
-497	Can delete contact	145	delete_contact
-498	Can view contact	145	view_contact
-499	Can add team	146	add_team
-500	Can change team	146	change_team
-501	Can delete team	146	delete_team
-502	Can view team	146	view_team
-503	Can add contact association	23	add_contactassociation
-504	Can change contact association	23	change_contactassociation
-505	Can delete contact association	23	delete_contactassociation
-506	Can view contact association	23	view_contactassociation
-507	Can add static group association	147	add_staticgroupassociation
-508	Can change static group association	147	change_staticgroupassociation
-509	Can delete static group association	147	delete_staticgroupassociation
-510	Can view static group association	147	view_staticgroupassociation
-511	Can add metadata type	148	add_metadatatype
-512	Can change metadata type	148	change_metadatatype
-513	Can delete metadata type	148	delete_metadatatype
-514	Can view metadata type	148	view_metadatatype
-515	Can add object metadata	149	add_objectmetadata
-516	Can change object metadata	149	change_objectmetadata
-517	Can delete object metadata	149	delete_objectmetadata
-518	Can view object metadata	149	view_objectmetadata
-519	Can add metadata choice	150	add_metadatachoice
-520	Can change metadata choice	150	change_metadatachoice
-521	Can delete metadata choice	150	delete_metadatachoice
-522	Can view metadata choice	150	view_metadatachoice
-523	Can add saved view	151	add_savedview
-524	Can change saved view	151	change_savedview
-525	Can delete saved view	151	delete_savedview
-526	Can view saved view	151	view_savedview
-527	Can add user saved view association	152	add_usersavedviewassociation
-528	Can change user saved view association	152	change_usersavedviewassociation
-529	Can delete user saved view association	152	delete_usersavedviewassociation
-530	Can view user saved view association	152	view_usersavedviewassociation
-531	Can add job queue	153	add_jobqueue
-532	Can change job queue	153	change_jobqueue
-533	Can delete job queue	153	delete_jobqueue
-534	Can view job queue	153	view_jobqueue
-535	Can add job queue assignment	154	add_jobqueueassignment
-536	Can change job queue assignment	154	change_jobqueueassignment
-537	Can delete job queue assignment	154	delete_jobqueueassignment
-538	Can view job queue assignment	154	view_jobqueueassignment
-539	Can add Approval Workflow	30	add_approvalworkflow
-540	Can change Approval Workflow	30	change_approvalworkflow
-541	Can delete Approval Workflow	30	delete_approvalworkflow
-542	Can view Approval Workflow	30	view_approvalworkflow
-543	Can add Approval Workflow Definition	33	add_approvalworkflowdefinition
-544	Can change Approval Workflow Definition	33	change_approvalworkflowdefinition
-545	Can delete Approval Workflow Definition	33	delete_approvalworkflowdefinition
-546	Can view Approval Workflow Definition	33	view_approvalworkflowdefinition
-547	Can add Approval Workflow Stage	31	add_approvalworkflowstage
-548	Can change Approval Workflow Stage	31	change_approvalworkflowstage
-549	Can delete Approval Workflow Stage	31	delete_approvalworkflowstage
-550	Can view Approval Workflow Stage	31	view_approvalworkflowstage
-551	Can add Approval Workflow Stage Response	32	add_approvalworkflowstageresponse
-552	Can change Approval Workflow Stage Response	32	change_approvalworkflowstageresponse
-553	Can delete Approval Workflow Stage Response	32	delete_approvalworkflowstageresponse
-554	Can view Approval Workflow Stage Response	32	view_approvalworkflowstageresponse
-555	Can add Approval Workflow Stage Definition	34	add_approvalworkflowstagedefinition
-556	Can change Approval Workflow Stage Definition	34	change_approvalworkflowstagedefinition
-557	Can delete Approval Workflow Stage Definition	34	delete_approvalworkflowstagedefinition
-558	Can view Approval Workflow Stage Definition	34	view_approvalworkflowstagedefinition
-559	Can add job console entry	155	add_jobconsoleentry
-560	Can change job console entry	155	change_jobconsoleentry
-561	Can delete job console entry	155	delete_jobconsoleentry
-562	Can view job console entry	155	view_jobconsoleentry
-563	Can add IP address	6	add_ipaddress
-564	Can change IP address	6	change_ipaddress
-565	Can delete IP address	6	delete_ipaddress
-566	Can view IP address	6	view_ipaddress
-567	Can add prefix	7	add_prefix
-568	Can change prefix	7	change_prefix
-569	Can delete prefix	7	delete_prefix
-570	Can view prefix	7	view_prefix
-571	Can add RIR	156	add_rir
-572	Can change RIR	156	change_rir
-573	Can delete RIR	156	delete_rir
-574	Can view RIR	156	view_rir
-575	Can add route target	157	add_routetarget
-576	Can change route target	157	change_routetarget
-577	Can delete route target	157	delete_routetarget
-578	Can view route target	157	view_routetarget
-579	Can add VRF	28	add_vrf
-580	Can change VRF	28	change_vrf
-581	Can delete VRF	28	delete_vrf
-582	Can view VRF	28	view_vrf
-583	Can add VLAN group	158	add_vlangroup
-584	Can change VLAN group	158	change_vlangroup
-585	Can delete VLAN group	158	delete_vlangroup
-586	Can view VLAN group	158	view_vlangroup
-587	Can add VLAN	8	add_vlan
-588	Can change VLAN	8	change_vlan
-589	Can delete VLAN	8	delete_vlan
-590	Can view VLAN	8	view_vlan
-591	Can add service	159	add_service
-592	Can change service	159	change_service
-593	Can delete service	159	delete_service
-594	Can view service	159	view_service
-595	Can add IP Address Assignment	160	add_ipaddresstointerface
-596	Can change IP Address Assignment	160	change_ipaddresstointerface
-597	Can delete IP Address Assignment	160	delete_ipaddresstointerface
-598	Can view IP Address Assignment	160	view_ipaddresstointerface
-599	Can add VRF-prefix assignment	161	add_vrfprefixassignment
-600	Can change VRF-prefix assignment	161	change_vrfprefixassignment
-601	Can delete VRF-prefix assignment	161	delete_vrfprefixassignment
-602	Can view VRF-prefix assignment	161	view_vrfprefixassignment
-603	Can add VRF-device assignment	162	add_vrfdeviceassignment
-604	Can change VRF-device assignment	162	change_vrfdeviceassignment
-605	Can delete VRF-device assignment	162	delete_vrfdeviceassignment
-606	Can view VRF-device assignment	162	view_vrfdeviceassignment
-607	Can add namespace	163	add_namespace
-608	Can change namespace	163	change_namespace
-609	Can delete namespace	163	delete_namespace
-610	Can view namespace	163	view_namespace
-611	Can add vlan location assignment	164	add_vlanlocationassignment
-612	Can change vlan location assignment	164	change_vlanlocationassignment
-613	Can delete vlan location assignment	164	delete_vlanlocationassignment
-614	Can view vlan location assignment	164	view_vlanlocationassignment
-615	Can add prefix location assignment	165	add_prefixlocationassignment
-616	Can change prefix location assignment	165	change_prefixlocationassignment
-617	Can delete prefix location assignment	165	delete_prefixlocationassignment
-618	Can view prefix location assignment	165	view_prefixlocationassignment
-619	Can add IP address range	36	add_ipaddressrange
-620	Can change IP address range	36	change_ipaddressrange
-621	Can delete IP address range	36	delete_ipaddressrange
-622	Can view IP address range	36	view_ipaddressrange
-623	Can add Certificate Profile	166	add_certificateprofile
-624	Can change Certificate Profile	166	change_certificateprofile
-625	Can delete Certificate Profile	166	delete_certificateprofile
-626	Can view Certificate Profile	166	view_certificateprofile
-627	Can add Health Check Monitor	167	add_healthcheckmonitor
-628	Can change Health Check Monitor	167	change_healthcheckmonitor
-629	Can delete Health Check Monitor	167	delete_healthcheckmonitor
-630	Can view Health Check Monitor	167	view_healthcheckmonitor
-631	Can add Load Balancer Pool	168	add_loadbalancerpool
-632	Can change Load Balancer Pool	168	change_loadbalancerpool
-633	Can delete Load Balancer Pool	168	delete_loadbalancerpool
-634	Can view Load Balancer Pool	168	view_loadbalancerpool
-635	Can add Load Balancer Pool Member	37	add_loadbalancerpoolmember
-636	Can change Load Balancer Pool Member	37	change_loadbalancerpoolmember
-637	Can delete Load Balancer Pool Member	37	delete_loadbalancerpoolmember
-638	Can view Load Balancer Pool Member	37	view_loadbalancerpoolmember
-639	Can add Virtual Server	169	add_virtualserver
-640	Can change Virtual Server	169	change_virtualserver
-641	Can delete Virtual Server	169	delete_virtualserver
-642	Can view Virtual Server	169	view_virtualserver
-643	Can add virtual server certificate profile assignment	170	add_virtualservercertificateprofileassignment
-644	Can change virtual server certificate profile assignment	170	change_virtualservercertificateprofileassignment
-645	Can delete virtual server certificate profile assignment	170	delete_virtualservercertificateprofileassignment
-646	Can view virtual server certificate profile assignment	170	view_virtualservercertificateprofileassignment
-647	Can add load balancer pool member certificate profile assignment	171	add_loadbalancerpoolmembercertificateprofileassignment
-648	Can change load balancer pool member certificate profile assignment	171	change_loadbalancerpoolmembercertificateprofileassignment
-649	Can delete load balancer pool member certificate profile assignment	171	delete_loadbalancerpoolmembercertificateprofileassignment
-650	Can view load balancer pool member certificate profile assignment	171	view_loadbalancerpoolmembercertificateprofileassignment
-651	Can add tenant group	172	add_tenantgroup
-652	Can change tenant group	172	change_tenantgroup
-653	Can delete tenant group	172	delete_tenantgroup
-654	Can view tenant group	172	view_tenantgroup
-655	Can add tenant	173	add_tenant
-656	Can change tenant	173	change_tenant
-657	Can delete tenant	173	delete_tenant
-658	Can view tenant	173	view_tenant
-659	Can add user	174	add_user
-660	Can change user	174	change_user
-661	Can delete user	174	delete_user
-662	Can view user	174	view_user
-663	Can add Group	175	add_admingroup
-664	Can change Group	175	change_admingroup
-665	Can delete Group	175	delete_admingroup
-666	Can view Group	175	view_admingroup
-667	Can add token	176	add_token
-668	Can change token	176	change_token
-669	Can delete token	176	delete_token
-670	Can view token	176	view_token
-671	Can add permission	177	add_objectpermission
-672	Can change permission	177	change_objectpermission
-673	Can delete permission	177	delete_objectpermission
-674	Can view permission	177	view_objectpermission
-675	Can add cluster	178	add_cluster
-676	Can change cluster	178	change_cluster
-677	Can delete cluster	178	delete_cluster
-678	Can view cluster	178	view_cluster
-679	Can add cluster group	179	add_clustergroup
-680	Can change cluster group	179	change_clustergroup
-681	Can delete cluster group	179	delete_clustergroup
-682	Can view cluster group	179	view_clustergroup
-683	Can add cluster type	180	add_clustertype
-684	Can change cluster type	180	change_clustertype
-685	Can delete cluster type	180	delete_clustertype
-686	Can view cluster type	180	view_clustertype
-687	Can add virtual machine	9	add_virtualmachine
-688	Can change virtual machine	9	change_virtualmachine
-689	Can delete virtual machine	9	delete_virtualmachine
-690	Can view virtual machine	9	view_virtualmachine
-691	Can add VM interface	12	add_vminterface
-692	Can change VM interface	12	change_vminterface
-693	Can delete VM interface	12	delete_vminterface
-694	Can view VM interface	12	view_vminterface
-695	Can add VPN	181	add_vpn
-696	Can change VPN	181	change_vpn
-697	Can delete VPN	181	delete_vpn
-698	Can view VPN	181	view_vpn
-699	Can add VPN Phase 1 Policy	182	add_vpnphase1policy
-700	Can change VPN Phase 1 Policy	182	change_vpnphase1policy
-701	Can delete VPN Phase 1 Policy	182	delete_vpnphase1policy
-702	Can view VPN Phase 1 Policy	182	view_vpnphase1policy
-703	Can add VPN Phase 2 Policy	183	add_vpnphase2policy
-704	Can change VPN Phase 2 Policy	183	change_vpnphase2policy
-705	Can delete VPN Phase 2 Policy	183	delete_vpnphase2policy
-706	Can view VPN Phase 2 Policy	183	view_vpnphase2policy
-707	Can add VPN Profile	184	add_vpnprofile
-708	Can change VPN Profile	184	change_vpnprofile
-709	Can delete VPN Profile	184	delete_vpnprofile
-710	Can view VPN Profile	184	view_vpnprofile
-711	Can add VPN Tunnel Endpoint	39	add_vpntunnelendpoint
-712	Can change VPN Tunnel Endpoint	39	change_vpntunnelendpoint
-713	Can delete VPN Tunnel Endpoint	39	delete_vpntunnelendpoint
-714	Can view VPN Tunnel Endpoint	39	view_vpntunnelendpoint
-715	Can add VPN Tunnel	38	add_vpntunnel
-716	Can change VPN Tunnel	38	change_vpntunnel
-717	Can delete VPN Tunnel	38	delete_vpntunnel
-718	Can view VPN Tunnel	38	view_vpntunnel
-719	Can add vpn profile phase2 policy assignment	185	add_vpnprofilephase2policyassignment
-720	Can change vpn profile phase2 policy assignment	185	change_vpnprofilephase2policyassignment
-721	Can delete vpn profile phase2 policy assignment	185	delete_vpnprofilephase2policyassignment
-722	Can view vpn profile phase2 policy assignment	185	view_vpnprofilephase2policyassignment
-723	Can add vpn profile phase1 policy assignment	186	add_vpnprofilephase1policyassignment
-724	Can change vpn profile phase1 policy assignment	186	change_vpnprofilephase1policyassignment
-725	Can delete vpn profile phase1 policy assignment	186	delete_vpnprofilephase1policyassignment
-726	Can view vpn profile phase1 policy assignment	186	view_vpnprofilephase1policyassignment
-727	Can add VPN Termination	187	add_vpntermination
-728	Can change VPN Termination	187	change_vpntermination
-729	Can delete VPN Termination	187	delete_vpntermination
-730	Can view VPN Termination	187	view_vpntermination
-731	Can add wireless network	188	add_wirelessnetwork
-732	Can change wireless network	188	change_wirelessnetwork
-733	Can delete wireless network	188	delete_wirelessnetwork
-734	Can view wireless network	188	view_wirelessnetwork
-735	Can add supported data rate	189	add_supporteddatarate
-736	Can change supported data rate	189	change_supporteddatarate
-737	Can delete supported data rate	189	delete_supporteddatarate
-738	Can view supported data rate	189	view_supporteddatarate
-739	Can add radio profile	190	add_radioprofile
-740	Can change radio profile	190	change_radioprofile
-741	Can delete radio profile	190	delete_radioprofile
-742	Can view radio profile	190	view_radioprofile
-743	Can add controller managed device group wireless network assignment	191	add_controllermanageddevicegroupwirelessnetworkassignment
-744	Can change controller managed device group wireless network assignment	191	change_controllermanageddevicegroupwirelessnetworkassignment
-745	Can delete controller managed device group wireless network assignment	191	delete_controllermanageddevicegroupwirelessnetworkassignment
-746	Can view controller managed device group wireless network assignment	191	view_controllermanageddevicegroupwirelessnetworkassignment
-747	Can add controller managed device group radio profile assignment	192	add_controllermanageddevicegroupradioprofileassignment
-748	Can change controller managed device group radio profile assignment	192	change_controllermanageddevicegroupradioprofileassignment
-749	Can delete controller managed device group radio profile assignment	192	delete_controllermanageddevicegroupradioprofileassignment
-750	Can view controller managed device group radio profile assignment	192	view_controllermanageddevicegroupradioprofileassignment
-751	Can add profile	193	add_profile
-752	Can change profile	193	change_profile
-753	Can delete profile	193	delete_profile
-754	Can view profile	193	view_profile
-755	Can add request	194	add_request
-756	Can change request	194	change_request
-757	Can delete request	194	delete_request
-758	Can view request	194	view_request
-759	Can add response	195	add_response
-760	Can change response	195	change_response
-761	Can delete response	195	delete_response
-762	Can view response	195	view_response
-763	Can add sql query	196	add_sqlquery
-764	Can change sql query	196	change_sqlquery
-765	Can delete sql query	196	delete_sqlquery
-766	Can view sql query	196	view_sqlquery
+339	Can add module family	110	add_modulefamily
+340	Can change module family	110	change_modulefamily
+341	Can delete module family	110	delete_modulefamily
+342	Can view module family	110	view_modulefamily
+343	Can add device cluster assignment	111	add_deviceclusterassignment
+344	Can change device cluster assignment	111	change_deviceclusterassignment
+345	Can delete device cluster assignment	111	delete_deviceclusterassignment
+346	Can view device cluster assignment	111	view_deviceclusterassignment
+347	Can add config context	112	add_configcontext
+348	Can change config context	112	change_configcontext
+349	Can delete config context	112	delete_configcontext
+350	Can view config context	112	view_configcontext
+351	Can add custom field	10	add_customfield
+352	Can change custom field	10	change_customfield
+353	Can delete custom field	10	delete_customfield
+354	Can view custom field	10	view_customfield
+355	Can add custom field choice	113	add_customfieldchoice
+356	Can change custom field choice	113	change_customfieldchoice
+357	Can delete custom field choice	113	delete_customfieldchoice
+358	Can view custom field choice	113	view_customfieldchoice
+359	Can add custom link	114	add_customlink
+360	Can change custom link	114	change_customlink
+361	Can delete custom link	114	delete_customlink
+362	Can view custom link	114	view_customlink
+363	Can add export template	115	add_exporttemplate
+364	Can change export template	115	change_exporttemplate
+365	Can delete export template	115	delete_exporttemplate
+366	Can view export template	115	view_exporttemplate
+367	Can add Git repository	116	add_gitrepository
+368	Can change Git repository	116	change_gitrepository
+369	Can delete Git repository	116	delete_gitrepository
+370	Can view Git repository	116	view_gitrepository
+371	Can add image attachment	117	add_imageattachment
+372	Can change image attachment	117	change_imageattachment
+373	Can delete image attachment	117	delete_imageattachment
+374	Can view image attachment	117	view_imageattachment
+375	Can add job result	118	add_jobresult
+376	Can change job result	118	change_jobresult
+377	Can delete job result	118	delete_jobresult
+378	Can view job result	118	view_jobresult
+379	Can add relationship	119	add_relationship
+380	Can change relationship	119	change_relationship
+381	Can delete relationship	119	delete_relationship
+382	Can view relationship	119	view_relationship
+383	Can add tag	120	add_tag
+384	Can change tag	120	change_tag
+385	Can delete tag	120	delete_tag
+386	Can view tag	120	view_tag
+387	Can add webhook	121	add_webhook
+388	Can change webhook	121	change_webhook
+389	Can delete webhook	121	delete_webhook
+390	Can view webhook	121	view_webhook
+391	Can add tagged item	122	add_taggeditem
+392	Can change tagged item	122	change_taggeditem
+393	Can delete tagged item	122	delete_taggeditem
+394	Can view tagged item	122	view_taggeditem
+395	Can add status	123	add_status
+396	Can change status	123	change_status
+397	Can delete status	123	delete_status
+398	Can view status	123	view_status
+399	Can add relationship association	124	add_relationshipassociation
+400	Can change relationship association	124	change_relationshipassociation
+401	Can delete relationship association	124	delete_relationshipassociation
+402	Can view relationship association	124	view_relationshipassociation
+403	Can add object change	125	add_objectchange
+404	Can change object change	125	change_objectchange
+405	Can delete object change	125	delete_objectchange
+406	Can view object change	125	view_objectchange
+407	Can add GraphQL query	126	add_graphqlquery
+408	Can change GraphQL query	126	change_graphqlquery
+409	Can delete GraphQL query	126	delete_graphqlquery
+410	Can view GraphQL query	126	view_graphqlquery
+411	Can add config context schema	127	add_configcontextschema
+412	Can change config context schema	127	change_configcontextschema
+413	Can delete config context schema	127	delete_configcontextschema
+414	Can view config context schema	127	view_configcontextschema
+415	Can add computed field	128	add_computedfield
+416	Can change computed field	128	change_computedfield
+417	Can delete computed field	128	delete_computedfield
+418	Can view computed field	128	view_computedfield
+419	Can add file attachment	129	add_fileattachment
+420	Can change file attachment	129	change_fileattachment
+421	Can delete file attachment	129	delete_fileattachment
+422	Can view file attachment	129	view_fileattachment
+423	Can add file proxy	130	add_fileproxy
+424	Can change file proxy	130	change_fileproxy
+425	Can delete file proxy	130	delete_fileproxy
+426	Can view file proxy	130	view_fileproxy
+427	Can add health check test model	131	add_healthchecktestmodel
+428	Can change health check test model	131	change_healthchecktestmodel
+429	Can delete health check test model	131	delete_healthchecktestmodel
+430	Can view health check test model	131	view_healthchecktestmodel
+431	Can add scheduled jobs	132	add_scheduledjobs
+432	Can change scheduled jobs	132	change_scheduledjobs
+433	Can delete scheduled jobs	132	delete_scheduledjobs
+434	Can view scheduled jobs	132	view_scheduledjobs
+435	Can add scheduled job	35	add_scheduledjob
+436	Can change scheduled job	35	change_scheduledjob
+437	Can delete scheduled job	35	delete_scheduledjob
+438	Can view scheduled job	35	view_scheduledjob
+439	Can add secret	133	add_secret
+440	Can change secret	133	change_secret
+441	Can delete secret	133	delete_secret
+442	Can view secret	133	view_secret
+443	Can add secrets group	134	add_secretsgroup
+444	Can change secrets group	134	change_secretsgroup
+445	Can delete secrets group	134	delete_secretsgroup
+446	Can view secrets group	134	view_secretsgroup
+447	Can add secrets group association	135	add_secretsgroupassociation
+448	Can change secrets group association	135	change_secretsgroupassociation
+449	Can delete secrets group association	135	delete_secretsgroupassociation
+450	Can view secrets group association	135	view_secretsgroupassociation
+451	Can add job log entry	136	add_joblogentry
+452	Can change job log entry	136	change_joblogentry
+453	Can delete job log entry	136	delete_joblogentry
+454	Can view job log entry	136	view_joblogentry
+455	Can add job	11	add_job
+456	Can change job	11	change_job
+457	Can delete job	11	delete_job
+458	Can view job	11	view_job
+459	Can add dynamic group	51	add_dynamicgroup
+460	Can change dynamic group	51	change_dynamicgroup
+461	Can delete dynamic group	51	delete_dynamicgroup
+462	Can view dynamic group	51	view_dynamicgroup
+463	Can add dynamic group membership	137	add_dynamicgroupmembership
+464	Can change dynamic group membership	137	change_dynamicgroupmembership
+465	Can delete dynamic group membership	137	delete_dynamicgroupmembership
+466	Can view dynamic group membership	137	view_dynamicgroupmembership
+467	Can add note	138	add_note
+468	Can change note	138	change_note
+469	Can delete note	138	delete_note
+470	Can view note	138	view_note
+471	Can add job hook	139	add_jobhook
+472	Can change job hook	139	change_jobhook
+473	Can delete job hook	139	delete_jobhook
+474	Can view job hook	139	view_jobhook
+475	Can add job button	140	add_jobbutton
+476	Can change job button	140	change_jobbutton
+477	Can delete job button	140	delete_jobbutton
+478	Can view job button	140	view_jobbutton
+479	Can add role	16	add_role
+480	Can change role	16	change_role
+481	Can delete role	16	delete_role
+482	Can view role	16	view_role
+483	Can add external integration	141	add_externalintegration
+484	Can change external integration	141	change_externalintegration
+485	Can delete external integration	141	delete_externalintegration
+486	Can view external integration	141	view_externalintegration
+487	Can add contact	142	add_contact
+488	Can change contact	142	change_contact
+489	Can delete contact	142	delete_contact
+490	Can view contact	142	view_contact
+491	Can add team	143	add_team
+492	Can change team	143	change_team
+493	Can delete team	143	delete_team
+494	Can view team	143	view_team
+495	Can add contact association	23	add_contactassociation
+496	Can change contact association	23	change_contactassociation
+497	Can delete contact association	23	delete_contactassociation
+498	Can view contact association	23	view_contactassociation
+499	Can add static group association	144	add_staticgroupassociation
+500	Can change static group association	144	change_staticgroupassociation
+501	Can delete static group association	144	delete_staticgroupassociation
+502	Can view static group association	144	view_staticgroupassociation
+503	Can add metadata type	145	add_metadatatype
+504	Can change metadata type	145	change_metadatatype
+505	Can delete metadata type	145	delete_metadatatype
+506	Can view metadata type	145	view_metadatatype
+507	Can add object metadata	146	add_objectmetadata
+508	Can change object metadata	146	change_objectmetadata
+509	Can delete object metadata	146	delete_objectmetadata
+510	Can view object metadata	146	view_objectmetadata
+511	Can add metadata choice	147	add_metadatachoice
+512	Can change metadata choice	147	change_metadatachoice
+513	Can delete metadata choice	147	delete_metadatachoice
+514	Can view metadata choice	147	view_metadatachoice
+515	Can add saved view	148	add_savedview
+516	Can change saved view	148	change_savedview
+517	Can delete saved view	148	delete_savedview
+518	Can view saved view	148	view_savedview
+519	Can add user saved view association	149	add_usersavedviewassociation
+520	Can change user saved view association	149	change_usersavedviewassociation
+521	Can delete user saved view association	149	delete_usersavedviewassociation
+522	Can view user saved view association	149	view_usersavedviewassociation
+523	Can add job queue	150	add_jobqueue
+524	Can change job queue	150	change_jobqueue
+525	Can delete job queue	150	delete_jobqueue
+526	Can view job queue	150	view_jobqueue
+527	Can add job queue assignment	151	add_jobqueueassignment
+528	Can change job queue assignment	151	change_jobqueueassignment
+529	Can delete job queue assignment	151	delete_jobqueueassignment
+530	Can view job queue assignment	151	view_jobqueueassignment
+531	Can add Approval Workflow	30	add_approvalworkflow
+532	Can change Approval Workflow	30	change_approvalworkflow
+533	Can delete Approval Workflow	30	delete_approvalworkflow
+534	Can view Approval Workflow	30	view_approvalworkflow
+535	Can add Approval Workflow Definition	33	add_approvalworkflowdefinition
+536	Can change Approval Workflow Definition	33	change_approvalworkflowdefinition
+537	Can delete Approval Workflow Definition	33	delete_approvalworkflowdefinition
+538	Can view Approval Workflow Definition	33	view_approvalworkflowdefinition
+539	Can add Approval Workflow Stage	31	add_approvalworkflowstage
+540	Can change Approval Workflow Stage	31	change_approvalworkflowstage
+541	Can delete Approval Workflow Stage	31	delete_approvalworkflowstage
+542	Can view Approval Workflow Stage	31	view_approvalworkflowstage
+543	Can add Approval Workflow Stage Response	32	add_approvalworkflowstageresponse
+544	Can change Approval Workflow Stage Response	32	change_approvalworkflowstageresponse
+545	Can delete Approval Workflow Stage Response	32	delete_approvalworkflowstageresponse
+546	Can view Approval Workflow Stage Response	32	view_approvalworkflowstageresponse
+547	Can add Approval Workflow Stage Definition	34	add_approvalworkflowstagedefinition
+548	Can change Approval Workflow Stage Definition	34	change_approvalworkflowstagedefinition
+549	Can delete Approval Workflow Stage Definition	34	delete_approvalworkflowstagedefinition
+550	Can view Approval Workflow Stage Definition	34	view_approvalworkflowstagedefinition
+551	Can add job console entry	152	add_jobconsoleentry
+552	Can change job console entry	152	change_jobconsoleentry
+553	Can delete job console entry	152	delete_jobconsoleentry
+554	Can view job console entry	152	view_jobconsoleentry
+555	Can add IP address	6	add_ipaddress
+556	Can change IP address	6	change_ipaddress
+557	Can delete IP address	6	delete_ipaddress
+558	Can view IP address	6	view_ipaddress
+559	Can add prefix	7	add_prefix
+560	Can change prefix	7	change_prefix
+561	Can delete prefix	7	delete_prefix
+562	Can view prefix	7	view_prefix
+563	Can add RIR	153	add_rir
+564	Can change RIR	153	change_rir
+565	Can delete RIR	153	delete_rir
+566	Can view RIR	153	view_rir
+567	Can add route target	154	add_routetarget
+568	Can change route target	154	change_routetarget
+569	Can delete route target	154	delete_routetarget
+570	Can view route target	154	view_routetarget
+571	Can add VRF	28	add_vrf
+572	Can change VRF	28	change_vrf
+573	Can delete VRF	28	delete_vrf
+574	Can view VRF	28	view_vrf
+575	Can add VLAN group	155	add_vlangroup
+576	Can change VLAN group	155	change_vlangroup
+577	Can delete VLAN group	155	delete_vlangroup
+578	Can view VLAN group	155	view_vlangroup
+579	Can add VLAN	8	add_vlan
+580	Can change VLAN	8	change_vlan
+581	Can delete VLAN	8	delete_vlan
+582	Can view VLAN	8	view_vlan
+583	Can add service	156	add_service
+584	Can change service	156	change_service
+585	Can delete service	156	delete_service
+586	Can view service	156	view_service
+587	Can add IP Address Assignment	157	add_ipaddresstointerface
+588	Can change IP Address Assignment	157	change_ipaddresstointerface
+589	Can delete IP Address Assignment	157	delete_ipaddresstointerface
+590	Can view IP Address Assignment	157	view_ipaddresstointerface
+591	Can add VRF-prefix assignment	158	add_vrfprefixassignment
+592	Can change VRF-prefix assignment	158	change_vrfprefixassignment
+593	Can delete VRF-prefix assignment	158	delete_vrfprefixassignment
+594	Can view VRF-prefix assignment	158	view_vrfprefixassignment
+595	Can add VRF-device assignment	159	add_vrfdeviceassignment
+596	Can change VRF-device assignment	159	change_vrfdeviceassignment
+597	Can delete VRF-device assignment	159	delete_vrfdeviceassignment
+598	Can view VRF-device assignment	159	view_vrfdeviceassignment
+599	Can add namespace	160	add_namespace
+600	Can change namespace	160	change_namespace
+601	Can delete namespace	160	delete_namespace
+602	Can view namespace	160	view_namespace
+603	Can add vlan location assignment	161	add_vlanlocationassignment
+604	Can change vlan location assignment	161	change_vlanlocationassignment
+605	Can delete vlan location assignment	161	delete_vlanlocationassignment
+606	Can view vlan location assignment	161	view_vlanlocationassignment
+607	Can add prefix location assignment	162	add_prefixlocationassignment
+608	Can change prefix location assignment	162	change_prefixlocationassignment
+609	Can delete prefix location assignment	162	delete_prefixlocationassignment
+610	Can view prefix location assignment	162	view_prefixlocationassignment
+611	Can add Certificate Profile	163	add_certificateprofile
+612	Can change Certificate Profile	163	change_certificateprofile
+613	Can delete Certificate Profile	163	delete_certificateprofile
+614	Can view Certificate Profile	163	view_certificateprofile
+615	Can add Health Check Monitor	164	add_healthcheckmonitor
+616	Can change Health Check Monitor	164	change_healthcheckmonitor
+617	Can delete Health Check Monitor	164	delete_healthcheckmonitor
+618	Can view Health Check Monitor	164	view_healthcheckmonitor
+619	Can add Load Balancer Pool	165	add_loadbalancerpool
+620	Can change Load Balancer Pool	165	change_loadbalancerpool
+621	Can delete Load Balancer Pool	165	delete_loadbalancerpool
+622	Can view Load Balancer Pool	165	view_loadbalancerpool
+623	Can add Load Balancer Pool Member	36	add_loadbalancerpoolmember
+624	Can change Load Balancer Pool Member	36	change_loadbalancerpoolmember
+625	Can delete Load Balancer Pool Member	36	delete_loadbalancerpoolmember
+626	Can view Load Balancer Pool Member	36	view_loadbalancerpoolmember
+627	Can add Virtual Server	166	add_virtualserver
+628	Can change Virtual Server	166	change_virtualserver
+629	Can delete Virtual Server	166	delete_virtualserver
+630	Can view Virtual Server	166	view_virtualserver
+631	Can add virtual server certificate profile assignment	167	add_virtualservercertificateprofileassignment
+632	Can change virtual server certificate profile assignment	167	change_virtualservercertificateprofileassignment
+633	Can delete virtual server certificate profile assignment	167	delete_virtualservercertificateprofileassignment
+634	Can view virtual server certificate profile assignment	167	view_virtualservercertificateprofileassignment
+635	Can add load balancer pool member certificate profile assignment	168	add_loadbalancerpoolmembercertificateprofileassignment
+636	Can change load balancer pool member certificate profile assignment	168	change_loadbalancerpoolmembercertificateprofileassignment
+637	Can delete load balancer pool member certificate profile assignment	168	delete_loadbalancerpoolmembercertificateprofileassignment
+638	Can view load balancer pool member certificate profile assignment	168	view_loadbalancerpoolmembercertificateprofileassignment
+639	Can add tenant group	169	add_tenantgroup
+640	Can change tenant group	169	change_tenantgroup
+641	Can delete tenant group	169	delete_tenantgroup
+642	Can view tenant group	169	view_tenantgroup
+643	Can add tenant	170	add_tenant
+644	Can change tenant	170	change_tenant
+645	Can delete tenant	170	delete_tenant
+646	Can view tenant	170	view_tenant
+647	Can add user	171	add_user
+648	Can change user	171	change_user
+649	Can delete user	171	delete_user
+650	Can view user	171	view_user
+651	Can add Group	172	add_admingroup
+652	Can change Group	172	change_admingroup
+653	Can delete Group	172	delete_admingroup
+654	Can view Group	172	view_admingroup
+655	Can add token	173	add_token
+656	Can change token	173	change_token
+657	Can delete token	173	delete_token
+658	Can view token	173	view_token
+659	Can add permission	174	add_objectpermission
+660	Can change permission	174	change_objectpermission
+661	Can delete permission	174	delete_objectpermission
+662	Can view permission	174	view_objectpermission
+663	Can add cluster	175	add_cluster
+664	Can change cluster	175	change_cluster
+665	Can delete cluster	175	delete_cluster
+666	Can view cluster	175	view_cluster
+667	Can add cluster group	176	add_clustergroup
+668	Can change cluster group	176	change_clustergroup
+669	Can delete cluster group	176	delete_clustergroup
+670	Can view cluster group	176	view_clustergroup
+671	Can add cluster type	177	add_clustertype
+672	Can change cluster type	177	change_clustertype
+673	Can delete cluster type	177	delete_clustertype
+674	Can view cluster type	177	view_clustertype
+675	Can add virtual machine	9	add_virtualmachine
+676	Can change virtual machine	9	change_virtualmachine
+677	Can delete virtual machine	9	delete_virtualmachine
+678	Can view virtual machine	9	view_virtualmachine
+679	Can add VM interface	12	add_vminterface
+680	Can change VM interface	12	change_vminterface
+681	Can delete VM interface	12	delete_vminterface
+682	Can view VM interface	12	view_vminterface
+683	Can add VPN	178	add_vpn
+684	Can change VPN	178	change_vpn
+685	Can delete VPN	178	delete_vpn
+686	Can view VPN	178	view_vpn
+687	Can add VPN Phase 1 Policy	179	add_vpnphase1policy
+688	Can change VPN Phase 1 Policy	179	change_vpnphase1policy
+689	Can delete VPN Phase 1 Policy	179	delete_vpnphase1policy
+690	Can view VPN Phase 1 Policy	179	view_vpnphase1policy
+691	Can add VPN Phase 2 Policy	180	add_vpnphase2policy
+692	Can change VPN Phase 2 Policy	180	change_vpnphase2policy
+693	Can delete VPN Phase 2 Policy	180	delete_vpnphase2policy
+694	Can view VPN Phase 2 Policy	180	view_vpnphase2policy
+695	Can add VPN Profile	181	add_vpnprofile
+696	Can change VPN Profile	181	change_vpnprofile
+697	Can delete VPN Profile	181	delete_vpnprofile
+698	Can view VPN Profile	181	view_vpnprofile
+699	Can add VPN Tunnel Endpoint	38	add_vpntunnelendpoint
+700	Can change VPN Tunnel Endpoint	38	change_vpntunnelendpoint
+701	Can delete VPN Tunnel Endpoint	38	delete_vpntunnelendpoint
+702	Can view VPN Tunnel Endpoint	38	view_vpntunnelendpoint
+703	Can add VPN Tunnel	37	add_vpntunnel
+704	Can change VPN Tunnel	37	change_vpntunnel
+705	Can delete VPN Tunnel	37	delete_vpntunnel
+706	Can view VPN Tunnel	37	view_vpntunnel
+707	Can add vpn profile phase2 policy assignment	182	add_vpnprofilephase2policyassignment
+708	Can change vpn profile phase2 policy assignment	182	change_vpnprofilephase2policyassignment
+709	Can delete vpn profile phase2 policy assignment	182	delete_vpnprofilephase2policyassignment
+710	Can view vpn profile phase2 policy assignment	182	view_vpnprofilephase2policyassignment
+711	Can add vpn profile phase1 policy assignment	183	add_vpnprofilephase1policyassignment
+712	Can change vpn profile phase1 policy assignment	183	change_vpnprofilephase1policyassignment
+713	Can delete vpn profile phase1 policy assignment	183	delete_vpnprofilephase1policyassignment
+714	Can view vpn profile phase1 policy assignment	183	view_vpnprofilephase1policyassignment
+715	Can add VPN Termination	184	add_vpntermination
+716	Can change VPN Termination	184	change_vpntermination
+717	Can delete VPN Termination	184	delete_vpntermination
+718	Can view VPN Termination	184	view_vpntermination
+719	Can add wireless network	185	add_wirelessnetwork
+720	Can change wireless network	185	change_wirelessnetwork
+721	Can delete wireless network	185	delete_wirelessnetwork
+722	Can view wireless network	185	view_wirelessnetwork
+723	Can add supported data rate	186	add_supporteddatarate
+724	Can change supported data rate	186	change_supporteddatarate
+725	Can delete supported data rate	186	delete_supporteddatarate
+726	Can view supported data rate	186	view_supporteddatarate
+727	Can add radio profile	187	add_radioprofile
+728	Can change radio profile	187	change_radioprofile
+729	Can delete radio profile	187	delete_radioprofile
+730	Can view radio profile	187	view_radioprofile
+731	Can add controller managed device group wireless network assignment	188	add_controllermanageddevicegroupwirelessnetworkassignment
+732	Can change controller managed device group wireless network assignment	188	change_controllermanageddevicegroupwirelessnetworkassignment
+733	Can delete controller managed device group wireless network assignment	188	delete_controllermanageddevicegroupwirelessnetworkassignment
+734	Can view controller managed device group wireless network assignment	188	view_controllermanageddevicegroupwirelessnetworkassignment
+735	Can add controller managed device group radio profile assignment	189	add_controllermanageddevicegroupradioprofileassignment
+736	Can change controller managed device group radio profile assignment	189	change_controllermanageddevicegroupradioprofileassignment
+737	Can delete controller managed device group radio profile assignment	189	delete_controllermanageddevicegroupradioprofileassignment
+738	Can view controller managed device group radio profile assignment	189	view_controllermanageddevicegroupradioprofileassignment
+739	Can add profile	190	add_profile
+740	Can change profile	190	change_profile
+741	Can delete profile	190	delete_profile
+742	Can view profile	190	view_profile
+743	Can add request	191	add_request
+744	Can change request	191	change_request
+745	Can delete request	191	delete_request
+746	Can view request	191	view_request
+747	Can add response	192	add_response
+748	Can change response	192	change_response
+749	Can delete response	192	delete_response
+750	Can view response	192	view_response
+751	Can add sql query	193	add_sqlquery
+752	Can change sql query	193	change_sqlquery
+753	Can delete sql query	193	delete_sqlquery
+754	Can view sql query	193	view_sqlquery
 \.
 
 
@@ -6161,7 +6096,7 @@ COPY public.circuits_circuit (id, created, last_updated, _custom_field_data, cid
 -- Data for Name: circuits_circuittermination; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.circuits_circuittermination (id, term_side, port_speed, upstream_speed, xconnect_id, pp_info, description, circuit_id, provider_network_id, _custom_field_data, created, last_updated, location_id, cloud_network_id) FROM stdin;
+COPY public.circuits_circuittermination (id, _cable_peer_id, term_side, port_speed, upstream_speed, xconnect_id, pp_info, description, _cable_peer_type_id, _path_id, cable_id, circuit_id, provider_network_id, _custom_field_data, created, last_updated, location_id, cloud_network_id) FROM stdin;
 \.
 
 
@@ -6298,7 +6233,7 @@ COPY public.data_validation_uniquerule (id, created, last_updated, _custom_field
 -- Data for Name: dcim_cable; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_cable (id, created, last_updated, _custom_field_data, type, label, color, length, length_unit, _abs_length, status_id, cable_type_id) FROM stdin;
+COPY public.dcim_cable (id, created, last_updated, _custom_field_data, termination_a_id, termination_b_id, type, label, color, length, length_unit, _abs_length, _termination_a_device_id, _termination_b_device_id, status_id, termination_a_type_id, termination_b_type_id) FROM stdin;
 \.
 
 
@@ -6306,27 +6241,7 @@ COPY public.dcim_cable (id, created, last_updated, _custom_field_data, type, lab
 -- Data for Name: dcim_cablepath; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_cablepath (id, origin_id, destination_id, path, is_active, is_split, destination_type_id, origin_type_id, peer_connector, destination_fans_out, origin_fans_out) FROM stdin;
-\.
-
-
---
--- Data for Name: dcim_cabletocabletermination; Type: TABLE DATA; Schema: public; Owner: nautobot
---
-
-COPY public.dcim_cabletocabletermination (id, cable_end, connector, cable_id, circuit_termination_id, console_port_id, console_server_port_id, front_port_id, interface_id, power_feed_id, power_outlet_id, power_port_id, rear_port_id) FROM stdin;
-\.
-
-
---
--- Data for Name: dcim_cabletype; Type: TABLE DATA; Schema: public; Owner: nautobot
---
-
-COPY public.dcim_cabletype (id, created, last_updated, _custom_field_data, name, description, manufacturer_id, part_number, has_embedded_transceivers, a_connectors, b_connectors, total_lanes, mapping, is_shuffle, strands_per_lane, polarity_method) FROM stdin;
-a36aebb1-b1fc-467c-bec3-6f783b5cf1c4	2026-09-21 09:49:47.059858+00	2026-09-21 09:49:47.059875+00	{}	1x2 Breakout	1 trunk connector broken out to 2 individual legs	\N		f	1	2	2	[{"label": "1", "a_position": 1, "b_position": 1, "a_connector": 1, "b_connector": 1}, {"label": "2", "a_position": 2, "b_position": 1, "a_connector": 1, "b_connector": 2}]	f	1	
-32e2efe8-b92e-43c7-a33a-14a8ca739dc1	2026-09-21 09:49:47.062522+00	2026-09-21 09:49:47.062536+00	{}	1x4 Breakout	1 trunk connector broken out to 4 individual legs	\N		f	1	4	4	[{"label": "1", "a_position": 1, "b_position": 1, "a_connector": 1, "b_connector": 1}, {"label": "2", "a_position": 2, "b_position": 1, "a_connector": 1, "b_connector": 2}, {"label": "3", "a_position": 3, "b_position": 1, "a_connector": 1, "b_connector": 3}, {"label": "4", "a_position": 4, "b_position": 1, "a_connector": 1, "b_connector": 4}]	f	1	
-1e357d41-426d-4b08-835f-474dca209cc4	2026-09-21 09:49:47.06452+00	2026-09-21 09:49:47.064532+00	{}	1x6 Breakout	1 trunk connector broken out to 6 individual legs	\N		f	1	6	6	[{"label": "1", "a_position": 1, "b_position": 1, "a_connector": 1, "b_connector": 1}, {"label": "2", "a_position": 2, "b_position": 1, "a_connector": 1, "b_connector": 2}, {"label": "3", "a_position": 3, "b_position": 1, "a_connector": 1, "b_connector": 3}, {"label": "4", "a_position": 4, "b_position": 1, "a_connector": 1, "b_connector": 4}, {"label": "5", "a_position": 5, "b_position": 1, "a_connector": 1, "b_connector": 5}, {"label": "6", "a_position": 6, "b_position": 1, "a_connector": 1, "b_connector": 6}]	f	1	
-e8775c11-4464-4b6d-8aef-3b5e26e73d5e	2026-09-21 09:49:47.066318+00	2026-09-21 09:49:47.066327+00	{}	1x8 Breakout	1 trunk connector broken out to 8 individual legs	\N		f	1	8	8	[{"label": "1", "a_position": 1, "b_position": 1, "a_connector": 1, "b_connector": 1}, {"label": "2", "a_position": 2, "b_position": 1, "a_connector": 1, "b_connector": 2}, {"label": "3", "a_position": 3, "b_position": 1, "a_connector": 1, "b_connector": 3}, {"label": "4", "a_position": 4, "b_position": 1, "a_connector": 1, "b_connector": 4}, {"label": "5", "a_position": 5, "b_position": 1, "a_connector": 1, "b_connector": 5}, {"label": "6", "a_position": 6, "b_position": 1, "a_connector": 1, "b_connector": 6}, {"label": "7", "a_position": 7, "b_position": 1, "a_connector": 1, "b_connector": 7}, {"label": "8", "a_position": 8, "b_position": 1, "a_connector": 1, "b_connector": 8}]	f	1	
+COPY public.dcim_cablepath (id, origin_id, destination_id, path, is_active, is_split, destination_type_id, origin_type_id) FROM stdin;
 \.
 
 
@@ -6334,7 +6249,7 @@ e8775c11-4464-4b6d-8aef-3b5e26e73d5e	2026-09-21 09:49:47.066318+00	2026-09-21 09
 -- Data for Name: dcim_consoleport; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_consoleport (id, _custom_field_data, name, _name, label, description, type, device_id, created, last_updated, module_id) FROM stdin;
+COPY public.dcim_consoleport (id, _custom_field_data, name, _name, label, description, _cable_peer_id, type, _cable_peer_type_id, _path_id, cable_id, device_id, created, last_updated, module_id) FROM stdin;
 \.
 
 
@@ -6350,7 +6265,7 @@ COPY public.dcim_consoleporttemplate (id, _custom_field_data, name, _name, label
 -- Data for Name: dcim_consoleserverport; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_consoleserverport (id, _custom_field_data, name, _name, label, description, type, device_id, created, last_updated, module_id) FROM stdin;
+COPY public.dcim_consoleserverport (id, _custom_field_data, name, _name, label, description, _cable_peer_id, type, _cable_peer_type_id, _path_id, cable_id, device_id, created, last_updated, module_id) FROM stdin;
 \.
 
 
@@ -6454,7 +6369,7 @@ COPY public.dcim_devicetypetosoftwareimagefile (id, device_type_id, software_ima
 -- Data for Name: dcim_frontport; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_frontport (id, _custom_field_data, name, _name, label, description, type, rear_port_position, device_id, rear_port_id, created, last_updated, module_id) FROM stdin;
+COPY public.dcim_frontport (id, _custom_field_data, name, _name, label, description, _cable_peer_id, type, rear_port_position, _cable_peer_type_id, cable_id, device_id, rear_port_id, created, last_updated, module_id) FROM stdin;
 \.
 
 
@@ -6470,7 +6385,7 @@ COPY public.dcim_frontporttemplate (id, _custom_field_data, name, _name, label, 
 -- Data for Name: dcim_interface; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_interface (id, _custom_field_data, name, label, description, enabled, mac_address, mtu, mode, _name, type, mgmt_only, device_id, lag_id, untagged_vlan_id, status_id, parent_interface_id, bridge_id, created, last_updated, vrf_id, role_id, module_id, duplex, speed, port_type, breakout_position) FROM stdin;
+COPY public.dcim_interface (id, _custom_field_data, name, label, description, _cable_peer_id, enabled, mac_address, mtu, mode, _name, type, mgmt_only, _cable_peer_type_id, _path_id, cable_id, device_id, lag_id, untagged_vlan_id, status_id, parent_interface_id, bridge_id, created, last_updated, vrf_id, role_id, module_id, duplex, speed, port_type) FROM stdin;
 \.
 
 
@@ -6614,7 +6529,7 @@ COPY public.dcim_platform (id, created, last_updated, _custom_field_data, name, 
 -- Data for Name: dcim_powerfeed; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_powerfeed (id, created, last_updated, _custom_field_data, name, type, supply, phase, voltage, amperage, max_utilization, available_power, comments, power_panel_id, rack_id, status_id, breaker_pole_count, breaker_position, destination_panel_id, power_path) FROM stdin;
+COPY public.dcim_powerfeed (id, created, last_updated, _custom_field_data, _cable_peer_id, name, type, supply, phase, voltage, amperage, max_utilization, available_power, comments, _cable_peer_type_id, _path_id, cable_id, power_panel_id, rack_id, status_id, breaker_pole_count, breaker_position, destination_panel_id, power_path) FROM stdin;
 \.
 
 
@@ -6622,7 +6537,7 @@ COPY public.dcim_powerfeed (id, created, last_updated, _custom_field_data, name,
 -- Data for Name: dcim_poweroutlet; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_poweroutlet (id, _custom_field_data, name, _name, label, description, type, feed_leg, device_id, power_port_id, created, last_updated, module_id) FROM stdin;
+COPY public.dcim_poweroutlet (id, _custom_field_data, name, _name, label, description, _cable_peer_id, type, feed_leg, _cable_peer_type_id, _path_id, cable_id, device_id, power_port_id, created, last_updated, module_id) FROM stdin;
 \.
 
 
@@ -6646,7 +6561,7 @@ COPY public.dcim_powerpanel (id, created, last_updated, _custom_field_data, name
 -- Data for Name: dcim_powerport; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_powerport (id, _custom_field_data, name, _name, label, description, type, maximum_draw, allocated_draw, device_id, created, last_updated, module_id, power_factor) FROM stdin;
+COPY public.dcim_powerport (id, _custom_field_data, name, _name, label, description, _cable_peer_id, type, maximum_draw, allocated_draw, _cable_peer_type_id, _path_id, cable_id, device_id, created, last_updated, module_id, power_factor) FROM stdin;
 \.
 
 
@@ -6686,7 +6601,7 @@ COPY public.dcim_rackreservation (id, created, last_updated, _custom_field_data,
 -- Data for Name: dcim_rearport; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_rearport (id, _custom_field_data, name, _name, label, description, type, positions, device_id, created, last_updated, module_id) FROM stdin;
+COPY public.dcim_rearport (id, _custom_field_data, name, _name, label, description, _cable_peer_id, type, positions, _cable_peer_type_id, cable_id, device_id, created, last_updated, module_id) FROM stdin;
 \.
 
 
@@ -6726,7 +6641,7 @@ COPY public.dcim_virtualchassis (id, created, last_updated, _custom_field_data, 
 -- Data for Name: dcim_virtualdevicecontext; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.dcim_virtualdevicecontext (id, created, last_updated, _custom_field_data, name, identifier, description, device_id, primary_ip4_id, primary_ip6_id, status_id, role_id, tenant_id, controller_managed_device_group_id) FROM stdin;
+COPY public.dcim_virtualdevicecontext (id, created, last_updated, _custom_field_data, name, identifier, description, device_id, primary_ip4_id, primary_ip6_id, status_id, role_id, tenant_id) FROM stdin;
 \.
 
 
@@ -6850,167 +6765,164 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 33	extras	approvalworkflowdefinition
 34	extras	approvalworkflowstagedefinition
 35	extras	scheduledjob
-36	ipam	ipaddressrange
-37	load_balancers	loadbalancerpoolmember
-38	vpn	vpntunnel
-39	vpn	vpntunnelendpoint
-40	auth	permission
-41	auth	group
-42	contenttypes	contenttype
-43	sessions	session
-44	social_django	association
-45	social_django	code
-46	social_django	nonce
-47	social_django	usersocialauth
-48	social_django	partial
-49	taggit	tag
-50	taggit	taggeditem
-51	constance	constance
-52	extras	dynamicgroup
-53	admin	logentry
-54	django_celery_beat	crontabschedule
-55	django_celery_beat	intervalschedule
-56	django_celery_beat	periodictask
-57	django_celery_beat	periodictasks
-58	django_celery_beat	solarschedule
-59	django_celery_beat	clockedschedule
-60	django_celery_results	taskresult
-61	django_celery_results	chordcounter
-62	django_celery_results	groupresult
-63	circuits	circuittermination
-64	circuits	circuittype
-65	circuits	provider
-66	circuits	providernetwork
-67	cloud	cloudaccount
-68	cloud	cloudnetwork
-69	cloud	cloudresourcetype
-70	cloud	cloudservice
-71	cloud	cloudnetworkprefixassignment
-72	cloud	cloudservicenetworkassignment
-73	data_validation	uniquevalidationrule
-74	data_validation	requiredvalidationrule
-75	data_validation	regularexpressionvalidationrule
-76	data_validation	minmaxvalidationrule
-77	data_validation	datacompliance
-78	dcim	cablepath
-79	dcim	consoleport
-80	dcim	consoleporttemplate
-81	dcim	consoleserverport
-82	dcim	consoleserverporttemplate
-83	dcim	devicebay
-84	dcim	devicebaytemplate
-85	dcim	devicetype
-86	dcim	frontport
-87	dcim	frontporttemplate
-88	dcim	interfacetemplate
-89	dcim	inventoryitem
-90	dcim	manufacturer
-91	dcim	platform
-92	dcim	poweroutlet
-93	dcim	poweroutlettemplate
-94	dcim	powerpanel
-95	dcim	powerport
-96	dcim	powerporttemplate
-97	dcim	rackgroup
-98	dcim	rackreservation
-99	dcim	rearport
-100	dcim	rearporttemplate
-101	dcim	virtualchassis
-102	dcim	locationtype
-103	dcim	interfaceredundancygroupassociation
-104	dcim	devicefamily
-105	dcim	devicetypetosoftwareimagefile
-106	dcim	controllermanageddevicegroup
-107	dcim	modulebay
-108	dcim	modulebaytemplate
-109	dcim	moduletype
-110	dcim	interfacevdcassignment
-111	dcim	modulefamily
-112	dcim	deviceclusterassignment
-113	dcim	cabletype
-114	dcim	cabletocabletermination
-115	extras	configcontext
-116	extras	customfieldchoice
-117	extras	customlink
-118	extras	exporttemplate
-119	extras	gitrepository
-120	extras	imageattachment
-121	extras	jobresult
-122	extras	relationship
-123	extras	tag
-124	extras	webhook
-125	extras	taggeditem
-126	extras	status
-127	extras	relationshipassociation
-128	extras	objectchange
-129	extras	graphqlquery
-130	extras	configcontextschema
-131	extras	computedfield
-132	extras	fileattachment
-133	extras	fileproxy
-134	extras	healthchecktestmodel
-135	extras	scheduledjobs
-136	extras	secret
-137	extras	secretsgroup
-138	extras	secretsgroupassociation
-139	extras	joblogentry
-140	extras	dynamicgroupmembership
-141	extras	note
-142	extras	jobhook
-143	extras	jobbutton
-144	extras	externalintegration
-145	extras	contact
-146	extras	team
-147	extras	staticgroupassociation
-148	extras	metadatatype
-149	extras	objectmetadata
-150	extras	metadatachoice
-151	extras	savedview
-152	extras	usersavedviewassociation
-153	extras	jobqueue
-154	extras	jobqueueassignment
-155	extras	jobconsoleentry
-156	ipam	rir
-157	ipam	routetarget
-158	ipam	vlangroup
-159	ipam	service
-160	ipam	ipaddresstointerface
-161	ipam	vrfprefixassignment
-162	ipam	vrfdeviceassignment
-163	ipam	namespace
-164	ipam	vlanlocationassignment
-165	ipam	prefixlocationassignment
-166	load_balancers	certificateprofile
-167	load_balancers	healthcheckmonitor
-168	load_balancers	loadbalancerpool
-169	load_balancers	virtualserver
-170	load_balancers	virtualservercertificateprofileassignment
-171	load_balancers	loadbalancerpoolmembercertificateprofileassignment
-172	tenancy	tenantgroup
-173	tenancy	tenant
-174	users	user
-175	users	admingroup
-176	users	token
-177	users	objectpermission
-178	virtualization	cluster
-179	virtualization	clustergroup
-180	virtualization	clustertype
-181	vpn	vpn
-182	vpn	vpnphase1policy
-183	vpn	vpnphase2policy
-184	vpn	vpnprofile
-185	vpn	vpnprofilephase2policyassignment
-186	vpn	vpnprofilephase1policyassignment
-187	vpn	vpntermination
-188	wireless	wirelessnetwork
-189	wireless	supporteddatarate
-190	wireless	radioprofile
-191	wireless	controllermanageddevicegroupwirelessnetworkassignment
-192	wireless	controllermanageddevicegroupradioprofileassignment
-193	silk	profile
-194	silk	request
-195	silk	response
-196	silk	sqlquery
+36	load_balancers	loadbalancerpoolmember
+37	vpn	vpntunnel
+38	vpn	vpntunnelendpoint
+39	auth	permission
+40	auth	group
+41	contenttypes	contenttype
+42	sessions	session
+43	social_django	association
+44	social_django	code
+45	social_django	nonce
+46	social_django	usersocialauth
+47	social_django	partial
+48	taggit	tag
+49	taggit	taggeditem
+50	constance	constance
+51	extras	dynamicgroup
+52	admin	logentry
+53	django_celery_beat	crontabschedule
+54	django_celery_beat	intervalschedule
+55	django_celery_beat	periodictask
+56	django_celery_beat	periodictasks
+57	django_celery_beat	solarschedule
+58	django_celery_beat	clockedschedule
+59	django_celery_results	taskresult
+60	django_celery_results	chordcounter
+61	django_celery_results	groupresult
+62	circuits	circuittermination
+63	circuits	circuittype
+64	circuits	provider
+65	circuits	providernetwork
+66	cloud	cloudaccount
+67	cloud	cloudnetwork
+68	cloud	cloudresourcetype
+69	cloud	cloudservice
+70	cloud	cloudnetworkprefixassignment
+71	cloud	cloudservicenetworkassignment
+72	data_validation	uniquevalidationrule
+73	data_validation	requiredvalidationrule
+74	data_validation	regularexpressionvalidationrule
+75	data_validation	minmaxvalidationrule
+76	data_validation	datacompliance
+77	dcim	cablepath
+78	dcim	consoleport
+79	dcim	consoleporttemplate
+80	dcim	consoleserverport
+81	dcim	consoleserverporttemplate
+82	dcim	devicebay
+83	dcim	devicebaytemplate
+84	dcim	devicetype
+85	dcim	frontport
+86	dcim	frontporttemplate
+87	dcim	interfacetemplate
+88	dcim	inventoryitem
+89	dcim	manufacturer
+90	dcim	platform
+91	dcim	poweroutlet
+92	dcim	poweroutlettemplate
+93	dcim	powerpanel
+94	dcim	powerport
+95	dcim	powerporttemplate
+96	dcim	rackgroup
+97	dcim	rackreservation
+98	dcim	rearport
+99	dcim	rearporttemplate
+100	dcim	virtualchassis
+101	dcim	locationtype
+102	dcim	interfaceredundancygroupassociation
+103	dcim	devicefamily
+104	dcim	devicetypetosoftwareimagefile
+105	dcim	controllermanageddevicegroup
+106	dcim	modulebay
+107	dcim	modulebaytemplate
+108	dcim	moduletype
+109	dcim	interfacevdcassignment
+110	dcim	modulefamily
+111	dcim	deviceclusterassignment
+112	extras	configcontext
+113	extras	customfieldchoice
+114	extras	customlink
+115	extras	exporttemplate
+116	extras	gitrepository
+117	extras	imageattachment
+118	extras	jobresult
+119	extras	relationship
+120	extras	tag
+121	extras	webhook
+122	extras	taggeditem
+123	extras	status
+124	extras	relationshipassociation
+125	extras	objectchange
+126	extras	graphqlquery
+127	extras	configcontextschema
+128	extras	computedfield
+129	extras	fileattachment
+130	extras	fileproxy
+131	extras	healthchecktestmodel
+132	extras	scheduledjobs
+133	extras	secret
+134	extras	secretsgroup
+135	extras	secretsgroupassociation
+136	extras	joblogentry
+137	extras	dynamicgroupmembership
+138	extras	note
+139	extras	jobhook
+140	extras	jobbutton
+141	extras	externalintegration
+142	extras	contact
+143	extras	team
+144	extras	staticgroupassociation
+145	extras	metadatatype
+146	extras	objectmetadata
+147	extras	metadatachoice
+148	extras	savedview
+149	extras	usersavedviewassociation
+150	extras	jobqueue
+151	extras	jobqueueassignment
+152	extras	jobconsoleentry
+153	ipam	rir
+154	ipam	routetarget
+155	ipam	vlangroup
+156	ipam	service
+157	ipam	ipaddresstointerface
+158	ipam	vrfprefixassignment
+159	ipam	vrfdeviceassignment
+160	ipam	namespace
+161	ipam	vlanlocationassignment
+162	ipam	prefixlocationassignment
+163	load_balancers	certificateprofile
+164	load_balancers	healthcheckmonitor
+165	load_balancers	loadbalancerpool
+166	load_balancers	virtualserver
+167	load_balancers	virtualservercertificateprofileassignment
+168	load_balancers	loadbalancerpoolmembercertificateprofileassignment
+169	tenancy	tenantgroup
+170	tenancy	tenant
+171	users	user
+172	users	admingroup
+173	users	token
+174	users	objectpermission
+175	virtualization	cluster
+176	virtualization	clustergroup
+177	virtualization	clustertype
+178	vpn	vpn
+179	vpn	vpnphase1policy
+180	vpn	vpnphase2policy
+181	vpn	vpnprofile
+182	vpn	vpnprofilephase2policyassignment
+183	vpn	vpnprofilephase1policyassignment
+184	vpn	vpntermination
+185	wireless	wirelessnetwork
+186	wireless	supporteddatarate
+187	wireless	radioprofile
+188	wireless	controllermanageddevicegroupwirelessnetworkassignment
+189	wireless	controllermanageddevicegroupradioprofileassignment
+190	silk	profile
+191	silk	request
+192	silk	response
+193	silk	sqlquery
 \.
 
 
@@ -7019,477 +6931,466 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2026-09-21 09:46:34.383056+00
-2	contenttypes	0002_remove_content_type_name	2026-09-21 09:46:34.388888+00
-3	auth	0001_initial	2026-09-21 09:46:34.418727+00
-4	auth	0002_alter_permission_name_max_length	2026-09-21 09:46:34.423479+00
-5	auth	0003_alter_user_email_max_length	2026-09-21 09:46:34.428037+00
-6	auth	0004_alter_user_username_opts	2026-09-21 09:46:34.432557+00
-7	auth	0005_alter_user_last_login_null	2026-09-21 09:46:34.436887+00
-8	auth	0006_require_contenttypes_0002	2026-09-21 09:46:34.437907+00
-9	auth	0007_alter_validators_add_error_messages	2026-09-21 09:46:34.442493+00
-10	auth	0008_alter_user_username_max_length	2026-09-21 09:46:34.447046+00
-11	auth	0009_alter_user_last_name_max_length	2026-09-21 09:46:34.452436+00
-12	auth	0010_alter_group_name_max_length	2026-09-21 09:46:34.459404+00
-13	auth	0011_update_proxy_permissions	2026-09-21 09:46:34.464958+00
-14	auth	0012_alter_user_first_name_max_length	2026-09-21 09:46:34.469729+00
-15	users	0001_initial	2026-09-21 09:46:34.540818+00
-16	admin	0001_initial	2026-09-21 09:46:34.561776+00
-17	admin	0002_logentry_remove_auto_add	2026-09-21 09:46:34.570865+00
-18	admin	0003_logentry_add_action_flag_choices	2026-09-21 09:46:34.579787+00
-19	extras	0001_initial_part_1	2026-09-21 09:46:34.772432+00
-20	tenancy	0001_initial	2026-09-21 09:46:34.812864+00
-21	dcim	0001_initial_part_1	2026-09-21 09:46:35.000159+00
-22	dcim	0002_initial_part_2	2026-09-21 09:46:35.306472+00
-23	ipam	0001_initial_part_1	2026-09-21 09:46:35.5387+00
-24	extras	0002_initial_part_2	2026-09-21 09:46:35.911727+00
-25	dcim	0003_initial_part_3	2026-09-21 09:46:39.423709+00
-26	virtualization	0001_initial	2026-09-21 09:46:40.223313+00
-27	dcim	0004_initial_part_4	2026-09-21 09:46:44.382879+00
-28	extras	0003_initial_part_3	2026-09-21 09:46:45.856482+00
-29	ipam	0002_initial_part_2	2026-09-21 09:46:48.023004+00
-30	circuits	0001_initial_part_1	2026-09-21 09:46:48.050479+00
-31	circuits	0002_initial_part_2	2026-09-21 09:46:49.417642+00
-32	extras	0004_populate_default_status_records	2026-09-21 09:46:49.658495+00
-33	extras	0005_configcontext_device_types	2026-09-21 09:46:49.759442+00
-34	extras	0006_graphqlquery	2026-09-21 09:46:49.768684+00
-35	extras	0007_configcontextschema	2026-09-21 09:46:49.955013+00
-36	virtualization	0002_virtualmachine_local_context_schema	2026-09-21 09:46:50.046311+00
-37	virtualization	0003_vminterface_verbose_name	2026-09-21 09:46:50.102533+00
-38	virtualization	0004_auto_slug	2026-09-21 09:46:50.193423+00
-39	virtualization	0005_add_natural_indexing	2026-09-21 09:46:50.674843+00
-40	extras	0008_jobresult__custom_field_data	2026-09-21 09:46:50.724651+00
-41	extras	0009_computedfield	2026-09-21 09:46:50.824427+00
-42	extras	0010_change_cf_validation_max_min_field_to_bigint	2026-09-21 09:46:50.941647+00
-43	extras	0011_fileattachment_fileproxy	2026-09-21 09:46:51.001594+00
-44	extras	0012_healthchecktestmodel	2026-09-21 09:46:51.007261+00
-45	extras	0013_default_fallback_value_computedfield	2026-09-21 09:46:51.055183+00
-46	extras	0014_auto_slug	2026-09-21 09:46:51.294136+00
-47	extras	0015_scheduled_job	2026-09-21 09:46:51.483139+00
-48	extras	0016_secret	2026-09-21 09:46:52.159093+00
-49	extras	0017_joblogentry	2026-09-21 09:46:52.25769+00
-50	extras	0018_joblog_data_migration	2026-09-21 09:46:52.351081+00
-51	extras	0019_joblogentry__meta_options__related_name	2026-09-21 09:46:52.449524+00
-52	extras	0020_customfield_changelog	2026-09-21 09:46:52.553828+00
-53	extras	0021_customfield_changelog_data	2026-09-21 09:46:52.651866+00
-54	extras	0022_objectchange_object_datav2	2026-09-21 09:46:52.703038+00
-55	extras	0023_job_model	2026-09-21 09:46:53.444035+00
-56	extras	0024_job_data_migration	2026-09-21 09:46:53.543559+00
-57	extras	0025_add_advanced_ui_boolean_to_customfield_conputedfield_and_relationship	2026-09-21 09:46:53.676396+00
-58	extras	0026_job_add_gitrepository_fk	2026-09-21 09:46:53.889226+00
-59	extras	0027_job_gitrepository_data_migration	2026-09-21 09:46:53.983433+00
-60	extras	0028_job_reduce_source	2026-09-21 09:46:54.055721+00
-61	extras	0029_dynamicgroup	2026-09-21 09:46:54.45756+00
-62	extras	0030_webhook_alter_unique_together	2026-09-21 09:46:54.508476+00
-63	extras	0031_tag_content_types	2026-09-21 09:46:54.612975+00
-64	extras	0032_tag_content_types_data_migration	2026-09-21 09:46:54.721924+00
-65	extras	0033_add__optimized_indexing	2026-09-21 09:46:55.887598+00
-66	virtualization	0006_vminterface_status	2026-09-21 09:46:55.991205+00
-67	virtualization	0007_vminterface_status_data_migration	2026-09-21 09:46:56.114811+00
-68	virtualization	0008_vminterface_parent	2026-09-21 09:46:56.316087+00
-69	extras	0034_alter_fileattachment_mimetype	2026-09-21 09:46:56.323297+00
-70	extras	0035_scheduledjob_crontab	2026-09-21 09:46:56.34566+00
-71	extras	0036_job_add_has_sensitive_variables	2026-09-21 09:46:56.464281+00
-72	extras	0037_configcontextschema__remove_name_unique__create_constraint_unique_name_owner	2026-09-21 09:46:56.567117+00
-73	dcim	0005_device_local_context_schema	2026-09-21 09:46:56.671797+00
-74	dcim	0006_auto_slug	2026-09-21 09:46:57.569215+00
-75	dcim	0007_device_secrets_group	2026-09-21 09:46:57.673107+00
-76	dcim	0008_increase_all_serial_lengths	2026-09-21 09:46:57.882343+00
-77	dcim	0009_add_natural_indexing	2026-09-21 09:47:00.583869+00
-78	dcim	0010_interface_status	2026-09-21 09:47:00.692631+00
-79	dcim	0011_interface_status_data_migration	2026-09-21 09:47:00.816967+00
-80	dcim	0012_interface_parent_bridge	2026-09-21 09:47:01.473448+00
-81	dcim	0013_location_location_type	2026-09-21 09:47:02.18878+00
-82	virtualization	0009_cluster_location	2026-09-21 09:47:02.294813+00
-83	virtualization	0010_vminterface_mac_address_data_migration	2026-09-21 09:47:02.707681+00
-84	virtualization	0011_alter_vminterface_mac_address	2026-09-21 09:47:02.772094+00
-85	extras	0038_configcontext_locations	2026-09-21 09:47:02.891019+00
-86	extras	0039_objectchange__add_change_context	2026-09-21 09:47:03.006968+00
-87	extras	0040_dynamicgroup__dynamicgroupmembership	2026-09-21 09:47:03.223307+00
-88	extras	0041_jobresult_job_kwargs	2026-09-21 09:47:03.28006+00
-89	extras	0042_job__add_is_job_hook_receiver	2026-09-21 09:47:03.342851+00
-90	extras	0043_note	2026-09-21 09:47:03.462876+00
-91	extras	0044_add_job_hook	2026-09-21 09:47:03.584114+00
-92	extras	0045_add_custom_field_slug	2026-09-21 09:47:03.943599+00
-93	extras	0046_populate_custom_field_slug_label	2026-09-21 09:47:04.050904+00
-94	extras	0047_enforce_custom_field_slug	2026-09-21 09:47:04.105992+00
-95	extras	0048_alter_objectchange_change_context_detail	2026-09-21 09:47:04.164349+00
-96	extras	0049_alter_tag_slug	2026-09-21 09:47:04.267218+00
-97	extras	0050_customfield_grouping	2026-09-21 09:47:04.319517+00
-98	extras	0051_add_job_task_queues	2026-09-21 09:47:04.444198+00
-99	dcim	0014_location_status_data_migration	2026-09-21 09:47:04.565631+00
-100	dcim	0015_device_components__changeloggedmodel	2026-09-21 09:47:06.956088+00
-101	dcim	0016_device_components__timestamp_data_migration	2026-09-21 09:47:07.088983+00
-102	dcim	0017_locationtype_nestable	2026-09-21 09:47:07.147377+00
-103	dcim	0018_device_redundancy_group	2026-09-21 09:47:07.483649+00
-104	extras	0052_configcontext_device_redundancy_groups	2026-09-21 09:47:07.609786+00
-105	extras	0053_relationship_required_on	2026-09-21 09:47:07.670905+00
-106	extras	0054_scheduledjob_kwargs_request_user_change	2026-09-21 09:47:08.27686+00
-107	extras	0055_configcontext_dynamic_groups	2026-09-21 09:47:08.402453+00
-108	extras	0056_objectchange_add_reverse_time_idx	2026-09-21 09:47:08.464844+00
-109	extras	0057_jobbutton	2026-09-21 09:47:08.658864+00
-110	extras	0058_jobresult_add_time_status_idxs	2026-09-21 09:47:09.056177+00
-111	extras	0059_joblogentry_scheduledjob_webhook_data_migration	2026-09-21 09:47:09.702463+00
-112	extras	0060_alter_joblogentry_scheduledjob_webhook_fields	2026-09-21 09:47:09.813024+00
-113	extras	0061_role_and_alter_status	2026-09-21 09:47:10.01375+00
-114	extras	0062_collect_roles_from_related_apps_roles	2026-09-21 09:47:10.171466+00
-115	virtualization	0012_alter_virtualmachine_role_add_new_role	2026-09-21 09:47:10.389546+00
-116	virtualization	0013_migrate_virtualmachine_role_data	2026-09-21 09:47:10.503099+00
-117	virtualization	0014_rename_virtualmachine_roles	2026-09-21 09:47:11.105738+00
-118	extras	0063_alter_role_options	2026-09-21 09:47:11.163237+00
-119	extras	0064_alter_configcontext_and_add_new_role	2026-09-21 09:47:11.392652+00
-120	extras	0065_configcontext_data_migrations	2026-09-21 09:47:11.506841+00
-121	extras	0066_rename_configcontext_role	2026-09-21 09:47:11.730146+00
-122	virtualization	0015_rename_foreignkey_fields	2026-09-21 09:47:12.895585+00
-123	ipam	0003_remove_max_length	2026-09-21 09:47:13.700989+00
-124	ipam	0004_fixup_p2p_broadcast	2026-09-21 09:47:13.821575+00
-125	ipam	0005_auto_slug	2026-09-21 09:47:13.870493+00
-126	ipam	0006_ipaddress_nat_outside_list	2026-09-21 09:47:14.003147+00
-127	ipam	0007_add_natural_indexing	2026-09-21 09:47:14.95638+00
-128	ipam	0008_prefix_vlan_vlangroup_location	2026-09-21 09:47:15.301248+00
-129	ipam	0009_alter_vlan_name	2026-09-21 09:47:15.418079+00
-130	ipam	0010_alter_ipam_role_add_new_role	2026-09-21 09:47:16.434663+00
-131	ipam	0011_migrate_ipam_role_data	2026-09-21 09:47:16.561503+00
-132	ipam	0012_rename_ipam_roles	2026-09-21 09:47:17.204251+00
-133	ipam	0013_delete_role	2026-09-21 09:47:17.211505+00
-134	ipam	0014_rename_foreign_keys_and_related_names	2026-09-21 09:47:17.873717+00
-135	ipam	0015_prefix_add_type	2026-09-21 09:47:17.945598+00
-136	dcim	0019_device_redundancy_group_data_migration	2026-09-21 09:47:18.077497+00
-137	dcim	0020_increase_device_asset_tag_size_limit	2026-09-21 09:47:18.186715+00
-138	dcim	0021_platform_network_driver	2026-09-21 09:47:18.208192+00
-139	dcim	0022_interface_redundancy_group	2026-09-21 09:47:19.207442+00
-140	dcim	0023_interface_redundancy_group_data_migration	2026-09-21 09:47:19.339686+00
-141	dcim	0024_move_site_fields_to_location_model	2026-09-21 09:47:20.434852+00
-142	dcim	0025_mptt_to_tree_queries	2026-09-21 09:47:21.710319+00
-143	dcim	0026_interface_mac_address_data_migration	2026-09-21 09:47:21.824762+00
-144	dcim	0027_alter_interface_mac_address	2026-09-21 09:47:21.961199+00
-145	dcim	0028_alter_device_and_rack_role_add_new_role	2026-09-21 09:47:22.869142+00
-146	dcim	0029_device_and_rack_roles_data_migrations	2026-09-21 09:47:22.98895+00
-147	dcim	0030_rename_device_and_rack_role	2026-09-21 09:47:23.445249+00
-148	dcim	0031_remove_device_role_and_rack_role	2026-09-21 09:47:23.457543+00
-149	dcim	0032_rename_foreignkey_fields	2026-09-21 09:47:24.458681+00
-150	circuits	0003_auto_slug	2026-09-21 09:47:24.531911+00
-151	circuits	0004_increase_provider_account_length	2026-09-21 09:47:24.600222+00
-152	circuits	0005_providernetwork	2026-09-21 09:47:25.721242+00
-153	circuits	0006_cache_circuit_terminations	2026-09-21 09:47:25.843639+00
-154	circuits	0007_circuitterminations_primary_model	2026-09-21 09:47:26.209714+00
-155	circuits	0008_add_natural_indexing	2026-09-21 09:47:26.283342+00
-156	circuits	0009_circuittermination_location	2026-09-21 09:47:26.414439+00
-157	dcim	0033_add_tree_managers_and_foreign_keys_pre_data_migration	2026-09-21 09:47:27.194305+00
-158	dcim	0034_migrate_region_and_site_data_to_locations	2026-09-21 09:47:27.315302+00
-159	virtualization	0016_remove_site_foreign_key_from_cluster_class	2026-09-21 09:47:27.438866+00
-160	virtualization	0017_created_datetime	2026-09-21 09:47:27.799013+00
-161	extras	0067_migrate_job_result_status	2026-09-21 09:47:28.261029+00
-162	extras	0068_jobresult__add_celery_fields	2026-09-21 09:47:30.057002+00
-163	extras	0069_created_datetime	2026-09-21 09:47:32.267835+00
-164	virtualization	0018_related_name_changes	2026-09-21 09:47:32.915811+00
-165	ipam	0016_prefix_type_data_migration	2026-09-21 09:47:33.045063+00
-166	ipam	0017_prefix_remove_is_pool	2026-09-21 09:47:33.122437+00
-167	tenancy	0002_auto_slug	2026-09-21 09:47:33.692282+00
-168	tenancy	0003_mptt_to_tree_queries	2026-09-21 09:47:33.855054+00
-169	tenancy	0004_change_tree_manager_on_tree_models	2026-09-21 09:47:33.869322+00
-170	tenancy	0005_rename_foreign_keys_and_related_names	2026-09-21 09:47:34.056721+00
-171	dcim	0035_rename_path_end_point_related_name	2026-09-21 09:47:35.074415+00
-172	dcim	0036_remove_site_foreign_key_from_dcim_models	2026-09-21 09:47:36.967421+00
-173	ipam	0018_remove_site_foreign_key_from_ipam_models	2026-09-21 09:47:37.790363+00
-174	ipam	0019_created_datetime	2026-09-21 09:47:38.545077+00
-175	ipam	0020_related_name_changes	2026-09-21 09:47:39.55322+00
-176	ipam	0021_prefix_add_rir_and_date_allocated	2026-09-21 09:47:39.864419+00
-177	ipam	0022_aggregate_to_prefix_data_migration	2026-09-21 09:47:40.323319+00
-178	ipam	0023_delete_aggregate	2026-09-21 09:47:40.334704+00
-179	extras	0070_remove_site_and_region_attributes_from_config_context	2026-09-21 09:47:40.585456+00
-180	django_celery_results	0001_initial	2026-09-21 09:47:40.597748+00
-181	django_celery_results	0002_add_task_name_args_kwargs	2026-09-21 09:47:40.609752+00
-182	django_celery_results	0003_auto_20181106_1101	2026-09-21 09:47:40.615018+00
-183	django_celery_results	0004_auto_20190516_0412	2026-09-21 09:47:40.665744+00
-184	django_celery_results	0005_taskresult_worker	2026-09-21 09:47:40.673107+00
-185	django_celery_results	0006_taskresult_date_created	2026-09-21 09:47:40.799167+00
-186	tenancy	0006_created_datetime	2026-09-21 09:47:41.037088+00
-187	dcim	0037_created_datetime	2026-09-21 09:47:44.536755+00
-188	dcim	0038_fixup_fks_and_related_names	2026-09-21 09:47:50.975757+00
-189	dcim	0039_related_name_changes	2026-09-21 09:47:53.002172+00
-190	circuits	0010_rename_foreign_keys_and_related_names	2026-09-21 09:47:53.471976+00
-191	circuits	0011_remove_site_foreign_key_from_circuit_termination_class	2026-09-21 09:47:53.593343+00
-192	dcim	0040_remove_region_and_site	2026-09-21 09:47:54.393364+00
-193	ipam	0024_interface_to_ipaddress_m2m	2026-09-21 09:47:54.516771+00
-194	virtualization	0019_vminterface_ip_addresses_m2m	2026-09-21 09:47:54.626323+00
-195	virtualization	0020_remove_clustergroup_clustertype_slug	2026-09-21 09:47:54.647508+00
-196	tenancy	0007_remove_tenant_tenantgroup_slug	2026-09-21 09:47:54.725835+00
-197	ipam	0025_interface_ipaddress_m2m_data_migration	2026-09-21 09:47:54.836522+00
-198	ipam	0026_ipaddress_remove_assigned_object	2026-09-21 09:47:55.385878+00
-199	ipam	0027_remove_rir_slug	2026-09-21 09:47:55.396089+00
-200	extras	0071_replace_related_names	2026-09-21 09:47:58.162894+00
-201	extras	0072_rename_model_fields	2026-09-21 09:47:58.523755+00
-202	extras	0073_job__unique_name_data_migration	2026-09-21 09:47:59.199466+00
-203	extras	0074_job__unique_name	2026-09-21 09:47:59.607627+00
-204	extras	0075_remove_gitrepository_fields	2026-09-21 09:47:59.736335+00
-205	extras	0076_rename_slug_to_key_for_custom_field	2026-09-21 09:47:59.904003+00
-206	extras	0077_migrate_custom_field_data	2026-09-21 09:48:00.033356+00
-207	extras	0078_remove_name_field_and_make_label_field_non_nullable	2026-09-21 09:48:00.532038+00
-208	dcim	0041_interface_ip_addresses_m2m	2026-09-21 09:48:00.648742+00
-209	dcim	0042_alter_location_managers	2026-09-21 09:48:00.716491+00
-210	dcim	0043_remove_slug	2026-09-21 09:48:00.809305+00
-211	circuits	0012_created_datetime	2026-09-21 09:48:01.127264+00
-212	circuits	0013_alter_circuittermination__path	2026-09-21 09:48:01.254194+00
-213	circuits	0014_related_name_changes	2026-09-21 09:48:01.363354+00
-214	circuits	0015_remove_circuittype_provider_slug	2026-09-21 09:48:01.440323+00
-215	extras	0079_remove_slug	2026-09-21 09:48:02.106166+00
-216	extras	0080_tagsfield	2026-09-21 09:48:02.438683+00
-217	virtualization	0021_tagsfield_and_vminterface_to_primarymodel	2026-09-21 09:48:03.230464+00
-218	virtualization	0022_vminterface_timestamps_data_migration	2026-09-21 09:48:03.341656+00
-219	ipam	0028_tagsfield	2026-09-21 09:48:03.983132+00
-220	dcim	0044_tagsfield	2026-09-21 09:48:07.028967+00
-221	ipam	0029_ip_address_to_interface_uniqueness_constraints	2026-09-21 09:48:07.061337+00
-222	ipam	0030_ipam__namespaces	2026-09-21 09:48:09.506768+00
-223	virtualization	0023_ipam__namespaces	2026-09-21 09:48:09.625955+00
-224	virtualization	0024_fixup_null_statuses	2026-09-21 09:48:09.739705+00
-225	extras	0081_rename_relationship_slug_to_key	2026-09-21 09:48:09.796491+00
-226	extras	0082_rename_relationship_name_to_label	2026-09-21 09:48:09.96237+00
-227	extras	0083_ensure_relationship_keys_are_unique	2026-09-21 09:48:10.079875+00
-228	extras	0084_rename_computed_field_slug_to_key	2026-09-21 09:48:10.188269+00
-229	virtualization	0025_status_nonnullable	2026-09-21 09:48:10.437422+00
-230	dcim	0045_ipam__namespaces	2026-09-21 09:48:10.909378+00
-231	ipam	0031_ipam___data_migrations	2026-09-21 09:48:11.18609+00
-232	ipam	0032_ipam__namespaces_finish	2026-09-21 09:48:12.496707+00
-233	ipam	0033_fixup_null_statuses	2026-09-21 09:48:12.617419+00
-234	ipam	0034_status_nonnullable	2026-09-21 09:48:12.991961+00
-235	ipam	0035_ensure_all_services_fit_uniqueness_constraint	2026-09-21 09:48:13.110514+00
-236	dcim	0046_fixup_null_statuses	2026-09-21 09:48:13.686571+00
-237	dcim	0047_status_nonnullable	2026-09-21 09:48:15.016331+00
-238	ipam	0036_add_uniqueness_constraints_to_service	2026-09-21 09:48:15.158947+00
-239	ipam	0037_data_migration_vlan_group_name_uniqueness	2026-09-21 09:48:15.274647+00
-240	ipam	0038_vlan_group_name_unique_remove_slug	2026-09-21 09:48:15.387199+00
-241	ipam	0039_alter_ipaddresstointerface_ip_address	2026-09-21 09:48:15.50991+00
-242	dcim	0048_ensure_virtual_chassis_names_are_unique_and_add_uniqueness_constraint	2026-09-21 09:48:15.701382+00
-243	dcim	0049_remove_slugs_and_change_device_primary_ip_fields	2026-09-21 09:48:16.633478+00
-244	dcim	0050_fix_interface_redundancy_group_association_created	2026-09-21 09:48:16.661464+00
-245	dcim	0051_interface_redundancy_group_nullable_status	2026-09-21 09:48:16.887028+00
-246	dcim	0052_fix_interface_redundancy_group_created	2026-09-21 09:48:17.616786+00
-247	ipam	0040_vlan_prefix_locations	2026-09-21 09:48:18.078521+00
-248	ipam	0041_vlan_prefix_locations_data_migration	2026-09-21 09:48:18.194483+00
-249	ipam	0042_remove_location_from_vlan_and_prefix	2026-09-21 09:48:18.801285+00
-250	ipam	0043_fixup_null_ip_version	2026-09-21 09:48:18.916839+00
-251	ipam	0044_ip_version_nonnullable	2026-09-21 09:48:19.148745+00
-252	ipam	0045_alter_vlangroup_options	2026-09-21 09:48:19.182387+00
-253	ipam	0046_update_all_charfields_max_length_to_255	2026-09-21 09:48:20.527137+00
-254	virtualization	0026_change_virtualmachine_primary_ip_fields	2026-09-21 09:48:20.787601+00
-255	tenancy	0008_tagsfield	2026-09-21 09:48:20.899918+00
-256	tenancy	0009_update_all_charfields_max_length_to_255	2026-09-21 09:48:21.674386+00
-257	extras	0085_taggeditem_cleanup	2026-09-21 09:48:21.790256+00
-258	extras	0086_taggeditem_uniqueness	2026-09-21 09:48:21.993103+00
-259	extras	0087_job__celery_task_fields__dryrun_support	2026-09-21 09:48:23.015829+00
-260	extras	0088_job__commit_default_data_migration	2026-09-21 09:48:23.131969+00
-261	extras	0089_joblogentry__log_level_default	2026-09-21 09:48:23.144251+00
-262	extras	0090_joblogentry__log_level_data_migration	2026-09-21 09:48:23.258578+00
-263	extras	0091_scheduledjob__data_migration	2026-09-21 09:48:23.371769+00
-264	extras	0092_uniqueness_data_migration	2026-09-21 09:48:23.599283+00
-265	extras	0093_uniqueness_fixup	2026-09-21 09:48:24.455986+00
-266	extras	0094_alter_objectchange_unique_together	2026-09-21 09:48:24.520849+00
-267	extras	0095_ensure_note_timestamps_are_unique	2026-09-21 09:48:24.637961+00
-268	extras	0096_remove_slugs	2026-09-21 09:48:24.846059+00
-269	extras	0097_alter_job_result_remove_result	2026-09-21 09:48:24.891569+00
-270	extras	0098_rename_data_jobresult_result	2026-09-21 09:48:24.915671+00
-271	extras	0099_remove_dangling_note_objects	2026-09-21 09:48:25.3374+00
-272	extras	0100_fileproxy_job_result	2026-09-21 09:48:25.463778+00
-273	extras	0101_externalintegration	2026-09-21 09:48:25.587517+00
-274	extras	0102_set_null_objectchange_contenttype	2026-09-21 09:48:25.824044+00
-275	extras	0103_add_db_indexes_to_object_change	2026-09-21 09:48:26.125478+00
-276	extras	0104_contact_contactassociation_team	2026-09-21 09:48:27.010808+00
-277	extras	0105_update_all_charfields_max_length_to_255	2026-09-21 09:48:31.551336+00
-278	extras	0106_populate_default_statuses_and_roles_for_contact_associations	2026-09-21 09:48:31.700137+00
-279	extras	0107_laxurlfield	2026-09-21 09:48:32.157222+00
-280	extras	0108_jobbutton_enabled	2026-09-21 09:48:32.21869+00
-281	extras	0109_dynamicgroup_group_type_dynamicgroup_tags_and_more	2026-09-21 09:48:32.761336+00
-282	dcim	0053_create_device_family_model	2026-09-21 09:48:33.004152+00
-283	dcim	0054_softwareimage_softwareversion	2026-09-21 09:48:34.388061+00
-284	dcim	0055_softwareimage_softwareversion_data_migration	2026-09-21 09:48:34.878766+00
-285	dcim	0056_update_all_charfields_max_length_to_255	2026-09-21 09:48:45.677683+00
-286	dcim	0057_controller_models	2026-09-21 09:48:46.098909+00
-287	dcim	0058_controller_data_migration	2026-09-21 09:48:46.246797+00
-288	dcim	0059_add_role_field_to_interface_models	2026-09-21 09:48:46.392818+00
-289	dcim	0060_alter_cable_status_alter_consoleport__path_and_more	2026-09-21 09:48:53.557189+00
-290	extras	0110_alter_configcontext_cluster_groups_and_more	2026-09-21 09:48:56.15985+00
-291	ipam	0047_alter_ipaddress_role_alter_ipaddress_status_and_more	2026-09-21 09:48:57.268058+00
-292	extras	0111_metadata	2026-09-21 09:48:57.687434+00
-293	extras	0112_dynamic_group_group_type_data_migration	2026-09-21 09:48:57.821548+00
-294	extras	0113_saved_views	2026-09-21 09:48:58.420085+00
-295	dcim	0061_module_models	2026-09-21 09:49:12.457514+00
-296	dcim	0062_module_data_migration	2026-09-21 09:49:12.620188+00
-297	cloud	0001_initial	2026-09-21 09:49:15.202543+00
-298	circuits	0016_tagsfield	2026-09-21 09:49:15.775687+00
-299	circuits	0017_fixup_null_statuses	2026-09-21 09:49:16.230633+00
-300	circuits	0018_status_nonnullable	2026-09-21 09:49:16.381262+00
-301	circuits	0019_remove_providernetwork_slug	2026-09-21 09:49:16.477734+00
-302	circuits	0020_update_all_charfields_max_length_to_255	2026-09-21 09:49:17.678632+00
-303	circuits	0021_alter_circuit_status_alter_circuittermination__path	2026-09-21 09:49:17.979968+00
-304	circuits	0022_circuittermination_cloud_network	2026-09-21 09:49:18.132825+00
-305	circuits	0023_remove_circuittermination_cable_peer_fields	2026-09-21 09:49:19.060843+00
-306	cloud	0002_alter_cloudservice_cloud_networks	2026-09-21 09:49:19.206172+00
-307	constance	0001_initial	2026-09-21 09:49:19.216416+00
-308	constance	0002_migrate_from_old_table	2026-09-21 09:49:19.376095+00
-309	constance	0003_drop_pickle	2026-09-21 09:49:19.519053+00
-310	extras	0114_computedfield_grouping	2026-09-21 09:49:19.583361+00
-311	extras	0115_scheduledjob_time_zone	2026-09-21 09:49:19.635704+00
-312	extras	0116_fix_dynamic_group_group_type_data_migration	2026-09-21 09:49:19.78429+00
-313	extras	0117_create_job_queue_model	2026-09-21 09:49:21.120723+00
-314	extras	0118_task_queue_to_job_queue_migration	2026-09-21 09:49:21.273693+00
-315	extras	0119_remove_task_queues_from_job_and_queue_from_scheduled_job	2026-09-21 09:49:21.879943+00
-316	extras	0120_job_is_singleton_job_is_singleton_override	2026-09-21 09:49:22.077233+00
-317	extras	0121_alter_team_contacts	2026-09-21 09:49:22.230509+00
-318	extras	0122_add_graphqlquery_owner_content_type	2026-09-21 09:49:22.441432+00
-319	extras	0123_alter_joblogentry_created	2026-09-21 09:49:22.458812+00
-320	extras	0124_add_joblogentry_index	2026-09-21 09:49:22.474339+00
-321	django_celery_results	0007_remove_taskresult_hidden	2026-09-21 09:49:22.480682+00
-322	django_celery_results	0008_chordcounter	2026-09-21 09:49:22.490311+00
-323	django_celery_results	0009_groupresult	2026-09-21 09:49:22.597492+00
-324	django_celery_results	0010_remove_duplicate_indices	2026-09-21 09:49:22.610579+00
-325	django_celery_results	0011_taskresult_periodic_task_name	2026-09-21 09:49:22.616161+00
-326	django_celery_results	0012_taskresult_date_started	2026-09-21 09:49:22.622017+00
-327	extras	0125_jobresult_date_started	2026-09-21 09:49:22.653112+00
-328	extras	0126_approval_workflow_pre_check	2026-09-21 09:49:22.801858+00
-329	extras	0127_approval_workflow_models	2026-09-21 09:49:24.662347+00
-330	data_validation	0001_initial	2026-09-21 09:49:25.471793+00
-331	data_validation	0002_data_migration_from_app	2026-09-21 09:49:26.296209+00
-332	extras	0128_remove_job_approval_required_and_more	2026-09-21 09:49:26.698681+00
-333	extras	0129_jobresult_debug_log_count_jobresult_error_log_count_and_more	2026-09-21 09:49:26.860122+00
-334	extras	0130_jobresult_generate_log_entry_counts	2026-09-21 09:49:27.33339+00
-335	ipam	0048_vrf_status	2026-09-21 09:49:27.513297+00
-336	ipam	0049_vrf_data_migration	2026-09-21 09:49:27.68488+00
-337	ipam	0050_vlangroup_range	2026-09-21 09:49:27.880571+00
-338	dcim	0063_interfacevdcassignment_virtualdevicecontext_and_more	2026-09-21 09:49:28.722877+00
-339	dcim	0064_virtualdevicecontext_status_data_migration	2026-09-21 09:49:28.893661+00
-340	dcim	0065_controller_capabilities_and_more	2026-09-21 09:49:29.191871+00
-341	wireless	0001_initial	2026-09-21 09:49:30.355808+00
-342	dcim	0066_controllermanageddevicegroup_radio_profiles_and_more	2026-09-21 09:49:30.688704+00
-343	dcim	0067_controllermanageddevicegroup_tenant	2026-09-21 09:49:30.857318+00
-344	dcim	0068_alter_softwareimagefile_download_url	2026-09-21 09:49:31.380269+00
-345	dcim	0069_softwareimagefile_external_integration	2026-09-21 09:49:31.554901+00
-346	dcim	0070_modulefamily_models	2026-09-21 09:49:32.680127+00
-347	dcim	0071_alter_consoleport_options_and_more	2026-09-21 09:49:33.875494+00
-348	dcim	0072_alter_powerfeed_options_and_more	2026-09-21 09:49:35.728919+00
-349	dcim	0073_alter_powerport_power_factor_and_more	2026-09-21 09:49:35.890661+00
-350	dcim	0074_alter_rack_u_height	2026-09-21 09:49:36.000185+00
-351	extras	0131_configcontext_device_families	2026-09-21 09:49:36.189845+00
-352	extras	0132_approval_workflow_seed_data	2026-09-21 09:49:36.771468+00
-353	extras	0133_alter_approvalworkflowstageresponse_options_and_more	2026-09-21 09:49:36.822978+00
-354	extras	0134_customfield_scope_filter	2026-09-21 09:49:36.893251+00
-355	extras	0135_rename_taggeditem_content_type_object_id_extras_tagg_content_717743_idx_and_more	2026-09-21 09:49:37.354396+00
-356	django_celery_beat	0001_initial	2026-09-21 09:49:37.381514+00
-357	django_celery_beat	0002_auto_20161118_0346	2026-09-21 09:49:37.397253+00
-358	django_celery_beat	0003_auto_20161209_0049	2026-09-21 09:49:37.412806+00
-359	django_celery_beat	0004_auto_20170221_0000	2026-09-21 09:49:37.424409+00
-360	django_celery_beat	0005_add_solarschedule_events_choices	2026-09-21 09:49:37.433404+00
-361	django_celery_beat	0006_auto_20180322_0932	2026-09-21 09:49:37.478176+00
-362	django_celery_beat	0007_auto_20180521_0826	2026-09-21 09:49:37.498129+00
-363	django_celery_beat	0008_auto_20180914_1922	2026-09-21 09:49:37.541333+00
-364	django_celery_beat	0006_auto_20180210_1226	2026-09-21 09:49:37.57159+00
-365	django_celery_beat	0006_periodictask_priority	2026-09-21 09:49:37.582989+00
-366	django_celery_beat	0009_periodictask_headers	2026-09-21 09:49:37.594249+00
-367	django_celery_beat	0010_auto_20190429_0326	2026-09-21 09:49:37.895668+00
-368	django_celery_beat	0011_auto_20190508_0153	2026-09-21 09:49:37.912314+00
-369	django_celery_beat	0012_periodictask_expire_seconds	2026-09-21 09:49:37.924578+00
-370	django_celery_beat	0013_auto_20200609_0727	2026-09-21 09:49:37.936433+00
-371	django_celery_beat	0014_remove_clockedschedule_enabled	2026-09-21 09:49:37.945954+00
-372	django_celery_beat	0015_edit_solarschedule_events_choices	2026-09-21 09:49:37.954754+00
-373	django_celery_beat	0016_alter_crontabschedule_timezone	2026-09-21 09:49:37.965467+00
-374	django_celery_beat	0017_alter_crontabschedule_month_of_year	2026-09-21 09:49:37.97714+00
-375	django_celery_beat	0018_improve_crontab_helptext	2026-09-21 09:49:37.987707+00
-376	django_celery_beat	0019_alter_periodictasks_options	2026-09-21 09:49:37.993574+00
-377	extras	0136_scheduledjob_clocked_scheduledjob_exchange_and_more	2026-09-21 09:49:38.879823+00
-378	extras	0137_jobconsoleentry	2026-09-21 09:49:39.054383+00
-379	extras	0138_job_console_log_default_and_more	2026-09-21 09:49:39.274744+00
-380	virtualization	0027_virtualmachine_software_image	2026-09-21 09:49:39.97874+00
-381	virtualization	0028_update_all_charfields_max_length_to_255	2026-09-21 09:49:41.350124+00
-382	virtualization	0029_add_role_field_to_interface_models	2026-09-21 09:49:41.531144+00
-383	virtualization	0030_alter_virtualmachine_local_config_context_data_owner_content_type_and_more	2026-09-21 09:49:42.927732+00
-384	dcim	0075_interface_duplex_interface_speed_and_more	2026-09-21 09:49:43.25941+00
-385	dcim	0076_add_deviceclusterassignment	2026-09-21 09:49:43.977047+00
-386	dcim	0077_device_cluster_to_clusters_data_migration	2026-09-21 09:49:44.153043+00
-387	dcim	0078_remove_device_cluster	2026-09-21 09:49:44.348079+00
-388	dcim	0079_remove_device_location_tenant_name_uniqueness	2026-09-21 09:49:44.501954+00
-389	dcim	0080_device_name_data_migration	2026-09-21 09:49:44.676993+00
-390	dcim	0081_alter_device_device_redundancy_group_priority_and_more	2026-09-21 09:49:45.409184+00
-391	dcim	0082_interface_port_type_interfacetemplate_port_type	2026-09-21 09:49:45.57981+00
-392	dcim	0083_alter_controllermanageddevicegroup_radio_profiles_and_more	2026-09-21 09:49:45.95084+00
-393	dcim	0084_add_module_type_image_support	2026-09-21 09:49:46.174852+00
-394	dcim	0085_fix_128gfc_qsfp28_typo	2026-09-21 09:49:46.692968+00
-395	dcim	0086_cabletype	2026-09-21 09:49:46.873996+00
-396	dcim	0087_populate_default_cable_types	2026-09-21 09:49:47.067252+00
-397	dcim	0088_cabletocabletermination	2026-09-21 09:49:50.876807+00
-398	dcim	0089_populate_cabletocabletermination	2026-09-21 09:49:51.058235+00
-399	dcim	0090_remove_cable_old_gfk_fields	2026-09-21 09:49:58.033036+00
-400	dcim	0091_cablepath_add_lane_fields	2026-09-21 09:49:59.646785+00
-401	dcim	0092_remove_consoleport_dcim_consoleport_device_name_unique_and_more	2026-09-21 09:50:04.150201+00
-402	dcim	0093_backpopulate_device_on_modular_component	2026-09-21 09:50:04.679766+00
-403	dcim	0094_alter_cable__abs_length	2026-09-21 09:50:04.787932+00
-404	dcim	0095_alter_consoleport_options_and_more	2026-09-21 09:50:05.851896+00
-405	dcim	0096_cablepath_add_fans_out_flags	2026-09-21 09:50:05.965471+00
-406	dcim	0097_virtualdevicecontext_controller_managed_device_group	2026-09-21 09:50:06.158514+00
-407	django_celery_results	0013_taskresult_django_cele_periodi_1993cf_idx	2026-09-21 09:50:06.166695+00
-408	django_celery_results	0014_alter_taskresult_status	2026-09-21 09:50:06.173753+00
-409	extras	0139_alter_approvalworkflow_approval_workflow_definition_and_more	2026-09-21 09:50:06.532273+00
-410	extras	0140_scheduledjob_state	2026-09-21 09:50:06.570663+00
-411	extras	0141_scheduledjob_state_data_migration	2026-09-21 09:50:06.752738+00
-412	extras	0142_remove_scheduledjob_approval_required	2026-09-21 09:50:06.787105+00
-413	extras	0143_computedfield_output_type_jobresult_cancel_type_and_more	2026-09-21 09:50:07.541897+00
-414	extras	0144_delete_orphaned_object_metadata	2026-09-21 09:50:07.720661+00
-415	extras	0145_objectmetadata_assigned_object_type_cascade	2026-09-21 09:50:07.908706+00
-416	ipam	0051_added_optional_vrf_relationship_to_vdc	2026-09-21 09:50:08.329138+00
-417	ipam	0052_alter_ipaddress_index_together_and_more	2026-09-21 09:50:08.985461+00
-418	ipam	0053_alter_vrfdeviceassignment_options_and_more	2026-09-21 09:50:09.087635+00
-419	ipam	0054_namespace_tenant	2026-09-21 09:50:09.264288+00
-420	ipam	0055_rename_ipaddress_ip_version_host_mask_length_ipam_ipaddr_ip_vers_d82ba5_idx_and_more	2026-09-21 09:50:11.580099+00
-421	ipam	0056_alter_vrfdeviceassignment_ordering_vrfprefixassignment_ordering	2026-09-21 09:50:11.675085+00
-422	ipam	0057_ipaddressrange	2026-09-21 09:50:11.863444+00
-423	ipam	0058_iprange_role_data	2026-09-21 09:50:12.07008+00
-424	load_balancers	0001_initial	2026-09-21 09:50:18.285388+00
-425	load_balancers	0002_create_default_statuses_pool_members	2026-09-21 09:50:18.487557+00
-426	sessions	0001_initial	2026-09-21 09:50:18.497862+00
-427	silk	0001_initial	2026-09-21 09:50:18.5819+00
-428	silk	0002_auto_update_uuid4_id_field	2026-09-21 09:50:18.603723+00
-429	silk	0003_request_prof_file	2026-09-21 09:50:18.614398+00
-430	silk	0004_request_prof_file_storage	2026-09-21 09:50:18.626097+00
-431	silk	0005_increase_request_prof_file_length	2026-09-21 09:50:18.637513+00
-432	silk	0006_fix_request_prof_file_blank	2026-09-21 09:50:18.649521+00
-433	silk	0007_sqlquery_identifier	2026-09-21 09:50:18.660911+00
-434	silk	0008_sqlquery_analysis	2026-09-21 09:50:18.669857+00
-435	social_django	0001_initial	2026-09-21 09:50:18.928212+00
-436	social_django	0002_add_related_name	2026-09-21 09:50:19.110346+00
-437	social_django	0003_alter_email_max_length	2026-09-21 09:50:19.12213+00
-438	social_django	0004_auto_20160423_0400	2026-09-21 09:50:19.150281+00
-439	social_django	0005_auto_20160727_2333	2026-09-21 09:50:19.159282+00
-440	social_django	0006_partial	2026-09-21 09:50:19.169761+00
-441	social_django	0007_code_timestamp	2026-09-21 09:50:19.179594+00
-442	social_django	0008_partial_timestamp	2026-09-21 09:50:19.188994+00
-443	social_django	0009_auto_20191118_0520	2026-09-21 09:50:19.245243+00
-444	social_django	0010_uid_db_index	2026-09-21 09:50:19.27482+00
-445	social_django	0011_alter_id_fields	2026-09-21 09:50:19.377239+00
-446	social_django	0012_usersocialauth_extra_data_new	2026-09-21 09:50:19.410695+00
-447	social_django	0013_migrate_extra_data	2026-09-21 09:50:19.924002+00
-448	social_django	0014_remove_usersocialauth_extra_data	2026-09-21 09:50:19.958184+00
-449	social_django	0015_rename_extra_data_new_usersocialauth_extra_data	2026-09-21 09:50:19.991983+00
-450	social_django	0016_alter_usersocialauth_extra_data	2026-09-21 09:50:20.018586+00
-451	social_django	0017_usersocialauth_user_social_auth_uid_required	2026-09-21 09:50:20.046695+00
-452	taggit	0001_initial	2026-09-21 09:50:20.254109+00
-453	taggit	0002_auto_20150616_2121	2026-09-21 09:50:20.312671+00
-454	taggit	0003_taggeditem_add_unique_index	2026-09-21 09:50:20.37406+00
-455	taggit	0004_alter_taggeditem_content_type_alter_taggeditem_tag	2026-09-21 09:50:20.753716+00
-456	taggit	0005_auto_20220424_2025	2026-09-21 09:50:20.766031+00
-457	taggit	0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx	2026-09-21 09:50:20.881196+00
-458	users	0002_token_ordering_by_created	2026-09-21 09:50:20.906903+00
-459	users	0003_alter_user_options	2026-09-21 09:50:21.25107+00
-460	users	0004_alter_user_managers	2026-09-21 09:50:21.280176+00
-461	users	0005_ensure_object_permission_names_are_unique	2026-09-21 09:50:21.468316+00
-462	users	0006_make_object_permission_name_globally_unique	2026-09-21 09:50:21.543593+00
-463	users	0007_alter_objectpermission_object_types	2026-09-21 09:50:21.737573+00
-464	users	0008_make_object_permission_a_changelogged_model	2026-09-21 09:50:21.88319+00
-465	users	0009_update_all_charfields_max_length_to_255	2026-09-21 09:50:22.062532+00
-466	users	0010_user_default_saved_views	2026-09-21 09:50:22.566134+00
-467	users	0011_alter_user_default_saved_views	2026-09-21 09:50:22.754707+00
-468	vpn	0001_initial	2026-09-21 09:50:25.729046+00
-469	vpn	0002_populate_defaults	2026-09-21 09:50:26.207469+00
-470	vpn	0003_vpntunnel_secrets_group	2026-09-21 09:50:26.421083+00
-471	vpn	0004_vpn_overlay_support	2026-09-21 09:50:28.209207+00
+1	contenttypes	0001_initial	2026-09-21 09:46:36.260482+00
+2	contenttypes	0002_remove_content_type_name	2026-09-21 09:46:36.436349+00
+3	auth	0001_initial	2026-09-21 09:46:36.454805+00
+4	auth	0002_alter_permission_name_max_length	2026-09-21 09:46:36.458125+00
+5	auth	0003_alter_user_email_max_length	2026-09-21 09:46:36.461546+00
+6	auth	0004_alter_user_username_opts	2026-09-21 09:46:36.46511+00
+7	auth	0005_alter_user_last_login_null	2026-09-21 09:46:36.468551+00
+8	auth	0006_require_contenttypes_0002	2026-09-21 09:46:36.469531+00
+9	auth	0007_alter_validators_add_error_messages	2026-09-21 09:46:36.473063+00
+10	auth	0008_alter_user_username_max_length	2026-09-21 09:46:36.476506+00
+11	auth	0009_alter_user_last_name_max_length	2026-09-21 09:46:36.480609+00
+12	auth	0010_alter_group_name_max_length	2026-09-21 09:46:36.485326+00
+13	auth	0011_update_proxy_permissions	2026-09-21 09:46:36.488499+00
+14	auth	0012_alter_user_first_name_max_length	2026-09-21 09:46:36.491771+00
+15	users	0001_initial	2026-09-21 09:46:36.534369+00
+16	admin	0001_initial	2026-09-21 09:46:36.547378+00
+17	admin	0002_logentry_remove_auto_add	2026-09-21 09:46:36.553337+00
+18	admin	0003_logentry_add_action_flag_choices	2026-09-21 09:46:36.559511+00
+19	extras	0001_initial_part_1	2026-09-21 09:46:36.684107+00
+20	tenancy	0001_initial	2026-09-21 09:46:36.791705+00
+21	dcim	0001_initial_part_1	2026-09-21 09:46:36.932202+00
+22	dcim	0002_initial_part_2	2026-09-21 09:46:37.288699+00
+23	ipam	0001_initial_part_1	2026-09-21 09:46:37.428283+00
+24	extras	0002_initial_part_2	2026-09-21 09:46:37.660504+00
+25	dcim	0003_initial_part_3	2026-09-21 09:46:40.154776+00
+26	virtualization	0001_initial	2026-09-21 09:46:40.508021+00
+27	dcim	0004_initial_part_4	2026-09-21 09:46:43.724449+00
+28	extras	0003_initial_part_3	2026-09-21 09:46:44.750791+00
+29	ipam	0002_initial_part_2	2026-09-21 09:46:46.159106+00
+30	circuits	0001_initial_part_1	2026-09-21 09:46:46.202191+00
+31	circuits	0002_initial_part_2	2026-09-21 09:46:47.106541+00
+32	extras	0004_populate_default_status_records	2026-09-21 09:46:47.284842+00
+33	extras	0005_configcontext_device_types	2026-09-21 09:46:47.349476+00
+34	extras	0006_graphqlquery	2026-09-21 09:46:47.401816+00
+35	extras	0007_configcontextschema	2026-09-21 09:46:47.560078+00
+36	virtualization	0002_virtualmachine_local_context_schema	2026-09-21 09:46:47.626687+00
+37	virtualization	0003_vminterface_verbose_name	2026-09-21 09:46:47.6678+00
+38	virtualization	0004_auto_slug	2026-09-21 09:46:47.735723+00
+39	virtualization	0005_add_natural_indexing	2026-09-21 09:46:48.113153+00
+40	extras	0008_jobresult__custom_field_data	2026-09-21 09:46:48.145896+00
+41	extras	0009_computedfield	2026-09-21 09:46:48.206707+00
+42	extras	0010_change_cf_validation_max_min_field_to_bigint	2026-09-21 09:46:48.279602+00
+43	extras	0011_fileattachment_fileproxy	2026-09-21 09:46:48.317402+00
+44	extras	0012_healthchecktestmodel	2026-09-21 09:46:48.321036+00
+45	extras	0013_default_fallback_value_computedfield	2026-09-21 09:46:48.430101+00
+46	extras	0014_auto_slug	2026-09-21 09:46:48.584658+00
+47	extras	0015_scheduled_job	2026-09-21 09:46:48.757584+00
+48	extras	0016_secret	2026-09-21 09:46:49.237429+00
+49	extras	0017_joblogentry	2026-09-21 09:46:49.29901+00
+50	extras	0018_joblog_data_migration	2026-09-21 09:46:49.357696+00
+51	extras	0019_joblogentry__meta_options__related_name	2026-09-21 09:46:49.420448+00
+52	extras	0020_customfield_changelog	2026-09-21 09:46:49.579815+00
+53	extras	0021_customfield_changelog_data	2026-09-21 09:46:49.642755+00
+54	extras	0022_objectchange_object_datav2	2026-09-21 09:46:49.675012+00
+55	extras	0023_job_model	2026-09-21 09:46:50.184365+00
+56	extras	0024_job_data_migration	2026-09-21 09:46:50.256204+00
+57	extras	0025_add_advanced_ui_boolean_to_customfield_conputedfield_and_relationship	2026-09-21 09:46:50.353705+00
+58	extras	0026_job_add_gitrepository_fk	2026-09-21 09:46:50.494915+00
+59	extras	0027_job_gitrepository_data_migration	2026-09-21 09:46:50.563228+00
+60	extras	0028_job_reduce_source	2026-09-21 09:46:50.608321+00
+61	extras	0029_dynamicgroup	2026-09-21 09:46:50.896318+00
+62	extras	0030_webhook_alter_unique_together	2026-09-21 09:46:50.928095+00
+63	extras	0031_tag_content_types	2026-09-21 09:46:51.03471+00
+64	extras	0032_tag_content_types_data_migration	2026-09-21 09:46:51.103645+00
+65	extras	0033_add__optimized_indexing	2026-09-21 09:46:51.850051+00
+66	virtualization	0006_vminterface_status	2026-09-21 09:46:51.916633+00
+67	virtualization	0007_vminterface_status_data_migration	2026-09-21 09:46:51.995491+00
+68	virtualization	0008_vminterface_parent	2026-09-21 09:46:52.122878+00
+69	extras	0034_alter_fileattachment_mimetype	2026-09-21 09:46:52.283284+00
+70	extras	0035_scheduledjob_crontab	2026-09-21 09:46:52.297592+00
+71	extras	0036_job_add_has_sensitive_variables	2026-09-21 09:46:52.446401+00
+72	extras	0037_configcontextschema__remove_name_unique__create_constraint_unique_name_owner	2026-09-21 09:46:52.511396+00
+73	dcim	0005_device_local_context_schema	2026-09-21 09:46:52.579911+00
+74	dcim	0006_auto_slug	2026-09-21 09:46:53.345274+00
+75	dcim	0007_device_secrets_group	2026-09-21 09:46:53.424892+00
+76	dcim	0008_increase_all_serial_lengths	2026-09-21 09:46:53.603672+00
+77	dcim	0009_add_natural_indexing	2026-09-21 09:46:55.4054+00
+78	dcim	0010_interface_status	2026-09-21 09:46:55.799425+00
+79	dcim	0011_interface_status_data_migration	2026-09-21 09:46:55.899321+00
+80	dcim	0012_interface_parent_bridge	2026-09-21 09:46:56.028341+00
+81	dcim	0013_location_location_type	2026-09-21 09:46:56.703097+00
+82	virtualization	0009_cluster_location	2026-09-21 09:46:56.774748+00
+83	virtualization	0010_vminterface_mac_address_data_migration	2026-09-21 09:46:56.840931+00
+84	virtualization	0011_alter_vminterface_mac_address	2026-09-21 09:46:56.882138+00
+85	extras	0038_configcontext_locations	2026-09-21 09:46:56.957591+00
+86	extras	0039_objectchange__add_change_context	2026-09-21 09:46:57.030585+00
+87	extras	0040_dynamicgroup__dynamicgroupmembership	2026-09-21 09:46:57.169422+00
+88	extras	0041_jobresult_job_kwargs	2026-09-21 09:46:57.20666+00
+89	extras	0042_job__add_is_job_hook_receiver	2026-09-21 09:46:57.247544+00
+90	extras	0043_note	2026-09-21 09:46:57.679783+00
+91	extras	0044_add_job_hook	2026-09-21 09:46:57.784133+00
+92	extras	0045_add_custom_field_slug	2026-09-21 09:46:57.849984+00
+93	extras	0046_populate_custom_field_slug_label	2026-09-21 09:46:57.926186+00
+94	extras	0047_enforce_custom_field_slug	2026-09-21 09:46:57.968348+00
+95	extras	0048_alter_objectchange_change_context_detail	2026-09-21 09:46:58.017104+00
+96	extras	0049_alter_tag_slug	2026-09-21 09:46:58.102184+00
+97	extras	0050_customfield_grouping	2026-09-21 09:46:58.141238+00
+98	extras	0051_add_job_task_queues	2026-09-21 09:46:58.222809+00
+99	dcim	0014_location_status_data_migration	2026-09-21 09:46:58.30479+00
+100	dcim	0015_device_components__changeloggedmodel	2026-09-21 09:46:59.893077+00
+101	dcim	0016_device_components__timestamp_data_migration	2026-09-21 09:46:59.971386+00
+102	dcim	0017_locationtype_nestable	2026-09-21 09:47:00.006102+00
+103	dcim	0018_device_redundancy_group	2026-09-21 09:47:00.508364+00
+104	extras	0052_configcontext_device_redundancy_groups	2026-09-21 09:47:00.585782+00
+105	extras	0053_relationship_required_on	2026-09-21 09:47:00.621945+00
+106	extras	0054_scheduledjob_kwargs_request_user_change	2026-09-21 09:47:00.729589+00
+107	extras	0055_configcontext_dynamic_groups	2026-09-21 09:47:00.812297+00
+108	extras	0056_objectchange_add_reverse_time_idx	2026-09-21 09:47:00.88526+00
+109	extras	0057_jobbutton	2026-09-21 09:47:01.024026+00
+110	extras	0058_jobresult_add_time_status_idxs	2026-09-21 09:47:01.492359+00
+111	extras	0059_joblogentry_scheduledjob_webhook_data_migration	2026-09-21 09:47:01.698338+00
+112	extras	0060_alter_joblogentry_scheduledjob_webhook_fields	2026-09-21 09:47:01.787701+00
+113	extras	0061_role_and_alter_status	2026-09-21 09:47:01.927739+00
+114	extras	0062_collect_roles_from_related_apps_roles	2026-09-21 09:47:02.046918+00
+115	virtualization	0012_alter_virtualmachine_role_add_new_role	2026-09-21 09:47:02.447084+00
+116	virtualization	0013_migrate_virtualmachine_role_data	2026-09-21 09:47:02.517082+00
+117	virtualization	0014_rename_virtualmachine_roles	2026-09-21 09:47:02.677308+00
+118	extras	0063_alter_role_options	2026-09-21 09:47:02.713328+00
+119	extras	0064_alter_configcontext_and_add_new_role	2026-09-21 09:47:02.862608+00
+120	extras	0065_configcontext_data_migrations	2026-09-21 09:47:02.934524+00
+121	extras	0066_rename_configcontext_role	2026-09-21 09:47:03.311397+00
+122	virtualization	0015_rename_foreignkey_fields	2026-09-21 09:47:04.078004+00
+123	ipam	0003_remove_max_length	2026-09-21 09:47:04.394191+00
+124	ipam	0004_fixup_p2p_broadcast	2026-09-21 09:47:04.471368+00
+125	ipam	0005_auto_slug	2026-09-21 09:47:04.501256+00
+126	ipam	0006_ipaddress_nat_outside_list	2026-09-21 09:47:04.584546+00
+127	ipam	0007_add_natural_indexing	2026-09-21 09:47:05.206947+00
+128	ipam	0008_prefix_vlan_vlangroup_location	2026-09-21 09:47:05.424259+00
+129	ipam	0009_alter_vlan_name	2026-09-21 09:47:05.741458+00
+130	ipam	0010_alter_ipam_role_add_new_role	2026-09-21 09:47:06.18918+00
+131	ipam	0011_migrate_ipam_role_data	2026-09-21 09:47:06.365493+00
+132	ipam	0012_rename_ipam_roles	2026-09-21 09:47:07.02889+00
+133	ipam	0013_delete_role	2026-09-21 09:47:07.033714+00
+134	ipam	0014_rename_foreign_keys_and_related_names	2026-09-21 09:47:07.241785+00
+135	ipam	0015_prefix_add_type	2026-09-21 09:47:07.288299+00
+136	dcim	0019_device_redundancy_group_data_migration	2026-09-21 09:47:07.376012+00
+137	dcim	0020_increase_device_asset_tag_size_limit	2026-09-21 09:47:07.680594+00
+138	dcim	0021_platform_network_driver	2026-09-21 09:47:07.695042+00
+139	dcim	0022_interface_redundancy_group	2026-09-21 09:47:08.153329+00
+140	dcim	0023_interface_redundancy_group_data_migration	2026-09-21 09:47:08.469438+00
+141	dcim	0024_move_site_fields_to_location_model	2026-09-21 09:47:09.017234+00
+142	dcim	0025_mptt_to_tree_queries	2026-09-21 09:47:09.83172+00
+143	dcim	0026_interface_mac_address_data_migration	2026-09-21 09:47:09.905118+00
+144	dcim	0027_alter_interface_mac_address	2026-09-21 09:47:10.22259+00
+145	dcim	0028_alter_device_and_rack_role_add_new_role	2026-09-21 09:47:10.590204+00
+146	dcim	0029_device_and_rack_roles_data_migrations	2026-09-21 09:47:10.66898+00
+147	dcim	0030_rename_device_and_rack_role	2026-09-21 09:47:11.215983+00
+148	dcim	0031_remove_device_role_and_rack_role	2026-09-21 09:47:11.223472+00
+149	dcim	0032_rename_foreignkey_fields	2026-09-21 09:47:11.692181+00
+150	circuits	0003_auto_slug	2026-09-21 09:47:11.744704+00
+151	circuits	0004_increase_provider_account_length	2026-09-21 09:47:11.820436+00
+152	circuits	0005_providernetwork	2026-09-21 09:47:12.579147+00
+153	circuits	0006_cache_circuit_terminations	2026-09-21 09:47:12.66589+00
+154	circuits	0007_circuitterminations_primary_model	2026-09-21 09:47:13.123559+00
+155	circuits	0008_add_natural_indexing	2026-09-21 09:47:13.170222+00
+156	circuits	0009_circuittermination_location	2026-09-21 09:47:13.251273+00
+157	dcim	0033_add_tree_managers_and_foreign_keys_pre_data_migration	2026-09-21 09:47:13.515588+00
+158	dcim	0034_migrate_region_and_site_data_to_locations	2026-09-21 09:47:13.592745+00
+159	virtualization	0016_remove_site_foreign_key_from_cluster_class	2026-09-21 09:47:13.671019+00
+160	virtualization	0017_created_datetime	2026-09-21 09:47:14.130953+00
+161	extras	0067_migrate_job_result_status	2026-09-21 09:47:14.207436+00
+162	extras	0068_jobresult__add_celery_fields	2026-09-21 09:47:15.608194+00
+163	extras	0069_created_datetime	2026-09-21 09:47:16.82945+00
+164	virtualization	0018_related_name_changes	2026-09-21 09:47:17.57852+00
+165	ipam	0016_prefix_type_data_migration	2026-09-21 09:47:17.661527+00
+166	ipam	0017_prefix_remove_is_pool	2026-09-21 09:47:17.711937+00
+167	tenancy	0002_auto_slug	2026-09-21 09:47:17.857947+00
+168	tenancy	0003_mptt_to_tree_queries	2026-09-21 09:47:17.965107+00
+169	tenancy	0004_change_tree_manager_on_tree_models	2026-09-21 09:47:17.973996+00
+170	tenancy	0005_rename_foreign_keys_and_related_names	2026-09-21 09:47:18.328792+00
+171	dcim	0035_rename_path_end_point_related_name	2026-09-21 09:47:18.770101+00
+172	dcim	0036_remove_site_foreign_key_from_dcim_models	2026-09-21 09:47:20.218476+00
+173	ipam	0018_remove_site_foreign_key_from_ipam_models	2026-09-21 09:47:20.558607+00
+174	ipam	0019_created_datetime	2026-09-21 09:47:21.308106+00
+175	ipam	0020_related_name_changes	2026-09-21 09:47:21.994365+00
+176	ipam	0021_prefix_add_rir_and_date_allocated	2026-09-21 09:47:22.195471+00
+177	ipam	0022_aggregate_to_prefix_data_migration	2026-09-21 09:47:22.284199+00
+178	ipam	0023_delete_aggregate	2026-09-21 09:47:22.290742+00
+179	extras	0070_remove_site_and_region_attributes_from_config_context	2026-09-21 09:47:22.447284+00
+180	django_celery_results	0001_initial	2026-09-21 09:47:22.56322+00
+181	django_celery_results	0002_add_task_name_args_kwargs	2026-09-21 09:47:22.573565+00
+182	django_celery_results	0003_auto_20181106_1101	2026-09-21 09:47:22.576751+00
+183	django_celery_results	0004_auto_20190516_0412	2026-09-21 09:47:22.611916+00
+184	django_celery_results	0005_taskresult_worker	2026-09-21 09:47:22.617502+00
+185	django_celery_results	0006_taskresult_date_created	2026-09-21 09:47:22.969067+00
+186	tenancy	0006_created_datetime	2026-09-21 09:47:23.344163+00
+187	dcim	0037_created_datetime	2026-09-21 09:47:25.466002+00
+188	dcim	0038_fixup_fks_and_related_names	2026-09-21 09:47:29.848378+00
+189	dcim	0039_related_name_changes	2026-09-21 09:47:30.978577+00
+190	circuits	0010_rename_foreign_keys_and_related_names	2026-09-21 09:47:31.508515+00
+191	circuits	0011_remove_site_foreign_key_from_circuit_termination_class	2026-09-21 09:47:31.587992+00
+192	dcim	0040_remove_region_and_site	2026-09-21 09:47:32.145471+00
+193	ipam	0024_interface_to_ipaddress_m2m	2026-09-21 09:47:32.230884+00
+194	virtualization	0019_vminterface_ip_addresses_m2m	2026-09-21 09:47:32.302096+00
+195	virtualization	0020_remove_clustergroup_clustertype_slug	2026-09-21 09:47:32.316455+00
+196	tenancy	0007_remove_tenant_tenantgroup_slug	2026-09-21 09:47:32.36582+00
+197	ipam	0025_interface_ipaddress_m2m_data_migration	2026-09-21 09:47:32.437743+00
+198	ipam	0026_ipaddress_remove_assigned_object	2026-09-21 09:47:32.646373+00
+199	ipam	0027_remove_rir_slug	2026-09-21 09:47:32.652848+00
+200	extras	0071_replace_related_names	2026-09-21 09:47:34.738043+00
+201	extras	0072_rename_model_fields	2026-09-21 09:47:35.045703+00
+202	extras	0073_job__unique_name_data_migration	2026-09-21 09:47:35.256877+00
+203	extras	0074_job__unique_name	2026-09-21 09:47:35.745059+00
+204	extras	0075_remove_gitrepository_fields	2026-09-21 09:47:35.824746+00
+205	extras	0076_rename_slug_to_key_for_custom_field	2026-09-21 09:47:35.935046+00
+206	extras	0077_migrate_custom_field_data	2026-09-21 09:47:36.015461+00
+207	extras	0078_remove_name_field_and_make_label_field_non_nullable	2026-09-21 09:47:36.124996+00
+208	dcim	0041_interface_ip_addresses_m2m	2026-09-21 09:47:36.197082+00
+209	dcim	0042_alter_location_managers	2026-09-21 09:47:36.239771+00
+210	dcim	0043_remove_slug	2026-09-21 09:47:36.521154+00
+211	circuits	0012_created_datetime	2026-09-21 09:47:36.720188+00
+212	circuits	0013_alter_circuittermination__path	2026-09-21 09:47:36.815301+00
+213	circuits	0014_related_name_changes	2026-09-21 09:47:36.887371+00
+214	circuits	0015_remove_circuittype_provider_slug	2026-09-21 09:47:36.942925+00
+215	extras	0079_remove_slug	2026-09-21 09:47:37.114068+00
+216	extras	0080_tagsfield	2026-09-21 09:47:37.563561+00
+217	virtualization	0021_tagsfield_and_vminterface_to_primarymodel	2026-09-21 09:47:37.863254+00
+218	virtualization	0022_vminterface_timestamps_data_migration	2026-09-21 09:47:37.934111+00
+219	ipam	0028_tagsfield	2026-09-21 09:47:38.637958+00
+220	dcim	0044_tagsfield	2026-09-21 09:47:40.430737+00
+221	ipam	0029_ip_address_to_interface_uniqueness_constraints	2026-09-21 09:47:40.452381+00
+222	ipam	0030_ipam__namespaces	2026-09-21 09:47:42.12827+00
+223	virtualization	0023_ipam__namespaces	2026-09-21 09:47:42.202935+00
+224	virtualization	0024_fixup_null_statuses	2026-09-21 09:47:42.510347+00
+225	extras	0081_rename_relationship_slug_to_key	2026-09-21 09:47:42.547301+00
+226	extras	0082_rename_relationship_name_to_label	2026-09-21 09:47:42.735107+00
+227	extras	0083_ensure_relationship_keys_are_unique	2026-09-21 09:47:42.807209+00
+228	extras	0084_rename_computed_field_slug_to_key	2026-09-21 09:47:42.877595+00
+229	virtualization	0025_status_nonnullable	2026-09-21 09:47:43.035326+00
+230	dcim	0045_ipam__namespaces	2026-09-21 09:47:43.110342+00
+231	ipam	0031_ipam___data_migrations	2026-09-21 09:47:43.528729+00
+232	ipam	0032_ipam__namespaces_finish	2026-09-21 09:47:44.379257+00
+233	ipam	0033_fixup_null_statuses	2026-09-21 09:47:44.466259+00
+234	ipam	0034_status_nonnullable	2026-09-21 09:47:44.721414+00
+235	ipam	0035_ensure_all_services_fit_uniqueness_constraint	2026-09-21 09:47:44.803759+00
+236	dcim	0046_fixup_null_statuses	2026-09-21 09:47:44.972132+00
+237	dcim	0047_status_nonnullable	2026-09-21 09:47:45.884286+00
+238	ipam	0036_add_uniqueness_constraints_to_service	2026-09-21 09:47:46.205452+00
+239	ipam	0037_data_migration_vlan_group_name_uniqueness	2026-09-21 09:47:46.279484+00
+240	ipam	0038_vlan_group_name_unique_remove_slug	2026-09-21 09:47:46.352207+00
+241	ipam	0039_alter_ipaddresstointerface_ip_address	2026-09-21 09:47:46.454825+00
+242	dcim	0048_ensure_virtual_chassis_names_are_unique_and_add_uniqueness_constraint	2026-09-21 09:47:46.57621+00
+243	dcim	0049_remove_slugs_and_change_device_primary_ip_fields	2026-09-21 09:47:47.20375+00
+244	dcim	0050_fix_interface_redundancy_group_association_created	2026-09-21 09:47:47.222333+00
+245	dcim	0051_interface_redundancy_group_nullable_status	2026-09-21 09:47:47.366228+00
+246	dcim	0052_fix_interface_redundancy_group_created	2026-09-21 09:47:47.603647+00
+247	ipam	0040_vlan_prefix_locations	2026-09-21 09:47:48.207822+00
+248	ipam	0041_vlan_prefix_locations_data_migration	2026-09-21 09:47:48.282774+00
+249	ipam	0042_remove_location_from_vlan_and_prefix	2026-09-21 09:47:48.482243+00
+250	ipam	0043_fixup_null_ip_version	2026-09-21 09:47:48.557055+00
+251	ipam	0044_ip_version_nonnullable	2026-09-21 09:47:48.927318+00
+252	ipam	0045_alter_vlangroup_options	2026-09-21 09:47:48.950291+00
+253	ipam	0046_update_all_charfields_max_length_to_255	2026-09-21 09:47:49.835638+00
+254	virtualization	0026_change_virtualmachine_primary_ip_fields	2026-09-21 09:47:50.014514+00
+255	tenancy	0008_tagsfield	2026-09-21 09:47:50.098526+00
+256	tenancy	0009_update_all_charfields_max_length_to_255	2026-09-21 09:47:50.624776+00
+257	extras	0085_taggeditem_cleanup	2026-09-21 09:47:50.69713+00
+258	extras	0086_taggeditem_uniqueness	2026-09-21 09:47:50.822432+00
+259	extras	0087_job__celery_task_fields__dryrun_support	2026-09-21 09:47:51.516142+00
+260	extras	0088_job__commit_default_data_migration	2026-09-21 09:47:51.589173+00
+261	extras	0089_joblogentry__log_level_default	2026-09-21 09:47:51.599891+00
+262	extras	0090_joblogentry__log_level_data_migration	2026-09-21 09:47:51.672275+00
+263	extras	0091_scheduledjob__data_migration	2026-09-21 09:47:51.743419+00
+264	extras	0092_uniqueness_data_migration	2026-09-21 09:47:51.887489+00
+265	extras	0093_uniqueness_fixup	2026-09-21 09:47:52.451471+00
+266	extras	0094_alter_objectchange_unique_together	2026-09-21 09:47:52.51169+00
+267	extras	0095_ensure_note_timestamps_are_unique	2026-09-21 09:47:52.584639+00
+268	extras	0096_remove_slugs	2026-09-21 09:47:52.71655+00
+269	extras	0097_alter_job_result_remove_result	2026-09-21 09:47:52.747078+00
+270	extras	0098_rename_data_jobresult_result	2026-09-21 09:47:52.763304+00
+271	extras	0099_remove_dangling_note_objects	2026-09-21 09:47:52.834173+00
+272	extras	0100_fileproxy_job_result	2026-09-21 09:47:53.150568+00
+273	extras	0101_externalintegration	2026-09-21 09:47:53.230185+00
+274	extras	0102_set_null_objectchange_contenttype	2026-09-21 09:47:53.381184+00
+275	extras	0103_add_db_indexes_to_object_change	2026-09-21 09:47:53.608179+00
+276	extras	0104_contact_contactassociation_team	2026-09-21 09:47:54.207841+00
+277	extras	0105_update_all_charfields_max_length_to_255	2026-09-21 09:47:57.239612+00
+278	extras	0106_populate_default_statuses_and_roles_for_contact_associations	2026-09-21 09:47:57.347596+00
+279	extras	0107_laxurlfield	2026-09-21 09:47:57.677222+00
+280	extras	0108_jobbutton_enabled	2026-09-21 09:47:57.715796+00
+281	extras	0109_dynamicgroup_group_type_dynamicgroup_tags_and_more	2026-09-21 09:47:58.053523+00
+282	dcim	0053_create_device_family_model	2026-09-21 09:47:58.514753+00
+283	dcim	0054_softwareimage_softwareversion	2026-09-21 09:47:59.42667+00
+284	dcim	0055_softwareimage_softwareversion_data_migration	2026-09-21 09:47:59.531578+00
+285	dcim	0056_update_all_charfields_max_length_to_255	2026-09-21 09:48:06.504671+00
+286	dcim	0057_controller_models	2026-09-21 09:48:06.771431+00
+287	dcim	0058_controller_data_migration	2026-09-21 09:48:07.186078+00
+288	dcim	0059_add_role_field_to_interface_models	2026-09-21 09:48:07.272865+00
+289	dcim	0060_alter_cable_status_alter_consoleport__path_and_more	2026-09-21 09:48:11.70551+00
+290	extras	0110_alter_configcontext_cluster_groups_and_more	2026-09-21 09:48:13.451234+00
+291	ipam	0047_alter_ipaddress_role_alter_ipaddress_status_and_more	2026-09-21 09:48:14.173799+00
+292	extras	0111_metadata	2026-09-21 09:48:14.675974+00
+293	extras	0112_dynamic_group_group_type_data_migration	2026-09-21 09:48:14.760589+00
+294	extras	0113_saved_views	2026-09-21 09:48:14.954408+00
+295	dcim	0061_module_models	2026-09-21 09:48:24.442333+00
+296	dcim	0062_module_data_migration	2026-09-21 09:48:24.547474+00
+297	cloud	0001_initial	2026-09-21 09:48:26.2956+00
+298	circuits	0016_tagsfield	2026-09-21 09:48:26.66752+00
+299	circuits	0017_fixup_null_statuses	2026-09-21 09:48:27.034691+00
+300	circuits	0018_status_nonnullable	2026-09-21 09:48:27.134488+00
+301	circuits	0019_remove_providernetwork_slug	2026-09-21 09:48:27.190592+00
+302	circuits	0020_update_all_charfields_max_length_to_255	2026-09-21 09:48:28.009794+00
+303	circuits	0021_alter_circuit_status_alter_circuittermination__path	2026-09-21 09:48:28.256829+00
+304	circuits	0022_circuittermination_cloud_network	2026-09-21 09:48:28.401844+00
+305	cloud	0002_alter_cloudservice_cloud_networks	2026-09-21 09:48:28.495004+00
+306	constance	0001_initial	2026-09-21 09:48:28.501847+00
+307	constance	0002_migrate_from_old_table	2026-09-21 09:48:28.631114+00
+308	constance	0003_drop_pickle	2026-09-21 09:48:29.030421+00
+309	extras	0114_computedfield_grouping	2026-09-21 09:48:29.074955+00
+310	extras	0115_scheduledjob_time_zone	2026-09-21 09:48:29.114962+00
+311	extras	0116_fix_dynamic_group_group_type_data_migration	2026-09-21 09:48:29.208498+00
+312	extras	0117_create_job_queue_model	2026-09-21 09:48:30.069219+00
+313	extras	0118_task_queue_to_job_queue_migration	2026-09-21 09:48:30.168826+00
+314	extras	0119_remove_task_queues_from_job_and_queue_from_scheduled_job	2026-09-21 09:48:30.37913+00
+315	extras	0120_job_is_singleton_job_is_singleton_override	2026-09-21 09:48:30.499991+00
+316	extras	0121_alter_team_contacts	2026-09-21 09:48:30.850926+00
+317	extras	0122_add_graphqlquery_owner_content_type	2026-09-21 09:48:31.133312+00
+318	extras	0123_alter_joblogentry_created	2026-09-21 09:48:31.266115+00
+319	extras	0124_add_joblogentry_index	2026-09-21 09:48:31.277367+00
+320	django_celery_results	0007_remove_taskresult_hidden	2026-09-21 09:48:31.282074+00
+321	django_celery_results	0008_chordcounter	2026-09-21 09:48:31.288186+00
+322	django_celery_results	0009_groupresult	2026-09-21 09:48:31.385934+00
+323	django_celery_results	0010_remove_duplicate_indices	2026-09-21 09:48:31.395133+00
+324	django_celery_results	0011_taskresult_periodic_task_name	2026-09-21 09:48:31.399565+00
+325	django_celery_results	0012_taskresult_date_started	2026-09-21 09:48:31.431198+00
+326	extras	0125_jobresult_date_started	2026-09-21 09:48:31.452112+00
+327	extras	0126_approval_workflow_pre_check	2026-09-21 09:48:31.561369+00
+328	extras	0127_approval_workflow_models	2026-09-21 09:48:32.612568+00
+329	data_validation	0001_initial	2026-09-21 09:48:33.468085+00
+330	data_validation	0002_data_migration_from_app	2026-09-21 09:48:34.020982+00
+331	ipam	0048_vrf_status	2026-09-21 09:48:34.237299+00
+332	ipam	0049_vrf_data_migration	2026-09-21 09:48:34.355347+00
+333	ipam	0050_vlangroup_range	2026-09-21 09:48:34.490176+00
+334	dcim	0063_interfacevdcassignment_virtualdevicecontext_and_more	2026-09-21 09:48:35.088559+00
+335	dcim	0064_virtualdevicecontext_status_data_migration	2026-09-21 09:48:35.203387+00
+336	dcim	0065_controller_capabilities_and_more	2026-09-21 09:48:35.399136+00
+337	wireless	0001_initial	2026-09-21 09:48:36.19467+00
+338	virtualization	0027_virtualmachine_software_image	2026-09-21 09:48:36.46996+00
+339	virtualization	0028_update_all_charfields_max_length_to_255	2026-09-21 09:48:37.363841+00
+340	virtualization	0029_add_role_field_to_interface_models	2026-09-21 09:48:37.746112+00
+341	virtualization	0030_alter_virtualmachine_local_config_context_data_owner_content_type_and_more	2026-09-21 09:48:38.697608+00
+342	dcim	0066_controllermanageddevicegroup_radio_profiles_and_more	2026-09-21 09:48:38.935823+00
+343	dcim	0067_controllermanageddevicegroup_tenant	2026-09-21 09:48:39.060423+00
+344	dcim	0068_alter_softwareimagefile_download_url	2026-09-21 09:48:39.182736+00
+345	dcim	0069_softwareimagefile_external_integration	2026-09-21 09:48:39.556874+00
+346	dcim	0070_modulefamily_models	2026-09-21 09:48:40.084718+00
+347	dcim	0071_alter_consoleport_options_and_more	2026-09-21 09:48:40.926119+00
+348	dcim	0072_alter_powerfeed_options_and_more	2026-09-21 09:48:42.563951+00
+349	dcim	0073_alter_powerport_power_factor_and_more	2026-09-21 09:48:42.687086+00
+350	dcim	0074_alter_rack_u_height	2026-09-21 09:48:42.767245+00
+351	dcim	0075_interface_duplex_interface_speed_and_more	2026-09-21 09:48:43.270411+00
+352	dcim	0076_add_deviceclusterassignment	2026-09-21 09:48:43.712552+00
+353	dcim	0077_device_cluster_to_clusters_data_migration	2026-09-21 09:48:43.826677+00
+354	dcim	0078_remove_device_cluster	2026-09-21 09:48:43.952792+00
+355	dcim	0079_remove_device_location_tenant_name_uniqueness	2026-09-21 09:48:44.050273+00
+356	dcim	0080_device_name_data_migration	2026-09-21 09:48:44.17578+00
+357	dcim	0081_alter_device_device_redundancy_group_priority_and_more	2026-09-21 09:48:44.758255+00
+358	dcim	0082_interface_port_type_interfacetemplate_port_type	2026-09-21 09:48:44.867526+00
+359	dcim	0083_alter_controllermanageddevicegroup_radio_profiles_and_more	2026-09-21 09:48:45.114416+00
+360	dcim	0084_add_module_type_image_support	2026-09-21 09:48:45.256872+00
+361	django_celery_beat	0001_initial	2026-09-21 09:48:45.542245+00
+362	django_celery_beat	0002_auto_20161118_0346	2026-09-21 09:48:45.57513+00
+363	django_celery_beat	0003_auto_20161209_0049	2026-09-21 09:48:45.586833+00
+364	django_celery_beat	0004_auto_20170221_0000	2026-09-21 09:48:45.592871+00
+365	django_celery_beat	0005_add_solarschedule_events_choices	2026-09-21 09:48:45.598541+00
+366	django_celery_beat	0006_auto_20180322_0932	2026-09-21 09:48:45.628929+00
+367	django_celery_beat	0007_auto_20180521_0826	2026-09-21 09:48:45.642537+00
+368	django_celery_beat	0008_auto_20180914_1922	2026-09-21 09:48:45.673355+00
+369	django_celery_beat	0006_auto_20180210_1226	2026-09-21 09:48:45.693054+00
+370	django_celery_beat	0006_periodictask_priority	2026-09-21 09:48:45.719637+00
+371	django_celery_beat	0009_periodictask_headers	2026-09-21 09:48:45.727902+00
+372	django_celery_beat	0010_auto_20190429_0326	2026-09-21 09:48:45.919145+00
+373	django_celery_beat	0011_auto_20190508_0153	2026-09-21 09:48:46.003106+00
+374	django_celery_beat	0012_periodictask_expire_seconds	2026-09-21 09:48:46.011844+00
+375	django_celery_beat	0013_auto_20200609_0727	2026-09-21 09:48:46.102951+00
+376	django_celery_beat	0014_remove_clockedschedule_enabled	2026-09-21 09:48:46.109675+00
+377	django_celery_beat	0015_edit_solarschedule_events_choices	2026-09-21 09:48:46.116098+00
+378	django_celery_beat	0016_alter_crontabschedule_timezone	2026-09-21 09:48:46.124408+00
+379	django_celery_beat	0017_alter_crontabschedule_month_of_year	2026-09-21 09:48:46.138125+00
+380	django_celery_beat	0018_improve_crontab_helptext	2026-09-21 09:48:46.146413+00
+381	django_celery_beat	0019_alter_periodictasks_options	2026-09-21 09:48:46.241453+00
+382	django_celery_results	0013_taskresult_django_cele_periodi_1993cf_idx	2026-09-21 09:48:46.247591+00
+383	django_celery_results	0014_alter_taskresult_status	2026-09-21 09:48:46.322121+00
+384	extras	0128_remove_job_approval_required_and_more	2026-09-21 09:48:46.626831+00
+385	extras	0129_jobresult_debug_log_count_jobresult_error_log_count_and_more	2026-09-21 09:48:46.729427+00
+386	extras	0130_jobresult_generate_log_entry_counts	2026-09-21 09:48:46.839484+00
+387	extras	0131_configcontext_device_families	2026-09-21 09:48:47.333596+00
+388	extras	0132_approval_workflow_seed_data	2026-09-21 09:48:47.65057+00
+389	extras	0133_alter_approvalworkflowstageresponse_options_and_more	2026-09-21 09:48:47.778087+00
+390	extras	0134_customfield_scope_filter	2026-09-21 09:48:47.87261+00
+391	extras	0135_rename_taggeditem_content_type_object_id_extras_tagg_content_717743_idx_and_more	2026-09-21 09:48:48.150656+00
+392	extras	0136_scheduledjob_clocked_scheduledjob_exchange_and_more	2026-09-21 09:48:48.98769+00
+393	extras	0137_jobconsoleentry	2026-09-21 09:48:49.113662+00
+394	extras	0138_job_console_log_default_and_more	2026-09-21 09:48:49.278739+00
+395	extras	0139_alter_approvalworkflow_approval_workflow_definition_and_more	2026-09-21 09:48:49.803857+00
+396	extras	0140_scheduledjob_state	2026-09-21 09:48:50.003973+00
+397	extras	0141_scheduledjob_state_data_migration	2026-09-21 09:48:50.123725+00
+398	extras	0142_remove_scheduledjob_approval_required	2026-09-21 09:48:50.149899+00
+399	ipam	0051_added_optional_vrf_relationship_to_vdc	2026-09-21 09:48:50.511939+00
+400	ipam	0052_alter_ipaddress_index_together_and_more	2026-09-21 09:48:50.973884+00
+401	ipam	0053_alter_vrfdeviceassignment_options_and_more	2026-09-21 09:48:51.04274+00
+402	ipam	0054_namespace_tenant	2026-09-21 09:48:51.267971+00
+403	ipam	0055_rename_ipaddress_ip_version_host_mask_length_ipam_ipaddr_ip_vers_d82ba5_idx_and_more	2026-09-21 09:48:52.834178+00
+404	load_balancers	0001_initial	2026-09-21 09:48:56.717747+00
+405	load_balancers	0002_create_default_statuses_pool_members	2026-09-21 09:48:56.849261+00
+406	sessions	0001_initial	2026-09-21 09:48:56.855546+00
+407	silk	0001_initial	2026-09-21 09:48:56.962455+00
+408	silk	0002_auto_update_uuid4_id_field	2026-09-21 09:48:56.978453+00
+409	silk	0003_request_prof_file	2026-09-21 09:48:56.985089+00
+410	silk	0004_request_prof_file_storage	2026-09-21 09:48:56.991929+00
+411	silk	0005_increase_request_prof_file_length	2026-09-21 09:48:57.004887+00
+412	silk	0006_fix_request_prof_file_blank	2026-09-21 09:48:57.132051+00
+413	silk	0007_sqlquery_identifier	2026-09-21 09:48:57.141827+00
+414	silk	0008_sqlquery_analysis	2026-09-21 09:48:57.148654+00
+415	default	0001_initial	2026-09-21 09:48:57.598745+00
+416	social_auth	0001_initial	2026-09-21 09:48:57.599656+00
+417	default	0002_add_related_name	2026-09-21 09:48:57.715057+00
+418	social_auth	0002_add_related_name	2026-09-21 09:48:57.715739+00
+419	default	0003_alter_email_max_length	2026-09-21 09:48:57.722232+00
+420	social_auth	0003_alter_email_max_length	2026-09-21 09:48:57.722592+00
+421	default	0004_auto_20160423_0400	2026-09-21 09:48:57.777245+00
+422	social_auth	0004_auto_20160423_0400	2026-09-21 09:48:57.777775+00
+423	social_auth	0005_auto_20160727_2333	2026-09-21 09:48:57.783318+00
+424	social_django	0006_partial	2026-09-21 09:48:57.798943+00
+425	social_django	0007_code_timestamp	2026-09-21 09:48:57.804933+00
+426	social_django	0008_partial_timestamp	2026-09-21 09:48:57.810473+00
+427	social_django	0009_auto_20191118_0520	2026-09-21 09:48:57.842553+00
+428	social_django	0010_uid_db_index	2026-09-21 09:48:57.860881+00
+429	social_django	0011_alter_id_fields	2026-09-21 09:48:57.907198+00
+430	social_django	0012_usersocialauth_extra_data_new	2026-09-21 09:48:57.928836+00
+431	social_django	0013_migrate_extra_data	2026-09-21 09:48:58.048179+00
+432	social_django	0014_remove_usersocialauth_extra_data	2026-09-21 09:48:58.122996+00
+433	social_django	0015_rename_extra_data_new_usersocialauth_extra_data	2026-09-21 09:48:58.144606+00
+434	social_django	0016_alter_usersocialauth_extra_data	2026-09-21 09:48:58.162756+00
+435	social_django	0017_usersocialauth_user_social_auth_uid_required	2026-09-21 09:48:58.178961+00
+436	taggit	0001_initial	2026-09-21 09:48:58.44307+00
+437	taggit	0002_auto_20150616_2121	2026-09-21 09:48:58.489904+00
+438	taggit	0003_taggeditem_add_unique_index	2026-09-21 09:48:58.79368+00
+439	taggit	0004_alter_taggeditem_content_type_alter_taggeditem_tag	2026-09-21 09:48:59.07998+00
+440	taggit	0005_auto_20220424_2025	2026-09-21 09:48:59.087773+00
+441	taggit	0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx	2026-09-21 09:48:59.180599+00
+442	users	0002_token_ordering_by_created	2026-09-21 09:48:59.198885+00
+443	users	0003_alter_user_options	2026-09-21 09:48:59.217495+00
+444	users	0004_alter_user_managers	2026-09-21 09:48:59.23454+00
+445	users	0005_ensure_object_permission_names_are_unique	2026-09-21 09:48:59.42997+00
+446	users	0006_make_object_permission_name_globally_unique	2026-09-21 09:48:59.489269+00
+447	users	0007_alter_objectpermission_object_types	2026-09-21 09:48:59.872583+00
+448	users	0008_make_object_permission_a_changelogged_model	2026-09-21 09:49:00.000524+00
+449	users	0009_update_all_charfields_max_length_to_255	2026-09-21 09:49:00.149843+00
+450	users	0010_user_default_saved_views	2026-09-21 09:49:00.281574+00
+451	users	0011_alter_user_default_saved_views	2026-09-21 09:49:00.406154+00
+452	vpn	0001_initial	2026-09-21 09:49:02.61185+00
+453	vpn	0002_populate_defaults	2026-09-21 09:49:02.929245+00
+454	vpn	0003_vpntunnel_secrets_group	2026-09-21 09:49:03.091771+00
+455	vpn	0004_vpn_overlay_support	2026-09-21 09:49:04.089525+00
+456	social_django	0001_initial	2026-09-21 09:49:04.093251+00
+457	social_django	0002_add_related_name	2026-09-21 09:49:04.119119+00
+458	social_django	0003_alter_email_max_length	2026-09-21 09:49:04.119801+00
+459	social_django	0004_auto_20160423_0400	2026-09-21 09:49:04.120311+00
+460	social_django	0005_auto_20160727_2333	2026-09-21 09:49:04.128065+00
 \.
 
 
@@ -7522,7 +7423,7 @@ COPY public.extras_approvalworkflow (id, created, last_updated, _custom_field_da
 --
 
 COPY public.extras_approvalworkflowdefinition (id, created, last_updated, _custom_field_data, name, model_constraints, weight, model_content_type_id) FROM stdin;
-e1751891-d8dd-4573-87e2-7b440cc75043	2026-09-21 09:49:36.7487+00	2026-09-21 09:49:36.748716+00	{}	Scheduled Jobs Approval - Example	{"job_model__job_class_name": "JobThatDoesNotExist"}	100	35
+08d07091-cd46-40b3-b5a1-dc196c91127f	2026-09-21 09:48:47.631437+00	2026-09-21 09:48:47.631453+00	{}	Scheduled Jobs Approval - Example	{"job_model__job_class_name": "JobThatDoesNotExist"}	100	35
 \.
 
 
@@ -7539,7 +7440,7 @@ COPY public.extras_approvalworkflowstage (id, created, last_updated, _custom_fie
 --
 
 COPY public.extras_approvalworkflowstagedefinition (id, created, last_updated, _custom_field_data, sequence, name, min_approvers, denial_message, approval_workflow_definition_id, approver_group_id) FROM stdin;
-554cf912-7a5b-4bd8-b282-a0a916081757	2026-09-21 09:49:36.751151+00	2026-09-21 09:49:36.751161+00	{}	10	Approval by nautobot-default-scheduledjob-approver	1	This Job requires an approval from nautobot-default-scheduledjob-approver.	e1751891-d8dd-4573-87e2-7b440cc75043	1
+fad85a45-dbb1-44db-a607-e23bfbdcd3a3	2026-09-21 09:48:47.633388+00	2026-09-21 09:48:47.6334+00	{}	10	Approval by nautobot-default-scheduledjob-approver	1	This Job requires an approval from nautobot-default-scheduledjob-approver.	08d07091-cd46-40b3-b5a1-dc196c91127f	1
 \.
 
 
@@ -7547,7 +7448,7 @@ COPY public.extras_approvalworkflowstagedefinition (id, created, last_updated, _
 -- Data for Name: extras_computedfield; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.extras_computedfield (id, created, last_updated, key, label, description, template, fallback_value, weight, content_type_id, advanced_ui, "grouping", output_type) FROM stdin;
+COPY public.extras_computedfield (id, created, last_updated, key, label, description, template, fallback_value, weight, content_type_id, advanced_ui, "grouping") FROM stdin;
 \.
 
 
@@ -7796,22 +7697,22 @@ COPY public.extras_imageattachment (id, object_id, image, image_height, image_wi
 --
 
 COPY public.extras_job (id, created, last_updated, _custom_field_data, module_name, job_class_name, "grouping", name, description, installed, enabled, dryrun_default, hidden, read_only, soft_time_limit, time_limit, grouping_override, name_override, description_override, dryrun_default_override, hidden_override, soft_time_limit_override, time_limit_override, has_sensitive_variables, has_sensitive_variables_override, is_job_hook_receiver, job_queues_override, is_job_button_receiver, supports_dryrun, default_job_queue_override, default_job_queue_id, is_singleton, is_singleton_override, console_log_default, console_log_default_override) FROM stdin;
-a60c3d53-79d0-42c4-b73b-f589e5f3db25	2026-09-21 09:50:28.459771+00	2026-09-21 09:50:28.46564+00	{}	nautobot.core.jobs.bulk_actions	BulkDeleteObjects	System Jobs	Bulk Delete Objects	Bulk delete objects.	t	t	f	t	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-48d985a5-f3d8-420a-a84f-ec96f562013a	2026-09-21 09:50:28.471148+00	2026-09-21 09:50:28.475474+00	{}	nautobot.core.jobs.bulk_actions	BulkEditObjects	System Jobs	Bulk Edit Objects	Bulk edit objects.	t	t	f	t	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-de767629-1b2d-4011-8857-a2d5b06d77dc	2026-09-21 09:50:28.480533+00	2026-09-21 09:50:28.484545+00	{}	nautobot.core.jobs.customfields	CleanupCustomFieldsData	Custom Field System Jobs	Cleanup Custom Fields	System Job to cleanup Custom Field data, which may be destructive.\n\nPlease review the documentation before running this job. It is recommended to run this job in a test environment and dry-run first.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	t	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-6161f032-095c-4d48-a14e-0c0fdb557a65	2026-09-21 09:50:28.489173+00	2026-09-21 09:50:28.493086+00	{}	nautobot.core.jobs.customfields	DeleteCustomFieldData	Custom Field System Jobs	Delete Custom Field Data	Delete all stored values for a given Custom Field key across the specified Content Types.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-1f8ed145-91b8-4030-9fa6-4cbc29e1c005	2026-09-21 09:50:28.497378+00	2026-09-21 09:50:28.501226+00	{}	nautobot.core.jobs	ExportObjectList	System Jobs	Export Object List	Export a list of objects to CSV or YAML, or render a specified Export Template.	t	t	f	f	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-e6d5d5b3-98c6-402f-b92e-54cf01d94215	2026-09-21 09:50:28.505671+00	2026-09-21 09:50:28.50947+00	{}	nautobot.core.jobs	GitRepositorySync	System Jobs	Git Repository: Sync	Clone and/or pull a Git repository, then refresh data sourced from this repository.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-a03acd34-9518-401a-9980-b1ba2a2b40d2	2026-09-21 09:50:28.514002+00	2026-09-21 09:50:28.517851+00	{}	nautobot.core.jobs	GitRepositoryDryRun	System Jobs	Git Repository: Dry-Run	Dry run of Git repository sync - will not update data sourced from this repository.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-66b11582-87cb-419f-9ae6-22b9cb62b261	2026-09-21 09:50:28.522265+00	2026-09-21 09:50:28.526467+00	{}	nautobot.core.jobs	ImportObjects	System Jobs	Import Objects	Import objects from CSV-formatted data.	t	t	f	f	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-8fbf422f-6f63-40ee-bcdf-2dd290fcd6c9	2026-09-21 09:50:28.531252+00	2026-09-21 09:50:28.535996+00	{}	nautobot.core.jobs.cleanup	LogsCleanup	System Jobs	Logs Cleanup	Delete ObjectChange and/or JobResult/JobLogEntry records older than a specified cutoff.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-c4506a14-4c91-41cd-ab2d-7ab3bfd63131	2026-09-21 09:50:28.541447+00	2026-09-21 09:50:28.545646+00	{}	nautobot.core.jobs.customfields	ProvisionCustomField	Custom Field System Jobs	Provision Custom Field	Add missing Custom Field default values to all in-scope objects for the specified Content Types.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	t	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-52172544-641a-4ace-8ed0-58eb90312a03	2026-09-21 09:50:28.550162+00	2026-09-21 09:50:28.554093+00	{}	nautobot.core.jobs.groups	RefreshDynamicGroupCaches	System Jobs	Refresh Dynamic Group Caches	Re-calculate and re-cache the membership lists of Dynamic Groups.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-69e74492-8332-4aee-8044-4affeb3a4076	2026-09-21 09:50:28.558765+00	2026-09-21 09:50:28.56305+00	{}	nautobot.core.jobs.groups	RefreshDynamicGroupCacheJobButtonReceiver	System Jobs	Refresh Dynamic Group Cache (Job Button Receiver)	Re-calculate and re-cache the membership list of a given Dynamic Group.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	t	f	f	f	t	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-ddefb03c-a138-4f22-866a-1e0eaaa03fcf	2026-09-21 09:50:28.567589+00	2026-09-21 09:50:28.571422+00	{}	nautobot.core.jobs	RunRegisteredDataComplianceRules	System Jobs	Run Registered Data Compliance Rules	Runs selected Data Compliance rule classes.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-5eed945c-40e0-4bd2-b403-eb5aebced35a	2026-09-21 09:50:28.575763+00	2026-09-21 09:50:28.579514+00	{}	nautobot.core.jobs.customfields	UpdateCustomFieldChoiceData	Custom Field System Jobs	Update Custom Field Choice Data	Rename a choice value on a Select or Multi-Select Custom Field across all affected objects.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-da93d441-d9df-410c-b2f6-1868332974c7	2026-09-21 09:50:28.583673+00	2026-09-21 09:50:28.587272+00	{}	nautobot.core.jobs	ValidateModelData	System Jobs	Validate Model Data	Run `full_clean()` against all records of a given type(s) to check for data validity.	t	t	f	f	t	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
-2622d031-4a25-4c10-a8cd-60cc57c8be4a	2026-09-21 09:50:28.591521+00	2026-09-21 09:50:28.595366+00	{}	nautobot.ipam.jobs.cleanup	FixIPAMParents	System Jobs	Check/Fix IPAM Parents	Check for and/or fix incorrect 'parent' values on IP Address and/or Prefix records.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	t	f	9ab161da-f37e-4e1c-b9f5-87f94dcb2634	f	f	f	f
+d0f01453-0ec1-4ff4-8085-aa0f62da323a	2026-09-21 09:49:04.532675+00	2026-09-21 09:49:04.536567+00	{}	nautobot.core.jobs.bulk_actions	BulkDeleteObjects	System Jobs	Bulk Delete Objects	Bulk delete objects.	t	t	f	t	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+5816592e-5fdd-418c-b924-0cda1f51a719	2026-09-21 09:49:04.540415+00	2026-09-21 09:49:04.54313+00	{}	nautobot.core.jobs.bulk_actions	BulkEditObjects	System Jobs	Bulk Edit Objects	Bulk edit objects.	t	t	f	t	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+38fb8702-3ac0-4433-887c-80246506b21f	2026-09-21 09:49:04.546603+00	2026-09-21 09:49:04.549474+00	{}	nautobot.core.jobs.customfields	CleanupCustomFieldsData	Custom Field System Jobs	Cleanup Custom Fields	System Job to cleanup Custom Field data, which may be destructive.\n\nPlease review the documentation before running this job. It is recommended to run this job in a test environment and dry-run first.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	t	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+c2e7aedd-099a-4c69-9835-9a8e4b41a829	2026-09-21 09:49:04.565054+00	2026-09-21 09:49:04.567655+00	{}	nautobot.core.jobs.customfields	DeleteCustomFieldData	Custom Field System Jobs	Delete Custom Field Data	Delete all stored values for a given Custom Field key across the specified Content Types.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+801377a1-0489-44c1-a0ef-32180657b761	2026-09-21 09:49:04.570946+00	2026-09-21 09:49:04.57353+00	{}	nautobot.core.jobs	ExportObjectList	System Jobs	Export Object List	Export a list of objects to CSV or YAML, or render a specified Export Template.	t	t	f	f	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+04b893f3-d493-4674-9f9c-94fb03bc9182	2026-09-21 09:49:04.719908+00	2026-09-21 09:49:04.722686+00	{}	nautobot.core.jobs	GitRepositorySync	System Jobs	Git Repository: Sync	Clone and/or pull a Git repository, then refresh data sourced from this repository.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+19ec8841-59e7-4d09-b716-8f951a0420c9	2026-09-21 09:49:04.726036+00	2026-09-21 09:49:04.728669+00	{}	nautobot.core.jobs	GitRepositoryDryRun	System Jobs	Git Repository: Dry-Run	Dry run of Git repository sync - will not update data sourced from this repository.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+9ebf4d1f-938a-40ed-8e71-b25038e78b54	2026-09-21 09:49:04.767107+00	2026-09-21 09:49:04.769755+00	{}	nautobot.core.jobs	ImportObjects	System Jobs	Import Objects	Import objects from CSV-formatted data.	t	t	f	f	f	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+0602e39a-ba40-4da8-806f-6a73d7c36c3b	2026-09-21 09:49:04.776708+00	2026-09-21 09:49:04.779299+00	{}	nautobot.core.jobs.cleanup	LogsCleanup	System Jobs	Logs Cleanup	Delete ObjectChange and/or JobResult/JobLogEntry records older than a specified cutoff.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+63a73d0b-261a-4762-95a5-7fc3c90fe001	2026-09-21 09:49:04.7825+00	2026-09-21 09:49:04.785086+00	{}	nautobot.core.jobs.customfields	ProvisionCustomField	Custom Field System Jobs	Provision Custom Field	Add missing Custom Field default values to all in-scope objects for the specified Content Types.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	t	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+24538ecd-1919-4744-ae39-6e7599123d7a	2026-09-21 09:49:04.788409+00	2026-09-21 09:49:04.791098+00	{}	nautobot.core.jobs.groups	RefreshDynamicGroupCaches	System Jobs	Refresh Dynamic Group Caches	Re-calculate and re-cache the membership lists of Dynamic Groups.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+df2bce55-41dd-4d59-91a8-6c1fa7b4c0da	2026-09-21 09:49:04.79433+00	2026-09-21 09:49:04.796928+00	{}	nautobot.core.jobs.groups	RefreshDynamicGroupCacheJobButtonReceiver	System Jobs	Refresh Dynamic Group Cache (Job Button Receiver)	Re-calculate and re-cache the membership list of a given Dynamic Group.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	t	f	f	f	t	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+e759988a-288b-4b0d-8e46-f43da90926a3	2026-09-21 09:49:04.800339+00	2026-09-21 09:49:04.803173+00	{}	nautobot.core.jobs	RunRegisteredDataComplianceRules	System Jobs	Run Registered Data Compliance Rules	Runs selected Data Compliance rule classes.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+ff51737a-88c2-4fec-b375-f6d99a4f754a	2026-09-21 09:49:04.838038+00	2026-09-21 09:49:04.840677+00	{}	nautobot.core.jobs.customfields	UpdateCustomFieldChoiceData	Custom Field System Jobs	Update Custom Field Choice Data	Rename a choice value on a Select or Multi-Select Custom Field across all affected objects.	t	t	f	f	f	3600	4000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+bd249f5f-cc65-4b9e-aa66-3d0361879867	2026-09-21 09:49:04.84412+00	2026-09-21 09:49:04.846877+00	{}	nautobot.core.jobs	ValidateModelData	System Jobs	Validate Model Data	Run `full_clean()` against all records of a given type(s) to check for data validity.	t	t	f	f	t	1800	2000	f	f	f	f	f	f	f	f	f	f	f	f	f	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
+c99a15e9-4191-47ef-91ed-94c3f9f6572d	2026-09-21 09:49:04.850169+00	2026-09-21 09:49:04.85273+00	{}	nautobot.ipam.jobs.cleanup	FixIPAMParents	System Jobs	Check/Fix IPAM Parents	Check for and/or fix incorrect 'parent' values on IP Address and/or Prefix records.	t	t	f	f	f	0	0	f	f	f	f	f	f	f	f	f	f	f	f	t	f	9a05104c-d288-48f2-bfae-3c9fe294677b	f	f	f	f
 \.
 
 
@@ -7820,7 +7721,7 @@ da93d441-d9df-410c-b2f6-1868332974c7	2026-09-21 09:50:28.583673+00	2026-09-21 09
 --
 
 COPY public.extras_jobbutton (id, created, last_updated, name, text, weight, group_name, button_class, confirmation, job_id, enabled) FROM stdin;
-a9e96825-774c-45d5-a377-d1e5ecfa0a23	2026-09-21 09:50:28.601277+00	2026-09-21 09:50:28.601287+00	Refresh Dynamic Group Members Cache	Refresh Members	100		warning	t	69e74492-8332-4aee-8044-4affeb3a4076	t
+8e440abf-83e4-4ee3-8533-41ec700f712b	2026-09-21 09:49:04.859062+00	2026-09-21 09:49:04.85907+00	Refresh Dynamic Group Members Cache	Refresh Members	100		warning	t	df2bce55-41dd-4d59-91a8-6c1fa7b4c0da	t
 \.
 
 
@@ -7829,7 +7730,7 @@ a9e96825-774c-45d5-a377-d1e5ecfa0a23	2026-09-21 09:50:28.601277+00	2026-09-21 09
 --
 
 COPY public.extras_jobbutton_content_types (id, jobbutton_id, contenttype_id) FROM stdin;
-1	a9e96825-774c-45d5-a377-d1e5ecfa0a23	52
+1	8e440abf-83e4-4ee3-8533-41ec700f712b	51
 \.
 
 
@@ -7870,7 +7771,7 @@ COPY public.extras_joblogentry (id, log_level, "grouping", message, created, log
 --
 
 COPY public.extras_jobqueue (id, created, last_updated, _custom_field_data, name, description, queue_type, tenant_id) FROM stdin;
-9ab161da-f37e-4e1c-b9f5-87f94dcb2634	2026-09-21 09:49:21.268347+00	2026-09-21 09:49:21.268363+00	{}	default		celery	\N
+9a05104c-d288-48f2-bfae-3c9fe294677b	2026-09-21 09:48:30.165423+00	2026-09-21 09:48:30.165439+00	{}	default		celery	\N
 \.
 
 
@@ -7879,22 +7780,22 @@ COPY public.extras_jobqueue (id, created, last_updated, _custom_field_data, name
 --
 
 COPY public.extras_jobqueueassignment (id, job_id, job_queue_id) FROM stdin;
-c32eaedd-80d7-49d9-b739-9aea29b4f1ce	a60c3d53-79d0-42c4-b73b-f589e5f3db25	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-51a8a5db-56df-44f5-82de-0dc65dcaccf3	48d985a5-f3d8-420a-a84f-ec96f562013a	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-e0c769b7-b1f3-41d0-a870-7f1e2303875e	de767629-1b2d-4011-8857-a2d5b06d77dc	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-e32f38c3-949e-471a-8e98-6f5252cffa81	6161f032-095c-4d48-a14e-0c0fdb557a65	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-a4371a83-45fb-44c0-bbed-d27fa9262304	1f8ed145-91b8-4030-9fa6-4cbc29e1c005	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-a3ce5ade-8364-4e9d-9722-c607c5199e5d	e6d5d5b3-98c6-402f-b92e-54cf01d94215	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-9f55280e-cae4-4c57-85af-e7bf98696fab	a03acd34-9518-401a-9980-b1ba2a2b40d2	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-02852d6d-5533-4b0a-a659-d0bba3f41748	66b11582-87cb-419f-9ae6-22b9cb62b261	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-f4b1dbf4-08e8-47fc-9e32-d14d485498ad	8fbf422f-6f63-40ee-bcdf-2dd290fcd6c9	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-f3d54869-04c9-462a-ae0a-a28ddb942b8f	c4506a14-4c91-41cd-ab2d-7ab3bfd63131	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-d5a0a946-6851-4600-a7fa-1afa4ca80df8	52172544-641a-4ace-8ed0-58eb90312a03	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-f091760e-22c9-4c0e-8c93-89e4f5553eef	69e74492-8332-4aee-8044-4affeb3a4076	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-86b0f9f2-000d-45e0-809d-b6cf293bff0f	ddefb03c-a138-4f22-866a-1e0eaaa03fcf	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-27600a47-2b1f-4b13-96ce-b4441bce4cf0	5eed945c-40e0-4bd2-b403-eb5aebced35a	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-a3de746c-0950-4b81-a5a3-4dc0a53b84fc	da93d441-d9df-410c-b2f6-1868332974c7	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
-6e5bf760-4190-4bdf-b0cd-50e0fd6f7fd3	2622d031-4a25-4c10-a8cd-60cc57c8be4a	9ab161da-f37e-4e1c-b9f5-87f94dcb2634
+d10dcf24-cf7a-4dd2-9519-aa6acaa81aa8	d0f01453-0ec1-4ff4-8085-aa0f62da323a	9a05104c-d288-48f2-bfae-3c9fe294677b
+c379698e-55a3-4571-b058-f5e24968d59f	5816592e-5fdd-418c-b924-0cda1f51a719	9a05104c-d288-48f2-bfae-3c9fe294677b
+4824a640-ad42-496d-99a7-72beb740f784	38fb8702-3ac0-4433-887c-80246506b21f	9a05104c-d288-48f2-bfae-3c9fe294677b
+1f1684d6-fa02-4e17-b241-b5be15caa7e5	c2e7aedd-099a-4c69-9835-9a8e4b41a829	9a05104c-d288-48f2-bfae-3c9fe294677b
+eb4bbced-235b-4d76-aea7-754c058be462	801377a1-0489-44c1-a0ef-32180657b761	9a05104c-d288-48f2-bfae-3c9fe294677b
+0f4625ce-9916-4092-ab5d-488aa717f9be	04b893f3-d493-4674-9f9c-94fb03bc9182	9a05104c-d288-48f2-bfae-3c9fe294677b
+9d104726-3852-40ff-98a0-8c0eaf1833ca	19ec8841-59e7-4d09-b716-8f951a0420c9	9a05104c-d288-48f2-bfae-3c9fe294677b
+b2a7721b-f722-462e-8d5e-bcd4e59affa0	9ebf4d1f-938a-40ed-8e71-b25038e78b54	9a05104c-d288-48f2-bfae-3c9fe294677b
+99754697-4f83-4cdc-8d8e-39eb6befc124	0602e39a-ba40-4da8-806f-6a73d7c36c3b	9a05104c-d288-48f2-bfae-3c9fe294677b
+016af5d7-611b-433c-adce-48d4fb60d44e	63a73d0b-261a-4762-95a5-7fc3c90fe001	9a05104c-d288-48f2-bfae-3c9fe294677b
+0a1e6224-f708-474b-95b7-387c6ae92104	24538ecd-1919-4744-ae39-6e7599123d7a	9a05104c-d288-48f2-bfae-3c9fe294677b
+628f5304-606a-41e8-aa31-11bac127c886	df2bce55-41dd-4d59-91a8-6c1fa7b4c0da	9a05104c-d288-48f2-bfae-3c9fe294677b
+fcf6bb58-f9cd-44de-889f-4e3e7b722134	e759988a-288b-4b0d-8e46-f43da90926a3	9a05104c-d288-48f2-bfae-3c9fe294677b
+d13d75ca-ca53-4114-b515-8ff99446b917	ff51737a-88c2-4fec-b375-f6d99a4f754a	9a05104c-d288-48f2-bfae-3c9fe294677b
+a51fce3a-e089-48a0-8987-a1d7bbf3b0f4	bd249f5f-cc65-4b9e-aa66-3d0361879867	9a05104c-d288-48f2-bfae-3c9fe294677b
+31a404a7-b550-4609-b48a-fff477d7baed	c99a15e9-4191-47ef-91ed-94c3f9f6572d	9a05104c-d288-48f2-bfae-3c9fe294677b
 \.
 
 
@@ -7902,7 +7803,7 @@ a3de746c-0950-4b81-a5a3-4dc0a53b84fc	da93d441-d9df-410c-b2f6-1868332974c7	9ab161
 -- Data for Name: extras_jobresult; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
-COPY public.extras_jobresult (id, name, date_created, date_done, status, result, user_id, _custom_field_data, scheduled_job_id, job_model_id, task_args, meta, task_kwargs, task_name, traceback, worker, celery_kwargs, date_started, debug_log_count, error_log_count, info_log_count, success_log_count, warning_log_count, cancel_type, canceled_by_id, canceled_by_user_name, date_canceled) FROM stdin;
+COPY public.extras_jobresult (id, name, date_created, date_done, status, result, user_id, _custom_field_data, scheduled_job_id, job_model_id, task_args, meta, task_kwargs, task_name, traceback, worker, celery_kwargs, date_started, debug_log_count, error_log_count, info_log_count, success_log_count, warning_log_count) FROM stdin;
 \.
 
 
@@ -7975,26 +7876,21 @@ COPY public.extras_relationshipassociation (id, source_id, destination_id, desti
 --
 
 COPY public.extras_role (id, created, last_updated, _custom_field_data, name, color, description, weight) FROM stdin;
-92fa7918-82d6-4926-bdff-ddc4d6fc2709	2026-09-21 00:00:00+00	2026-09-21 09:47:10.146729+00	{}	Loopback	9e9e9e		\N
-7be459c0-fca4-4de7-b28f-d64bf2761668	2026-09-21 00:00:00+00	2026-09-21 09:47:10.148431+00	{}	Secondary	2196f3		\N
-26601e10-c6f8-44ee-a1ff-32333af3ceef	2026-09-21 00:00:00+00	2026-09-21 09:47:10.149936+00	{}	Anycast	ffc107		\N
-38358ebc-0bf1-45c3-b711-6a5abce4ef1d	2026-09-21 00:00:00+00	2026-09-21 09:47:10.151361+00	{}	VIP	4caf50		\N
-c37a8e8c-9f59-4abb-8737-8f8994857ac9	2026-09-21 00:00:00+00	2026-09-21 09:47:10.152852+00	{}	VRRP	4caf50		\N
-fe59212c-cf94-44fd-8004-be9ce0dff209	2026-09-21 00:00:00+00	2026-09-21 09:47:10.154271+00	{}	HSRP	4caf50		\N
-e874c53d-f127-4271-a13d-748b0a5a177b	2026-09-21 00:00:00+00	2026-09-21 09:47:10.155767+00	{}	GLBP	4caf50		\N
-caff1948-870f-4460-8478-388e14222967	2026-09-21 00:00:00+00	2026-09-21 09:47:10.157292+00	{}	CARP	4caf50		\N
-bf7ee457-d33a-4abe-b3a5-6bb35e4737af	2026-09-21 09:48:31.685803+00	2026-09-21 09:48:31.685816+00	{}	Administrative	2196f3	Unit plays an administrative role	\N
-2bef9604-2bb6-4272-b730-a7cb48189345	2026-09-21 09:48:31.690505+00	2026-09-21 09:48:31.690516+00	{}	Billing	4caf50	Unit plays a billing role	\N
-5968b42e-e6cb-4363-a16a-3304fb02b3a6	2026-09-21 09:48:31.693985+00	2026-09-21 09:48:31.693994+00	{}	Support	ffeb3b	Unit plays a support role	\N
-535b20e7-85fb-49df-aafc-bfc32df209cd	2026-09-21 09:48:31.697405+00	2026-09-21 09:48:31.697414+00	{}	On Site	111111	Unit plays an on site role	\N
-63fbcf4d-4233-4a0d-86ce-d8c389dd3859	2026-09-21 09:50:12.053494+00	2026-09-21 09:50:12.053509+00	{}	DHCP	2196f3	IP Address Range used as a DHCP scope	\N
-f2983fc2-d95d-4d92-8530-5f6bfcf0d158	2026-09-21 09:50:12.057115+00	2026-09-21 09:50:12.057125+00	{}	Firewall Object	f44336	IP Address Range representing a firewall address object	\N
-1d0513b4-c8f9-4e25-a287-390cacbabce6	2026-09-21 09:50:12.060391+00	2026-09-21 09:50:12.060401+00	{}	NAT Pool	ff9800	IP Address Range used as a NAT pool	\N
-15c0b975-2fed-43be-b0d0-f04037d63cb9	2026-09-21 09:50:12.063705+00	2026-09-21 09:50:12.063714+00	{}	Load Balancer Pool	4caf50	IP Address Range used as a load balancer pool	\N
-a6febf72-00ea-4e7c-bee9-c0c33b404df0	2026-09-21 09:50:12.06724+00	2026-09-21 09:50:12.067251+00	{}	Reserved	9e9e9e	IP Address Range reserved for a specific purpose	\N
-5e18d79a-f1bb-4ebb-ada0-968d4f7a26eb	2026-09-21 09:50:25.951793+00	2026-09-21 09:50:25.95181+00	{}	Peer	ff9800	Unit plays a Peer role	\N
-d249b337-b060-49ad-ae1e-add14dedf3de	2026-09-21 09:50:25.95574+00	2026-09-21 09:50:25.955753+00	{}	Hub	2f6a31	Unit plays a Hub role	\N
-a172432f-3d44-4697-b48b-c4fbaf6351b1	2026-09-21 09:50:25.959284+00	2026-09-21 09:50:25.959295+00	{}	Spoke	8bc34a	Unit plays a Spoke role	\N
+d4c290df-9f8d-4832-818c-45e2a04f5050	2026-09-21 00:00:00+00	2026-09-21 09:47:02.027688+00	{}	Loopback	9e9e9e		\N
+b77c12b2-5b1e-452e-8ad5-3852cb0e370f	2026-09-21 00:00:00+00	2026-09-21 09:47:02.0292+00	{}	Secondary	2196f3		\N
+4cc2bf86-10da-40dc-8911-3eb67d0bc5c8	2026-09-21 00:00:00+00	2026-09-21 09:47:02.030518+00	{}	Anycast	ffc107		\N
+1f8bde57-224b-47d5-9b2d-85e8789aaf81	2026-09-21 00:00:00+00	2026-09-21 09:47:02.031794+00	{}	VIP	4caf50		\N
+b6ede485-4877-44c2-b43c-e607823a93e8	2026-09-21 00:00:00+00	2026-09-21 09:47:02.033029+00	{}	VRRP	4caf50		\N
+0e4d6b71-a022-4d3e-9d74-a0acae22cb95	2026-09-21 00:00:00+00	2026-09-21 09:47:02.034297+00	{}	HSRP	4caf50		\N
+0451cece-9772-4612-94ae-2e2b4a068ff5	2026-09-21 00:00:00+00	2026-09-21 09:47:02.035727+00	{}	GLBP	4caf50		\N
+3fe7f0b6-16f6-42b7-ae9b-5b2e1034cb91	2026-09-21 00:00:00+00	2026-09-21 09:47:02.036953+00	{}	CARP	4caf50		\N
+a482c164-5d4d-4612-9c58-a581a48c9d9e	2026-09-21 09:47:57.33751+00	2026-09-21 09:47:57.337523+00	{}	Administrative	2196f3	Unit plays an administrative role	\N
+6bec3f2c-5a55-45d8-b22d-2212cbd93154	2026-09-21 09:47:57.340727+00	2026-09-21 09:47:57.340734+00	{}	Billing	4caf50	Unit plays a billing role	\N
+1a9cb0aa-8dbf-42bc-84bb-ee6a97f22b07	2026-09-21 09:47:57.343228+00	2026-09-21 09:47:57.343236+00	{}	Support	ffeb3b	Unit plays a support role	\N
+de7d0706-3059-4f72-b0e4-82601f42e051	2026-09-21 09:47:57.345696+00	2026-09-21 09:47:57.345703+00	{}	On Site	111111	Unit plays an on site role	\N
+9c64acff-a296-4241-9f23-c83426c28d2d	2026-09-21 09:49:02.754714+00	2026-09-21 09:49:02.754729+00	{}	Peer	ff9800	Unit plays a Peer role	\N
+ae0e5c70-4f42-4e81-bd61-8372c2917aa5	2026-09-21 09:49:02.757882+00	2026-09-21 09:49:02.757892+00	{}	Hub	2f6a31	Unit plays a Hub role	\N
+ff165747-5408-4027-a7ab-7e2805efcbd7	2026-09-21 09:49:02.760745+00	2026-09-21 09:49:02.760754+00	{}	Spoke	8bc34a	Unit plays a Spoke role	\N
 \.
 
 
@@ -8003,26 +7899,21 @@ a172432f-3d44-4697-b48b-c4fbaf6351b1	2026-09-21 09:50:25.959284+00	2026-09-21 09
 --
 
 COPY public.extras_role_content_types (id, role_id, contenttype_id) FROM stdin;
-1	26601e10-c6f8-44ee-a1ff-32333af3ceef	6
-2	caff1948-870f-4460-8478-388e14222967	6
-3	e874c53d-f127-4271-a13d-748b0a5a177b	6
-4	fe59212c-cf94-44fd-8004-be9ce0dff209	6
-5	92fa7918-82d6-4926-bdff-ddc4d6fc2709	6
-6	7be459c0-fca4-4de7-b28f-d64bf2761668	6
-7	38358ebc-0bf1-45c3-b711-6a5abce4ef1d	6
-8	c37a8e8c-9f59-4abb-8737-8f8994857ac9	6
-9	bf7ee457-d33a-4abe-b3a5-6bb35e4737af	23
-10	2bef9604-2bb6-4272-b730-a7cb48189345	23
-11	5968b42e-e6cb-4363-a16a-3304fb02b3a6	23
-12	535b20e7-85fb-49df-aafc-bfc32df209cd	23
-13	63fbcf4d-4233-4a0d-86ce-d8c389dd3859	36
-14	f2983fc2-d95d-4d92-8530-5f6bfcf0d158	36
-15	1d0513b4-c8f9-4e25-a287-390cacbabce6	36
-16	15c0b975-2fed-43be-b0d0-f04037d63cb9	36
-17	a6febf72-00ea-4e7c-bee9-c0c33b404df0	36
-18	5e18d79a-f1bb-4ebb-ada0-968d4f7a26eb	39
-19	d249b337-b060-49ad-ae1e-add14dedf3de	39
-20	a172432f-3d44-4697-b48b-c4fbaf6351b1	39
+1	4cc2bf86-10da-40dc-8911-3eb67d0bc5c8	6
+2	3fe7f0b6-16f6-42b7-ae9b-5b2e1034cb91	6
+3	0451cece-9772-4612-94ae-2e2b4a068ff5	6
+4	0e4d6b71-a022-4d3e-9d74-a0acae22cb95	6
+5	d4c290df-9f8d-4832-818c-45e2a04f5050	6
+6	b77c12b2-5b1e-452e-8ad5-3852cb0e370f	6
+7	1f8bde57-224b-47d5-9b2d-85e8789aaf81	6
+8	b6ede485-4877-44c2-b43c-e607823a93e8	6
+9	a482c164-5d4d-4612-9c58-a581a48c9d9e	23
+10	6bec3f2c-5a55-45d8-b22d-2212cbd93154	23
+11	1a9cb0aa-8dbf-42bc-84bb-ee6a97f22b07	23
+12	de7d0706-3059-4f72-b0e4-82601f42e051	23
+13	9c64acff-a296-4241-9f23-c83426c28d2d	38
+14	ae0e5c70-4f42-4e81-bd61-8372c2917aa5	38
+15	ff165747-5408-4027-a7ab-7e2805efcbd7	38
 \.
 
 
@@ -8087,28 +7978,28 @@ COPY public.extras_staticgroupassociation (id, created, last_updated, _custom_fi
 --
 
 COPY public.extras_status (id, created, last_updated, _custom_field_data, name, color, description) FROM stdin;
-62347ece-b687-4adb-90d0-79658f45346d	2026-09-21 00:00:00+00	2026-09-21 09:46:49.509639+00	{}	Planned	00bcd4	Unit has been planned
-d419d842-8258-4cad-938b-a3f3236c5591	2026-09-21 00:00:00+00	2026-09-21 09:46:49.51494+00	{}	Provisioning	2196f3	Circuit is being provisioned
-98a213dd-5345-4072-b799-381e2fb9958a	2026-09-21 00:00:00+00	2026-09-21 09:46:49.518707+00	{}	Active	4caf50	Unit is active
-f4b62670-8432-41d2-b3ef-82c68f6811e8	2026-09-21 00:00:00+00	2026-09-21 09:46:49.522759+00	{}	Offline	ffc107	Unit is offline
-ba1d60a4-32d1-4684-ad49-9bb20698ec87	2026-09-21 00:00:00+00	2026-09-21 09:46:49.526895+00	{}	Deprovisioning	ffc107	Circuit is being deprovisioned
-c665f04a-b23e-4bed-a08f-a9507f358cef	2026-09-21 00:00:00+00	2026-09-21 09:46:49.530925+00	{}	Decommissioned	9e9e9e	Circuit has been decommissioned
-3a7df80c-8308-4c2b-bc54-b6d4d93ae740	2026-09-21 00:00:00+00	2026-09-21 09:46:49.537054+00	{}	Connected	4caf50	Cable is connected
-73c225a4-2ada-4cca-a2dd-fa2348d14843	2026-09-21 00:00:00+00	2026-09-21 09:46:49.543699+00	{}	Decommissioning	ffc107	Unit is being decommissioned
-ca3fe163-69e5-4745-95d6-96b4b986e82c	2026-09-21 00:00:00+00	2026-09-21 09:46:49.558025+00	{}	Staged	2196f3	Unit has been staged
-7d887d31-1641-43ca-a20d-09cb9a2f1bed	2026-09-21 00:00:00+00	2026-09-21 09:46:49.561796+00	{}	Failed	f44336	Unit has failed
-05ba2ac7-9502-49d9-b35e-70c6377fd3d9	2026-09-21 00:00:00+00	2026-09-21 09:46:49.56532+00	{}	Inventory	9e9e9e	Device is in inventory
-0328c961-32c4-4f45-ab17-8ab5adb0e31e	2026-09-21 00:00:00+00	2026-09-21 09:46:49.588499+00	{}	Reserved	00bcd4	Unit is reserved
-62e94c4b-87ac-461d-986a-1197be4f6be0	2026-09-21 00:00:00+00	2026-09-21 09:46:49.592535+00	{}	Available	4caf50	Unit is available
-84650ff2-5194-4581-a630-335dcddeb134	2026-09-21 00:00:00+00	2026-09-21 09:46:49.602779+00	{}	Deprecated	f44336	Unit has been deprecated
-2318c927-f5d2-4749-99b9-d931cc8c6fea	2026-09-21 00:00:00+00	2026-09-21 09:46:56.104311+00	{}	Maintenance	9e9e9e	Unit is under maintenance
-6ad7bc75-0328-4e95-8b4e-52c19793db72	2026-09-21 00:00:00+00	2026-09-21 09:47:04.553759+00	{}	Staging	2196f3	Location is in the process of being staged
-cb40b806-6a91-4279-85ed-18166caa4506	2026-09-21 00:00:00+00	2026-09-21 09:47:04.562901+00	{}	Retired	f44336	Location has been retired
-86ebd194-437c-4c31-8ece-8d399eeca704	2026-09-21 09:48:31.672764+00	2026-09-21 09:48:31.672779+00	{}	Primary	2196f3	Unit is primary
-040fdad5-2682-4edb-aa62-a9ab98ec54ed	2026-09-21 09:48:31.6783+00	2026-09-21 09:48:31.678314+00	{}	Secondary	ffeb3b	Unit is secondary
-4712709a-f925-42d6-a619-4e83627ed21b	2026-09-21 09:48:34.861989+00	2026-09-21 09:48:34.862005+00	{}	Extended Support	00bcd4	Software is in extended support
-e4ecfd24-4986-4fd6-b9a2-3696af1fdb51	2026-09-21 09:48:34.86552+00	2026-09-21 09:48:34.865529+00	{}	End-of-Life	f44336	Unit has reached end-of-life
-0e97de33-f2ce-484b-b1be-cfba2b17850e	2026-09-21 09:49:27.679272+00	2026-09-21 09:49:27.679288+00	{}	Down	ffc107	VRF is down
+e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	2026-09-21 00:00:00+00	2026-09-21 09:46:47.172842+00	{}	Planned	00bcd4	Unit has been planned
+7a138259-546b-4c41-839f-6f3f916fad50	2026-09-21 00:00:00+00	2026-09-21 09:46:47.177631+00	{}	Provisioning	2196f3	Circuit is being provisioned
+6aab4439-3656-498b-81e2-93e0a1199454	2026-09-21 00:00:00+00	2026-09-21 09:46:47.180903+00	{}	Active	4caf50	Unit is active
+e07f11b2-617f-430c-9f96-2ac3626f3208	2026-09-21 00:00:00+00	2026-09-21 09:46:47.184118+00	{}	Offline	ffc107	Unit is offline
+d647f370-db5a-4cf2-b805-bc75cdeb42f6	2026-09-21 00:00:00+00	2026-09-21 09:46:47.186897+00	{}	Deprovisioning	ffc107	Circuit is being deprovisioned
+ce816a90-0782-4230-ad48-247605c436d6	2026-09-21 00:00:00+00	2026-09-21 09:46:47.18963+00	{}	Decommissioned	9e9e9e	Circuit has been decommissioned
+42f70ef6-5e12-45ff-9426-2fde15eef432	2026-09-21 00:00:00+00	2026-09-21 09:46:47.194659+00	{}	Connected	4caf50	Cable is connected
+d80274e1-4d55-43f5-9aab-3da6b2192eb3	2026-09-21 00:00:00+00	2026-09-21 09:46:47.199651+00	{}	Decommissioning	ffc107	Unit is being decommissioned
+f6b077e3-d02d-4cc0-9817-cb0f72c22919	2026-09-21 00:00:00+00	2026-09-21 09:46:47.210787+00	{}	Staged	2196f3	Unit has been staged
+e680399c-933b-4cc0-b976-d6206f352bbe	2026-09-21 00:00:00+00	2026-09-21 09:46:47.213447+00	{}	Failed	f44336	Unit has failed
+89912a5b-a2dd-48d9-9579-2f06cbce33e9	2026-09-21 00:00:00+00	2026-09-21 09:46:47.216347+00	{}	Inventory	9e9e9e	Device is in inventory
+ca045391-415e-43e3-867a-c22d71df8900	2026-09-21 00:00:00+00	2026-09-21 09:46:47.233499+00	{}	Reserved	00bcd4	Unit is reserved
+e12fb774-98ba-4621-ad15-854c83212d91	2026-09-21 00:00:00+00	2026-09-21 09:46:47.236058+00	{}	Available	4caf50	Unit is available
+8e5e6e32-961d-455e-8d69-eec369d05f93	2026-09-21 00:00:00+00	2026-09-21 09:46:47.242417+00	{}	Deprecated	f44336	Unit has been deprecated
+9e99284b-aea4-4c5e-b738-e6dbd0c973e3	2026-09-21 00:00:00+00	2026-09-21 09:46:51.988247+00	{}	Maintenance	9e9e9e	Unit is under maintenance
+e80622b7-dd35-4f37-a857-5732ae1aaadd	2026-09-21 00:00:00+00	2026-09-21 09:46:58.295947+00	{}	Staging	2196f3	Location is in the process of being staged
+e8f96415-d50c-4bdb-b006-aacd7be527a4	2026-09-21 00:00:00+00	2026-09-21 09:46:58.302843+00	{}	Retired	f44336	Location has been retired
+9ac1a252-4ad1-4c06-854e-491aa862b35d	2026-09-21 09:47:57.32866+00	2026-09-21 09:47:57.328677+00	{}	Primary	2196f3	Unit is primary
+226e4132-1f72-427f-ac3e-c1af15e63b6b	2026-09-21 09:47:57.332284+00	2026-09-21 09:47:57.332294+00	{}	Secondary	ffeb3b	Unit is secondary
+1efbd083-7157-4723-b624-4514dc51a357	2026-09-21 09:47:59.519575+00	2026-09-21 09:47:59.519591+00	{}	Extended Support	00bcd4	Software is in extended support
+fa1508d0-bfe8-4379-b6df-c3e005131d93	2026-09-21 09:47:59.522244+00	2026-09-21 09:47:59.522253+00	{}	End-of-Life	f44336	Unit has reached end-of-life
+9b6056b4-ae5e-4df6-8631-41cbe6cceed6	2026-09-21 09:48:34.350438+00	2026-09-21 09:48:34.350453+00	{}	Down	ffc107	VRF is down
 \.
 
 
@@ -8117,111 +8008,108 @@ e4ecfd24-4986-4fd6-b9a2-3696af1fdb51	2026-09-21 09:48:34.86552+00	2026-09-21 09:
 --
 
 COPY public.extras_status_content_types (id, status_id, contenttype_id) FROM stdin;
-1	62347ece-b687-4adb-90d0-79658f45346d	1
-2	d419d842-8258-4cad-938b-a3f3236c5591	1
-3	98a213dd-5345-4072-b799-381e2fb9958a	1
-4	f4b62670-8432-41d2-b3ef-82c68f6811e8	1
-5	ba1d60a4-32d1-4684-ad49-9bb20698ec87	1
-6	c665f04a-b23e-4bed-a08f-a9507f358cef	1
-7	3a7df80c-8308-4c2b-bc54-b6d4d93ae740	2
-8	62347ece-b687-4adb-90d0-79658f45346d	2
-9	73c225a4-2ada-4cca-a2dd-fa2348d14843	2
-10	f4b62670-8432-41d2-b3ef-82c68f6811e8	3
-11	98a213dd-5345-4072-b799-381e2fb9958a	3
-12	62347ece-b687-4adb-90d0-79658f45346d	3
-13	ca3fe163-69e5-4745-95d6-96b4b986e82c	3
-14	7d887d31-1641-43ca-a20d-09cb9a2f1bed	3
-15	05ba2ac7-9502-49d9-b35e-70c6377fd3d9	3
-16	73c225a4-2ada-4cca-a2dd-fa2348d14843	3
-17	f4b62670-8432-41d2-b3ef-82c68f6811e8	4
-18	98a213dd-5345-4072-b799-381e2fb9958a	4
-19	62347ece-b687-4adb-90d0-79658f45346d	4
-20	7d887d31-1641-43ca-a20d-09cb9a2f1bed	4
-21	0328c961-32c4-4f45-ab17-8ab5adb0e31e	5
-22	62e94c4b-87ac-461d-986a-1197be4f6be0	5
-23	62347ece-b687-4adb-90d0-79658f45346d	5
-24	98a213dd-5345-4072-b799-381e2fb9958a	5
-25	84650ff2-5194-4581-a630-335dcddeb134	5
-26	98a213dd-5345-4072-b799-381e2fb9958a	6
-27	0328c961-32c4-4f45-ab17-8ab5adb0e31e	6
-28	84650ff2-5194-4581-a630-335dcddeb134	6
-29	98a213dd-5345-4072-b799-381e2fb9958a	7
-30	0328c961-32c4-4f45-ab17-8ab5adb0e31e	7
-31	84650ff2-5194-4581-a630-335dcddeb134	7
-32	98a213dd-5345-4072-b799-381e2fb9958a	8
-33	0328c961-32c4-4f45-ab17-8ab5adb0e31e	8
-34	84650ff2-5194-4581-a630-335dcddeb134	8
-35	f4b62670-8432-41d2-b3ef-82c68f6811e8	9
-36	98a213dd-5345-4072-b799-381e2fb9958a	9
-37	62347ece-b687-4adb-90d0-79658f45346d	9
-38	ca3fe163-69e5-4745-95d6-96b4b986e82c	9
-39	7d887d31-1641-43ca-a20d-09cb9a2f1bed	9
-40	73c225a4-2ada-4cca-a2dd-fa2348d14843	9
-41	7d887d31-1641-43ca-a20d-09cb9a2f1bed	12
-42	98a213dd-5345-4072-b799-381e2fb9958a	12
-43	73c225a4-2ada-4cca-a2dd-fa2348d14843	12
-44	2318c927-f5d2-4749-99b9-d931cc8c6fea	12
-45	62347ece-b687-4adb-90d0-79658f45346d	12
-46	62347ece-b687-4adb-90d0-79658f45346d	13
-47	7d887d31-1641-43ca-a20d-09cb9a2f1bed	13
-48	98a213dd-5345-4072-b799-381e2fb9958a	13
-49	73c225a4-2ada-4cca-a2dd-fa2348d14843	13
-50	2318c927-f5d2-4749-99b9-d931cc8c6fea	13
-51	62347ece-b687-4adb-90d0-79658f45346d	14
-52	6ad7bc75-0328-4e95-8b4e-52c19793db72	14
-53	98a213dd-5345-4072-b799-381e2fb9958a	14
-54	73c225a4-2ada-4cca-a2dd-fa2348d14843	14
-55	cb40b806-6a91-4279-85ed-18166caa4506	14
-56	62347ece-b687-4adb-90d0-79658f45346d	19
-57	6ad7bc75-0328-4e95-8b4e-52c19793db72	19
-58	98a213dd-5345-4072-b799-381e2fb9958a	19
-59	73c225a4-2ada-4cca-a2dd-fa2348d14843	19
-60	cb40b806-6a91-4279-85ed-18166caa4506	19
-61	62347ece-b687-4adb-90d0-79658f45346d	20
-62	6ad7bc75-0328-4e95-8b4e-52c19793db72	20
-63	98a213dd-5345-4072-b799-381e2fb9958a	20
-64	73c225a4-2ada-4cca-a2dd-fa2348d14843	20
-65	cb40b806-6a91-4279-85ed-18166caa4506	20
-66	86ebd194-437c-4c31-8ece-8d399eeca704	23
-67	040fdad5-2682-4edb-aa62-a9ab98ec54ed	23
-68	98a213dd-5345-4072-b799-381e2fb9958a	23
-69	98a213dd-5345-4072-b799-381e2fb9958a	24
-70	4712709a-f925-42d6-a619-4e83627ed21b	24
-71	e4ecfd24-4986-4fd6-b9a2-3696af1fdb51	24
-72	98a213dd-5345-4072-b799-381e2fb9958a	25
-73	4712709a-f925-42d6-a619-4e83627ed21b	25
-74	e4ecfd24-4986-4fd6-b9a2-3696af1fdb51	25
-75	f4b62670-8432-41d2-b3ef-82c68f6811e8	26
-76	98a213dd-5345-4072-b799-381e2fb9958a	26
-77	62347ece-b687-4adb-90d0-79658f45346d	26
-78	ca3fe163-69e5-4745-95d6-96b4b986e82c	26
-79	7d887d31-1641-43ca-a20d-09cb9a2f1bed	26
-80	05ba2ac7-9502-49d9-b35e-70c6377fd3d9	26
-81	73c225a4-2ada-4cca-a2dd-fa2348d14843	26
-82	f4b62670-8432-41d2-b3ef-82c68f6811e8	27
-83	98a213dd-5345-4072-b799-381e2fb9958a	27
-84	62347ece-b687-4adb-90d0-79658f45346d	27
-85	ca3fe163-69e5-4745-95d6-96b4b986e82c	27
-86	7d887d31-1641-43ca-a20d-09cb9a2f1bed	27
-87	05ba2ac7-9502-49d9-b35e-70c6377fd3d9	27
-88	73c225a4-2ada-4cca-a2dd-fa2348d14843	27
-89	98a213dd-5345-4072-b799-381e2fb9958a	28
-90	0e97de33-f2ce-484b-b1be-cfba2b17850e	28
-91	84650ff2-5194-4581-a630-335dcddeb134	28
-92	f4b62670-8432-41d2-b3ef-82c68f6811e8	29
-93	98a213dd-5345-4072-b799-381e2fb9958a	29
-94	62347ece-b687-4adb-90d0-79658f45346d	29
-95	98a213dd-5345-4072-b799-381e2fb9958a	36
-96	0328c961-32c4-4f45-ab17-8ab5adb0e31e	36
-97	84650ff2-5194-4581-a630-335dcddeb134	36
-98	98a213dd-5345-4072-b799-381e2fb9958a	37
-99	2318c927-f5d2-4749-99b9-d931cc8c6fea	37
-100	62347ece-b687-4adb-90d0-79658f45346d	37
-101	7d887d31-1641-43ca-a20d-09cb9a2f1bed	37
-102	73c225a4-2ada-4cca-a2dd-fa2348d14843	37
-103	98a213dd-5345-4072-b799-381e2fb9958a	38
-104	0e97de33-f2ce-484b-b1be-cfba2b17850e	38
-105	84650ff2-5194-4581-a630-335dcddeb134	38
+1	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	1
+2	7a138259-546b-4c41-839f-6f3f916fad50	1
+3	6aab4439-3656-498b-81e2-93e0a1199454	1
+4	e07f11b2-617f-430c-9f96-2ac3626f3208	1
+5	d647f370-db5a-4cf2-b805-bc75cdeb42f6	1
+6	ce816a90-0782-4230-ad48-247605c436d6	1
+7	42f70ef6-5e12-45ff-9426-2fde15eef432	2
+8	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	2
+9	d80274e1-4d55-43f5-9aab-3da6b2192eb3	2
+10	e07f11b2-617f-430c-9f96-2ac3626f3208	3
+11	6aab4439-3656-498b-81e2-93e0a1199454	3
+12	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	3
+13	f6b077e3-d02d-4cc0-9817-cb0f72c22919	3
+14	e680399c-933b-4cc0-b976-d6206f352bbe	3
+15	89912a5b-a2dd-48d9-9579-2f06cbce33e9	3
+16	d80274e1-4d55-43f5-9aab-3da6b2192eb3	3
+17	e07f11b2-617f-430c-9f96-2ac3626f3208	4
+18	6aab4439-3656-498b-81e2-93e0a1199454	4
+19	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	4
+20	e680399c-933b-4cc0-b976-d6206f352bbe	4
+21	ca045391-415e-43e3-867a-c22d71df8900	5
+22	e12fb774-98ba-4621-ad15-854c83212d91	5
+23	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	5
+24	6aab4439-3656-498b-81e2-93e0a1199454	5
+25	8e5e6e32-961d-455e-8d69-eec369d05f93	5
+26	6aab4439-3656-498b-81e2-93e0a1199454	6
+27	ca045391-415e-43e3-867a-c22d71df8900	6
+28	8e5e6e32-961d-455e-8d69-eec369d05f93	6
+29	6aab4439-3656-498b-81e2-93e0a1199454	7
+30	ca045391-415e-43e3-867a-c22d71df8900	7
+31	8e5e6e32-961d-455e-8d69-eec369d05f93	7
+32	6aab4439-3656-498b-81e2-93e0a1199454	8
+33	ca045391-415e-43e3-867a-c22d71df8900	8
+34	8e5e6e32-961d-455e-8d69-eec369d05f93	8
+35	e07f11b2-617f-430c-9f96-2ac3626f3208	9
+36	6aab4439-3656-498b-81e2-93e0a1199454	9
+37	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	9
+38	f6b077e3-d02d-4cc0-9817-cb0f72c22919	9
+39	e680399c-933b-4cc0-b976-d6206f352bbe	9
+40	d80274e1-4d55-43f5-9aab-3da6b2192eb3	9
+41	e680399c-933b-4cc0-b976-d6206f352bbe	12
+42	6aab4439-3656-498b-81e2-93e0a1199454	12
+43	d80274e1-4d55-43f5-9aab-3da6b2192eb3	12
+44	9e99284b-aea4-4c5e-b738-e6dbd0c973e3	12
+45	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	12
+46	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	13
+47	e680399c-933b-4cc0-b976-d6206f352bbe	13
+48	6aab4439-3656-498b-81e2-93e0a1199454	13
+49	d80274e1-4d55-43f5-9aab-3da6b2192eb3	13
+50	9e99284b-aea4-4c5e-b738-e6dbd0c973e3	13
+51	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	14
+52	e80622b7-dd35-4f37-a857-5732ae1aaadd	14
+53	6aab4439-3656-498b-81e2-93e0a1199454	14
+54	d80274e1-4d55-43f5-9aab-3da6b2192eb3	14
+55	e8f96415-d50c-4bdb-b006-aacd7be527a4	14
+56	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	19
+57	e80622b7-dd35-4f37-a857-5732ae1aaadd	19
+58	6aab4439-3656-498b-81e2-93e0a1199454	19
+59	d80274e1-4d55-43f5-9aab-3da6b2192eb3	19
+60	e8f96415-d50c-4bdb-b006-aacd7be527a4	19
+61	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	20
+62	e80622b7-dd35-4f37-a857-5732ae1aaadd	20
+63	6aab4439-3656-498b-81e2-93e0a1199454	20
+64	d80274e1-4d55-43f5-9aab-3da6b2192eb3	20
+65	e8f96415-d50c-4bdb-b006-aacd7be527a4	20
+66	9ac1a252-4ad1-4c06-854e-491aa862b35d	23
+67	226e4132-1f72-427f-ac3e-c1af15e63b6b	23
+68	6aab4439-3656-498b-81e2-93e0a1199454	23
+69	6aab4439-3656-498b-81e2-93e0a1199454	24
+70	1efbd083-7157-4723-b624-4514dc51a357	24
+71	fa1508d0-bfe8-4379-b6df-c3e005131d93	24
+72	6aab4439-3656-498b-81e2-93e0a1199454	25
+73	1efbd083-7157-4723-b624-4514dc51a357	25
+74	fa1508d0-bfe8-4379-b6df-c3e005131d93	25
+75	e07f11b2-617f-430c-9f96-2ac3626f3208	26
+76	6aab4439-3656-498b-81e2-93e0a1199454	26
+77	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	26
+78	f6b077e3-d02d-4cc0-9817-cb0f72c22919	26
+79	e680399c-933b-4cc0-b976-d6206f352bbe	26
+80	89912a5b-a2dd-48d9-9579-2f06cbce33e9	26
+81	d80274e1-4d55-43f5-9aab-3da6b2192eb3	26
+82	e07f11b2-617f-430c-9f96-2ac3626f3208	27
+83	6aab4439-3656-498b-81e2-93e0a1199454	27
+84	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	27
+85	f6b077e3-d02d-4cc0-9817-cb0f72c22919	27
+86	e680399c-933b-4cc0-b976-d6206f352bbe	27
+87	89912a5b-a2dd-48d9-9579-2f06cbce33e9	27
+88	d80274e1-4d55-43f5-9aab-3da6b2192eb3	27
+89	6aab4439-3656-498b-81e2-93e0a1199454	28
+90	9b6056b4-ae5e-4df6-8631-41cbe6cceed6	28
+91	8e5e6e32-961d-455e-8d69-eec369d05f93	28
+92	e07f11b2-617f-430c-9f96-2ac3626f3208	29
+93	6aab4439-3656-498b-81e2-93e0a1199454	29
+94	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	29
+95	6aab4439-3656-498b-81e2-93e0a1199454	36
+96	9e99284b-aea4-4c5e-b738-e6dbd0c973e3	36
+97	e7cfbd96-fe19-4037-bfea-4dbd05e5cb06	36
+98	e680399c-933b-4cc0-b976-d6206f352bbe	36
+99	d80274e1-4d55-43f5-9aab-3da6b2192eb3	36
+100	6aab4439-3656-498b-81e2-93e0a1199454	37
+101	9b6056b4-ae5e-4df6-8631-41cbe6cceed6	37
+102	8e5e6e32-961d-455e-8d69-eec369d05f93	37
 \.
 
 
@@ -8298,14 +8186,6 @@ COPY public.ipam_ipaddress (id, created, last_updated, _custom_field_data, host,
 
 
 --
--- Data for Name: ipam_ipaddressrange; Type: TABLE DATA; Schema: public; Owner: nautobot
---
-
-COPY public.ipam_ipaddressrange (id, created, last_updated, _custom_field_data, name, start_host, end_host, ip_version, description, count_as_utilized, is_exclusive, parent_id, role_id, status_id, tenant_id) FROM stdin;
-\.
-
-
---
 -- Data for Name: ipam_ipaddresstointerface; Type: TABLE DATA; Schema: public; Owner: nautobot
 --
 
@@ -8318,7 +8198,7 @@ COPY public.ipam_ipaddresstointerface (id, is_source, is_destination, is_default
 --
 
 COPY public.ipam_namespace (id, created, last_updated, _custom_field_data, name, description, location_id, tenant_id) FROM stdin;
-1947b0f6-6ace-46b1-b64f-bd12b6fee101	2026-09-21 09:48:07.577107+00	2026-09-21 09:48:07.577122+00	{}	Global	Default Global namespace. Created by Nautobot.	\N	\N
+8cc9f2bf-2d20-4aec-9165-ec29984d7f28	2026-09-21 09:47:41.028653+00	2026-09-21 09:47:41.028669+00	{}	Global	Default Global namespace. Created by Nautobot.	\N	\N
 \.
 
 
@@ -8607,9 +8487,9 @@ COPY public.tenancy_tenantgroup (id, created, last_updated, _custom_field_data, 
 --
 
 COPY public.users_objectpermission (id, name, description, enabled, actions, constraints, created, last_updated) FROM stdin;
-2531913b-c20c-474a-a309-6aa7f6a06147	nautobot-default-scheduledjobs-architect-permissions	Nautobot added permission aligned to the Workflow Architect persona.	t	["view", "add", "change", "delete"]	\N	2026-09-21 09:50:21.810032+00	2026-09-21 09:50:21.881073+00
-14840c12-f618-4faf-807d-d6febd1a43e8	nautobot-default-scheduledjobs-approver-permissions	Nautobot added permission aligned to the Workflow Approver persona.	t	["view", "change"]	\N	2026-09-21 09:50:21.810032+00	2026-09-21 09:50:21.881073+00
-6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	nautobot-default-scheduledjobs-operator-permissions	Nautobot added permission aligned to the Workflow Operator persona.	t	["view"]	\N	2026-09-21 09:50:21.810032+00	2026-09-21 09:50:21.881073+00
+e23a8cc6-617a-4281-bb4a-71689819c4f6	nautobot-default-scheduledjobs-architect-permissions	Nautobot added permission aligned to the Workflow Architect persona.	t	["view", "add", "change", "delete"]	\N	2026-09-21 09:48:59.936123+00	2026-09-21 09:48:59.999193+00
+da588f59-9db3-4308-a802-df46df9418db	nautobot-default-scheduledjobs-approver-permissions	Nautobot added permission aligned to the Workflow Approver persona.	t	["view", "change"]	\N	2026-09-21 09:48:59.936123+00	2026-09-21 09:48:59.999193+00
+a3e649cd-6ff9-4f37-a533-05b268446791	nautobot-default-scheduledjobs-operator-permissions	Nautobot added permission aligned to the Workflow Operator persona.	t	["view"]	\N	2026-09-21 09:48:59.936123+00	2026-09-21 09:48:59.999193+00
 \.
 
 
@@ -8618,11 +8498,11 @@ COPY public.users_objectpermission (id, name, description, enabled, actions, con
 --
 
 COPY public.users_objectpermission_groups (id, objectpermission_id, group_id) FROM stdin;
-1	2531913b-c20c-474a-a309-6aa7f6a06147	3
-2	14840c12-f618-4faf-807d-d6febd1a43e8	1
-3	6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	1
-4	6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	2
-5	6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	3
+1	e23a8cc6-617a-4281-bb4a-71689819c4f6	3
+2	da588f59-9db3-4308-a802-df46df9418db	1
+3	a3e649cd-6ff9-4f37-a533-05b268446791	1
+4	a3e649cd-6ff9-4f37-a533-05b268446791	2
+5	a3e649cd-6ff9-4f37-a533-05b268446791	3
 \.
 
 
@@ -8631,12 +8511,12 @@ COPY public.users_objectpermission_groups (id, objectpermission_id, group_id) FR
 --
 
 COPY public.users_objectpermission_object_types (id, objectpermission_id, contenttype_id) FROM stdin;
-1	2531913b-c20c-474a-a309-6aa7f6a06147	33
-2	2531913b-c20c-474a-a309-6aa7f6a06147	34
-3	14840c12-f618-4faf-807d-d6febd1a43e8	31
-4	6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	32
-5	6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	30
-6	6654cf17-0ebf-4bdb-a3da-23e9b3d3d177	31
+1	e23a8cc6-617a-4281-bb4a-71689819c4f6	33
+2	e23a8cc6-617a-4281-bb4a-71689819c4f6	34
+3	da588f59-9db3-4308-a802-df46df9418db	31
+4	a3e649cd-6ff9-4f37-a533-05b268446791	32
+5	a3e649cd-6ff9-4f37-a533-05b268446791	30
+6	a3e649cd-6ff9-4f37-a533-05b268446791	31
 \.
 
 
@@ -8725,10 +8605,10 @@ COPY public.vpn_vpn (id, created, last_updated, _custom_field_data, name, descri
 --
 
 COPY public.vpn_vpnphase1policy (id, created, last_updated, _custom_field_data, name, description, ike_version, aggressive_mode, encryption_algorithm, integrity_algorithm, dh_group, lifetime_seconds, lifetime_kb, authentication_method, tenant_id) FROM stdin;
-0569eef7-47ef-4373-b826-7e87a14beac7	2026-09-21 09:50:26.162348+00	2026-09-21 09:50:26.162369+00	{}	Standard Policy	Standard Phase 1 Policy dedicated for Standard Site-to-Site VPN	IKEv2	f	["AES-256-CBC"]	["SHA256"]	["14"]	86400	\N		\N
-ab030d13-1c86-4803-9cdf-b832953c693d	2026-09-21 09:50:26.177261+00	2026-09-21 09:50:26.177271+00	{}	Remote Access	Policy dedicated for Remote Access VPN (IKEv2)	IKEv2	f	["AES-256-CBC"]	["SHA256"]	["19"]	28800	\N		\N
-aad79d0e-ce42-40e5-bd68-43f9047dbf93	2026-09-21 09:50:26.187426+00	2026-09-21 09:50:26.187438+00	{}	Performance-Oriented	Performance-Oriented for Site-to-Site	IKEv2	f	["AES-128-CBC"]	["SHA256"]	["5"]	86400	\N		\N
-e8afb83f-05f3-41bd-9e38-b2fa496dde49	2026-09-21 09:50:26.197764+00	2026-09-21 09:50:26.197776+00	{}	High-Security	High-Security Policy for Site-to-Site	IKEv2	f	["AES-256-GCM"]	["SHA512"]	["21"]	86400	\N		\N
+91baae55-eb25-4051-bc1e-b54d6a221857	2026-09-21 09:49:02.893485+00	2026-09-21 09:49:02.893499+00	{}	Standard Policy	Standard Phase 1 Policy dedicated for Standard Site-to-Site VPN	IKEv2	f	["AES-256-CBC"]	["SHA256"]	["14"]	86400	\N		\N
+8a2b5e2d-f54b-428d-b1e2-51517a704ba4	2026-09-21 09:49:02.906103+00	2026-09-21 09:49:02.906112+00	{}	Remote Access	Policy dedicated for Remote Access VPN (IKEv2)	IKEv2	f	["AES-256-CBC"]	["SHA256"]	["19"]	28800	\N		\N
+e08448d1-6ea9-4dba-b6cc-37c96b703d9c	2026-09-21 09:49:02.914219+00	2026-09-21 09:49:02.914227+00	{}	Performance-Oriented	Performance-Oriented for Site-to-Site	IKEv2	f	["AES-128-CBC"]	["SHA256"]	["5"]	86400	\N		\N
+b5d870ed-f3f5-40fd-a108-7d5892918544	2026-09-21 09:49:02.922141+00	2026-09-21 09:49:02.922148+00	{}	High-Security	High-Security Policy for Site-to-Site	IKEv2	f	["AES-256-GCM"]	["SHA512"]	["21"]	86400	\N		\N
 \.
 
 
@@ -8737,10 +8617,10 @@ e8afb83f-05f3-41bd-9e38-b2fa496dde49	2026-09-21 09:50:26.197764+00	2026-09-21 09
 --
 
 COPY public.vpn_vpnphase2policy (id, created, last_updated, _custom_field_data, name, description, encryption_algorithm, integrity_algorithm, pfs_group, lifetime, tenant_id) FROM stdin;
-05eaac75-e91a-4d77-96e9-bc34c9c7e330	2026-09-21 09:50:26.165416+00	2026-09-21 09:50:26.165426+00	{}	Standard Policy	Standard Phase 2 Policy dedicated for Standard Site-to-Site VPN	["AES-256-CBC"]	["SHA256"]	["14"]	3600	\N
-996d1884-19c7-4f1f-8d7a-3bfa6f7930f8	2026-09-21 09:50:26.179108+00	2026-09-21 09:50:26.179116+00	{}	Remote Access	Policy dedicated for Remote Access VPN (IKEv2)	["AES-256-CBC"]	["SHA256"]	["19"]	3600	\N
-617ddc67-4432-4290-9ea4-905c79dde602	2026-09-21 09:50:26.189295+00	2026-09-21 09:50:26.189306+00	{}	Performance-Oriented	Performance-Oriented for Site-to-Site	["AES-128-CBC"]	["SHA256"]	\N	3600	\N
-3977c69f-8f4e-4742-b836-dcb21b68c1b8	2026-09-21 09:50:26.199776+00	2026-09-21 09:50:26.199787+00	{}	High-Security	High-Security Policy for Site-to-Site	["AES-256-GCM"]	["SHA512"]	["21"]	1800	\N
+e6a2dd7a-eef6-409a-891f-f9a0e31ee6b4	2026-09-21 09:49:02.896054+00	2026-09-21 09:49:02.896068+00	{}	Standard Policy	Standard Phase 2 Policy dedicated for Standard Site-to-Site VPN	["AES-256-CBC"]	["SHA256"]	["14"]	3600	\N
+6f93f25a-afcf-43f8-a1a7-c5e3f63409a5	2026-09-21 09:49:02.907562+00	2026-09-21 09:49:02.90757+00	{}	Remote Access	Policy dedicated for Remote Access VPN (IKEv2)	["AES-256-CBC"]	["SHA256"]	["19"]	3600	\N
+f0b6e02f-93f5-46e3-86d4-40249b9063ae	2026-09-21 09:49:02.915674+00	2026-09-21 09:49:02.915682+00	{}	Performance-Oriented	Performance-Oriented for Site-to-Site	["AES-128-CBC"]	["SHA256"]	\N	3600	\N
+42051848-574c-4007-af1e-2c95c72c67e7	2026-09-21 09:49:02.923601+00	2026-09-21 09:49:02.923609+00	{}	High-Security	High-Security Policy for Site-to-Site	["AES-256-GCM"]	["SHA512"]	["21"]	1800	\N
 \.
 
 
@@ -8749,10 +8629,10 @@ COPY public.vpn_vpnphase2policy (id, created, last_updated, _custom_field_data, 
 --
 
 COPY public.vpn_vpnprofile (id, created, last_updated, _custom_field_data, name, description, keepalive_enabled, keepalive_interval, keepalive_retries, nat_traversal, extra_options, role_id, secrets_group_id, tenant_id) FROM stdin;
-88696e2b-560c-405f-9413-c06e824bbb9d	2026-09-21 09:50:26.168301+00	2026-09-21 09:50:26.16831+00	{}	Standard Site-to-Site VPN	Standard Site-to-Site VPN	t	10	3	f	\N	\N	\N	\N
-77d2f3a1-5c67-47d5-86ed-f62d8a6b5e11	2026-09-21 09:50:26.180875+00	2026-09-21 09:50:26.180883+00	{}	Remote Access VPN (IKEv2)	Remote Access VPN (IKEv2)	t	30	5	f	\N	\N	\N	\N
-08a4ae1b-4549-4d93-a405-48348bbe4c12	2026-09-21 09:50:26.191112+00	2026-09-21 09:50:26.191121+00	{}	Performance-Oriented Site-to-Site	Performance-Oriented Site-to-Site	t	5	2	f	\N	\N	\N	\N
-a25087ed-ee54-409f-8e6d-0c9fb1229306	2026-09-21 09:50:26.201651+00	2026-09-21 09:50:26.201666+00	{}	High-Security Site-to-Site	High-Security Site-to-Site	t	15	4	f	\N	\N	\N	\N
+9d7ca57d-0d27-4317-9fc4-70864ee35cbf	2026-09-21 09:49:02.898531+00	2026-09-21 09:49:02.898541+00	{}	Standard Site-to-Site VPN	Standard Site-to-Site VPN	t	10	3	f	\N	\N	\N	\N
+73c6478c-8354-4ec9-8903-dec25ee11317	2026-09-21 09:49:02.908945+00	2026-09-21 09:49:02.908953+00	{}	Remote Access VPN (IKEv2)	Remote Access VPN (IKEv2)	t	30	5	f	\N	\N	\N	\N
+d85821e5-bde3-4e18-9021-ccd5f46eff71	2026-09-21 09:49:02.916988+00	2026-09-21 09:49:02.916996+00	{}	Performance-Oriented Site-to-Site	Performance-Oriented Site-to-Site	t	5	2	f	\N	\N	\N	\N
+44495c5d-e471-4a92-a25d-397955c75c00	2026-09-21 09:49:02.924951+00	2026-09-21 09:49:02.924959+00	{}	High-Security Site-to-Site	High-Security Site-to-Site	t	15	4	f	\N	\N	\N	\N
 \.
 
 
@@ -8761,10 +8641,10 @@ a25087ed-ee54-409f-8e6d-0c9fb1229306	2026-09-21 09:50:26.201651+00	2026-09-21 09
 --
 
 COPY public.vpn_vpnprofilephase1policyassignment (id, weight, vpn_phase1_policy_id, vpn_profile_id) FROM stdin;
-a1eb532a-6645-4b3a-bde4-7a7606a307ea	100	0569eef7-47ef-4373-b826-7e87a14beac7	88696e2b-560c-405f-9413-c06e824bbb9d
-2b6160a0-6301-466a-8dbc-26fbb4209f69	100	ab030d13-1c86-4803-9cdf-b832953c693d	77d2f3a1-5c67-47d5-86ed-f62d8a6b5e11
-fe9b0559-d6ae-4bef-9c2f-3bd12b704fd6	100	aad79d0e-ce42-40e5-bd68-43f9047dbf93	08a4ae1b-4549-4d93-a405-48348bbe4c12
-87b89c42-f693-49d1-b9b9-c9d6f93314cf	100	e8afb83f-05f3-41bd-9e38-b2fa496dde49	a25087ed-ee54-409f-8e6d-0c9fb1229306
+2cd93655-4438-48c2-a48f-6ee0f13f52d9	100	91baae55-eb25-4051-bc1e-b54d6a221857	9d7ca57d-0d27-4317-9fc4-70864ee35cbf
+34c05d2f-ea33-4b6a-b741-bc0044e482bc	100	8a2b5e2d-f54b-428d-b1e2-51517a704ba4	73c6478c-8354-4ec9-8903-dec25ee11317
+0f572460-a93f-401d-a2c8-5d5aaef2f80f	100	e08448d1-6ea9-4dba-b6cc-37c96b703d9c	d85821e5-bde3-4e18-9021-ccd5f46eff71
+18af4344-01ee-4fc8-b8ca-7bc9c76ee65f	100	b5d870ed-f3f5-40fd-a108-7d5892918544	44495c5d-e471-4a92-a25d-397955c75c00
 \.
 
 
@@ -8773,10 +8653,10 @@ fe9b0559-d6ae-4bef-9c2f-3bd12b704fd6	100	aad79d0e-ce42-40e5-bd68-43f9047dbf93	08
 --
 
 COPY public.vpn_vpnprofilephase2policyassignment (id, weight, vpn_phase2_policy_id, vpn_profile_id) FROM stdin;
-555918f8-e9ce-49e3-a866-28c274b12e80	100	05eaac75-e91a-4d77-96e9-bc34c9c7e330	88696e2b-560c-405f-9413-c06e824bbb9d
-7efad311-63bd-4dd5-a59b-8524d49b99d1	100	996d1884-19c7-4f1f-8d7a-3bfa6f7930f8	77d2f3a1-5c67-47d5-86ed-f62d8a6b5e11
-e08b2b04-e367-436b-bf57-ca7f98ee93c4	100	617ddc67-4432-4290-9ea4-905c79dde602	08a4ae1b-4549-4d93-a405-48348bbe4c12
-605632c5-582b-4306-8a98-4166d2befa4e	100	3977c69f-8f4e-4742-b836-dcb21b68c1b8	a25087ed-ee54-409f-8e6d-0c9fb1229306
+09c7de18-6f73-4a56-a8f2-71a66272d6b5	100	e6a2dd7a-eef6-409a-891f-f9a0e31ee6b4	9d7ca57d-0d27-4317-9fc4-70864ee35cbf
+e66f2d9d-8e88-4ca1-9591-e1e9409dabab	100	6f93f25a-afcf-43f8-a1a7-c5e3f63409a5	73c6478c-8354-4ec9-8903-dec25ee11317
+d513e0a5-dac2-4ccc-944b-23163f1e4914	100	f0b6e02f-93f5-46e3-86d4-40249b9063ae	d85821e5-bde3-4e18-9021-ccd5f46eff71
+5824531c-00af-4b72-99cf-7acecbf3a94d	100	42051848-574c-4007-af1e-2c95c72c67e7	44495c5d-e471-4a92-a25d-397955c75c00
 \.
 
 
@@ -8886,7 +8766,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nautobot
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 766, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 754, true);
 
 
 --
@@ -9012,14 +8892,14 @@ SELECT pg_catalog.setval('public.django_celery_results_taskresult_id_seq', 1, fa
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nautobot
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 196, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 193, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nautobot
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 471, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 460, true);
 
 
 --
@@ -9138,14 +9018,14 @@ SELECT pg_catalog.setval('public.extras_metadatatype_content_types_id_seq', 1, f
 -- Name: extras_role_content_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nautobot
 --
 
-SELECT pg_catalog.setval('public.extras_role_content_types_id_seq', 20, true);
+SELECT pg_catalog.setval('public.extras_role_content_types_id_seq', 15, true);
 
 
 --
 -- Name: extras_status_content_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nautobot
 --
 
-SELECT pg_catalog.setval('public.extras_status_content_types_id_seq', 105, true);
+SELECT pg_catalog.setval('public.extras_status_content_types_id_seq', 102, true);
 
 
 --
@@ -9749,11 +9629,27 @@ ALTER TABLE ONLY public.dcim_cable
 
 
 --
--- Name: dcim_cablepath dcim_cablepath_origin_type_id_origin_id_93b779d6_uniq; Type: CONSTRAINT; Schema: public; Owner: nautobot
+-- Name: dcim_cable dcim_cable_termination_a_type_id_termination_a_id_e9d24bad_uniq; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_cable
+    ADD CONSTRAINT dcim_cable_termination_a_type_id_termination_a_id_e9d24bad_uniq UNIQUE (termination_a_type_id, termination_a_id);
+
+
+--
+-- Name: dcim_cable dcim_cable_termination_b_type_id_termination_b_id_057fc21f_uniq; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_cable
+    ADD CONSTRAINT dcim_cable_termination_b_type_id_termination_b_id_057fc21f_uniq UNIQUE (termination_b_type_id, termination_b_id);
+
+
+--
+-- Name: dcim_cablepath dcim_cablepath_origin_type_id_origin_id_41b6f814_uniq; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
 ALTER TABLE ONLY public.dcim_cablepath
-    ADD CONSTRAINT dcim_cablepath_origin_type_id_origin_id_93b779d6_uniq UNIQUE (origin_type_id, origin_id, peer_connector);
+    ADD CONSTRAINT dcim_cablepath_origin_type_id_origin_id_41b6f814_uniq UNIQUE (origin_type_id, origin_id);
 
 
 --
@@ -9765,107 +9661,11 @@ ALTER TABLE ONLY public.dcim_cablepath
 
 
 --
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_circuit_termination_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
+-- Name: dcim_consoleport dcim_consoleport_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_circuit_termination_id_key UNIQUE (circuit_termination_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_console_port_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_console_port_id_key UNIQUE (console_port_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_console_server_port_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_console_server_port_id_key UNIQUE (console_server_port_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_front_port_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_front_port_id_key UNIQUE (front_port_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_interface_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_interface_id_key UNIQUE (interface_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_pkey; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_pkey PRIMARY KEY (id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_power_feed_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_power_feed_id_key UNIQUE (power_feed_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_power_outlet_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_power_outlet_id_key UNIQUE (power_outlet_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_power_port_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_power_port_id_key UNIQUE (power_port_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_rear_port_id_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_rear_port_id_key UNIQUE (rear_port_id);
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_unique_connector; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_unique_connector UNIQUE (cable_id, cable_end, connector);
-
-
---
--- Name: dcim_cabletype dcim_cabletype_name_key; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletype
-    ADD CONSTRAINT dcim_cabletype_name_key UNIQUE (name);
-
-
---
--- Name: dcim_cabletype dcim_cabletype_pkey; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletype
-    ADD CONSTRAINT dcim_cabletype_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.dcim_consoleport
+    ADD CONSTRAINT dcim_consoleport_device_name_unique UNIQUE (device_id, name);
 
 
 --
@@ -9906,6 +9706,14 @@ ALTER TABLE ONLY public.dcim_consoleporttemplate
 
 ALTER TABLE ONLY public.dcim_consoleporttemplate
     ADD CONSTRAINT dcim_consoleporttemplate_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dcim_consoleserverport dcim_consoleserverport_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_consoleserverport
+    ADD CONSTRAINT dcim_consoleserverport_device_name_unique UNIQUE (device_id, name);
 
 
 --
@@ -10149,6 +9957,14 @@ ALTER TABLE ONLY public.dcim_devicetypetosoftwareimagefile
 
 
 --
+-- Name: dcim_frontport dcim_frontport_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_frontport
+    ADD CONSTRAINT dcim_frontport_device_name_unique UNIQUE (device_id, name);
+
+
+--
 -- Name: dcim_frontport dcim_frontport_module_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -10205,6 +10021,14 @@ ALTER TABLE ONLY public.dcim_frontporttemplate
 
 
 --
+-- Name: dcim_interface dcim_interface_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_interface
+    ADD CONSTRAINT dcim_interface_device_name_unique UNIQUE (device_id, name);
+
+
+--
 -- Name: dcim_interface dcim_interface_module_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -10234,14 +10058,6 @@ ALTER TABLE ONLY public.dcim_interface_tagged_vlans
 
 ALTER TABLE ONLY public.dcim_interface_tagged_vlans
     ADD CONSTRAINT dcim_interface_tagged_vlans_pkey PRIMARY KEY (id);
-
-
---
--- Name: dcim_interface dcim_interface_unique_parent_breakout_position; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_interface
-    ADD CONSTRAINT dcim_interface_unique_parent_breakout_position UNIQUE (parent_interface_id, breakout_position);
 
 
 --
@@ -10453,6 +10269,14 @@ ALTER TABLE ONLY public.dcim_module
 
 
 --
+-- Name: dcim_modulebay dcim_modulebay_parent_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_modulebay
+    ADD CONSTRAINT dcim_modulebay_parent_device_name_unique UNIQUE (parent_device_id, name);
+
+
+--
 -- Name: dcim_modulebay dcim_modulebay_parent_module_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -10565,6 +10389,14 @@ ALTER TABLE ONLY public.dcim_powerfeed
 
 
 --
+-- Name: dcim_poweroutlet dcim_poweroutlet_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_poweroutlet
+    ADD CONSTRAINT dcim_poweroutlet_device_name_unique UNIQUE (device_id, name);
+
+
+--
 -- Name: dcim_poweroutlet dcim_poweroutlet_module_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -10618,6 +10450,14 @@ ALTER TABLE ONLY public.dcim_powerpanel
 
 ALTER TABLE ONLY public.dcim_powerpanel
     ADD CONSTRAINT dcim_powerpanel_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dcim_powerport dcim_powerport_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerport
+    ADD CONSTRAINT dcim_powerport_device_name_unique UNIQUE (device_id, name);
 
 
 --
@@ -10714,6 +10554,14 @@ ALTER TABLE ONLY public.dcim_rackgroup
 
 ALTER TABLE ONLY public.dcim_rackreservation
     ADD CONSTRAINT dcim_rackreservation_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dcim_rearport dcim_rearport_device_name_unique; Type: CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_rearport
+    ADD CONSTRAINT dcim_rearport_device_name_unique UNIQUE (device_id, name);
 
 
 --
@@ -12149,14 +11997,6 @@ ALTER TABLE ONLY public.ipam_ipaddress
 
 
 --
--- Name: ipam_ipaddressrange ipam_ipaddressrange_pkey; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.ipam_ipaddressrange
-    ADD CONSTRAINT ipam_ipaddressrange_pkey PRIMARY KEY (id);
-
-
---
 -- Name: ipam_ipaddresstointerface ipam_ipaddresstointerfac_ip_address_id_interface__b15a8b31_uniq; Type: CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -12746,14 +12586,6 @@ ALTER TABLE ONLY public.tenancy_tenantgroup
 
 ALTER TABLE ONLY public.ipam_service
     ADD CONSTRAINT unique_device_service_name UNIQUE (name, device_id);
-
-
---
--- Name: ipam_ipaddressrange unique_iprange_parent_start; Type: CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.ipam_ipaddressrange
-    ADD CONSTRAINT unique_iprange_parent_start UNIQUE (parent_id, start_host);
 
 
 --
@@ -13386,6 +13218,27 @@ CREATE INDEX circuits_circuit_type_id_1b9f485a ON public.circuits_circuit USING 
 
 
 --
+-- Name: circuits_circuittermination__cable_peer_type_id_bd122156; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX circuits_circuittermination__cable_peer_type_id_bd122156 ON public.circuits_circuittermination USING btree (_cable_peer_type_id);
+
+
+--
+-- Name: circuits_circuittermination__path_id_6dfd8db0; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX circuits_circuittermination__path_id_6dfd8db0 ON public.circuits_circuittermination USING btree (_path_id);
+
+
+--
+-- Name: circuits_circuittermination_cable_id_35e9f703; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX circuits_circuittermination_cable_id_35e9f703 ON public.circuits_circuittermination USING btree (cable_id);
+
+
+--
 -- Name: circuits_circuittermination_circuit_id_257e87e7; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -13645,10 +13498,17 @@ CREATE INDEX data_validation_uniquerule_name_32d3756b_like ON public.data_valida
 
 
 --
--- Name: dcim_cable_cable_type_id_476b3754; Type: INDEX; Schema: public; Owner: nautobot
+-- Name: dcim_cable__termination_a_device_id_e59cde1c; Type: INDEX; Schema: public; Owner: nautobot
 --
 
-CREATE INDEX dcim_cable_cable_type_id_476b3754 ON public.dcim_cable USING btree (cable_type_id);
+CREATE INDEX dcim_cable__termination_a_device_id_e59cde1c ON public.dcim_cable USING btree (_termination_a_device_id);
+
+
+--
+-- Name: dcim_cable__termination_b_device_id_a9073762; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_cable__termination_b_device_id_a9073762 ON public.dcim_cable USING btree (_termination_b_device_id);
 
 
 --
@@ -13656,6 +13516,20 @@ CREATE INDEX dcim_cable_cable_type_id_476b3754 ON public.dcim_cable USING btree 
 --
 
 CREATE INDEX dcim_cable_status_id_6a580869 ON public.dcim_cable USING btree (status_id);
+
+
+--
+-- Name: dcim_cable_termination_a_type_id_a614bab8; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_cable_termination_a_type_id_a614bab8 ON public.dcim_cable USING btree (termination_a_type_id);
+
+
+--
+-- Name: dcim_cable_termination_b_type_id_a91595d0; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_cable_termination_b_type_id_a91595d0 ON public.dcim_cable USING btree (termination_b_type_id);
 
 
 --
@@ -13673,24 +13547,10 @@ CREATE INDEX dcim_cablepath_origin_type_id_6de54f6d ON public.dcim_cablepath USI
 
 
 --
--- Name: dcim_cabletocabletermination_cable_id_21aad480; Type: INDEX; Schema: public; Owner: nautobot
+-- Name: dcim_consoleport__cable_peer_type_id_52adb1be; Type: INDEX; Schema: public; Owner: nautobot
 --
 
-CREATE INDEX dcim_cabletocabletermination_cable_id_21aad480 ON public.dcim_cabletocabletermination USING btree (cable_id);
-
-
---
--- Name: dcim_cabletype_manufacturer_id_49e6bbe2; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX dcim_cabletype_manufacturer_id_49e6bbe2 ON public.dcim_cabletype USING btree (manufacturer_id);
-
-
---
--- Name: dcim_cabletype_name_2d321d6d_like; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX dcim_cabletype_name_2d321d6d_like ON public.dcim_cabletype USING btree (name varchar_pattern_ops);
+CREATE INDEX dcim_consoleport__cable_peer_type_id_52adb1be ON public.dcim_consoleport USING btree (_cable_peer_type_id);
 
 
 --
@@ -13705,6 +13565,20 @@ CREATE INDEX dcim_consoleport__name_6ac60d99 ON public.dcim_consoleport USING bt
 --
 
 CREATE INDEX dcim_consoleport__name_6ac60d99_like ON public.dcim_consoleport USING btree (_name varchar_pattern_ops);
+
+
+--
+-- Name: dcim_consoleport__path_id_e40a4436; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_consoleport__path_id_e40a4436 ON public.dcim_consoleport USING btree (_path_id);
+
+
+--
+-- Name: dcim_consoleport_cable_id_a9ae5465; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_consoleport_cable_id_a9ae5465 ON public.dcim_consoleport USING btree (cable_id);
 
 
 --
@@ -13750,6 +13624,13 @@ CREATE INDEX dcim_consoleporttemplate_module_type_id_c0f35d97 ON public.dcim_con
 
 
 --
+-- Name: dcim_consoleserverport__cable_peer_type_id_132b6744; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_consoleserverport__cable_peer_type_id_132b6744 ON public.dcim_consoleserverport USING btree (_cable_peer_type_id);
+
+
+--
 -- Name: dcim_consoleserverport__name_70f9317c; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -13761,6 +13642,20 @@ CREATE INDEX dcim_consoleserverport__name_70f9317c ON public.dcim_consoleserverp
 --
 
 CREATE INDEX dcim_consoleserverport__name_70f9317c_like ON public.dcim_consoleserverport USING btree (_name varchar_pattern_ops);
+
+
+--
+-- Name: dcim_consoleserverport__path_id_dc5abe09; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_consoleserverport__path_id_dc5abe09 ON public.dcim_consoleserverport USING btree (_path_id);
+
+
+--
+-- Name: dcim_consoleserverport_cable_id_f2940dfd; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_consoleserverport_cable_id_f2940dfd ON public.dcim_consoleserverport USING btree (cable_id);
 
 
 --
@@ -14184,6 +14079,13 @@ CREATE INDEX dcim_devicetypetosoftwareimagefile_device_type_id_74d7511c ON publi
 
 
 --
+-- Name: dcim_frontport__cable_peer_type_id_c4690f56; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_frontport__cable_peer_type_id_c4690f56 ON public.dcim_frontport USING btree (_cable_peer_type_id);
+
+
+--
 -- Name: dcim_frontport__name_273b2ca3; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -14195,6 +14097,13 @@ CREATE INDEX dcim_frontport__name_273b2ca3 ON public.dcim_frontport USING btree 
 --
 
 CREATE INDEX dcim_frontport__name_273b2ca3_like ON public.dcim_frontport USING btree (_name varchar_pattern_ops);
+
+
+--
+-- Name: dcim_frontport_cable_id_04ff8aab; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_frontport_cable_id_04ff8aab ON public.dcim_frontport USING btree (cable_id);
 
 
 --
@@ -14254,6 +14163,13 @@ CREATE INDEX dcim_frontporttemplate_rear_port_id_9775411b ON public.dcim_frontpo
 
 
 --
+-- Name: dcim_interface__cable_peer_type_id_ce52cb81; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_interface__cable_peer_type_id_ce52cb81 ON public.dcim_interface USING btree (_cable_peer_type_id);
+
+
+--
 -- Name: dcim_interface__name_8796fa61; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -14268,10 +14184,24 @@ CREATE INDEX dcim_interface__name_8796fa61_like ON public.dcim_interface USING b
 
 
 --
+-- Name: dcim_interface__path_id_f8f4f7f0; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_interface__path_id_f8f4f7f0 ON public.dcim_interface USING btree (_path_id);
+
+
+--
 -- Name: dcim_interface_bridge_id_f2a8df85; Type: INDEX; Schema: public; Owner: nautobot
 --
 
 CREATE INDEX dcim_interface_bridge_id_f2a8df85 ON public.dcim_interface USING btree (bridge_id);
+
+
+--
+-- Name: dcim_interface_cable_id_1b264edb; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_interface_cable_id_1b264edb ON public.dcim_interface USING btree (cable_id);
 
 
 --
@@ -14779,6 +14709,27 @@ CREATE INDEX dcim_powerf_power_p_b4d96d_idx ON public.dcim_powerfeed USING btree
 
 
 --
+-- Name: dcim_powerfeed__cable_peer_type_id_9f930589; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_powerfeed__cable_peer_type_id_9f930589 ON public.dcim_powerfeed USING btree (_cable_peer_type_id);
+
+
+--
+-- Name: dcim_powerfeed__path_id_a1ea1f28; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_powerfeed__path_id_a1ea1f28 ON public.dcim_powerfeed USING btree (_path_id);
+
+
+--
+-- Name: dcim_powerfeed_cable_id_ec44c4f8; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_powerfeed_cable_id_ec44c4f8 ON public.dcim_powerfeed USING btree (cable_id);
+
+
+--
 -- Name: dcim_powerfeed_destination_panel_id_7f6d6103; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -14807,6 +14758,13 @@ CREATE INDEX dcim_powerfeed_status_id_8c424cc3 ON public.dcim_powerfeed USING bt
 
 
 --
+-- Name: dcim_poweroutlet__cable_peer_type_id_bbff28d0; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_poweroutlet__cable_peer_type_id_bbff28d0 ON public.dcim_poweroutlet USING btree (_cable_peer_type_id);
+
+
+--
 -- Name: dcim_poweroutlet__name_0ecdd374; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -14818,6 +14776,20 @@ CREATE INDEX dcim_poweroutlet__name_0ecdd374 ON public.dcim_poweroutlet USING bt
 --
 
 CREATE INDEX dcim_poweroutlet__name_0ecdd374_like ON public.dcim_poweroutlet USING btree (_name varchar_pattern_ops);
+
+
+--
+-- Name: dcim_poweroutlet__path_id_cbb47bb9; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_poweroutlet__path_id_cbb47bb9 ON public.dcim_poweroutlet USING btree (_path_id);
+
+
+--
+-- Name: dcim_poweroutlet_cable_id_8dbea1ec; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_poweroutlet_cable_id_8dbea1ec ON public.dcim_poweroutlet USING btree (cable_id);
 
 
 --
@@ -14905,6 +14877,13 @@ CREATE INDEX dcim_powerpanel_rack_group_id_76467cc9 ON public.dcim_powerpanel US
 
 
 --
+-- Name: dcim_powerport__cable_peer_type_id_9df2a278; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_powerport__cable_peer_type_id_9df2a278 ON public.dcim_powerport USING btree (_cable_peer_type_id);
+
+
+--
 -- Name: dcim_powerport__name_cd2ccdac; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -14916,6 +14895,20 @@ CREATE INDEX dcim_powerport__name_cd2ccdac ON public.dcim_powerport USING btree 
 --
 
 CREATE INDEX dcim_powerport__name_cd2ccdac_like ON public.dcim_powerport USING btree (_name varchar_pattern_ops);
+
+
+--
+-- Name: dcim_powerport__path_id_9fe4af8f; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_powerport__path_id_9fe4af8f ON public.dcim_powerport USING btree (_path_id);
+
+
+--
+-- Name: dcim_powerport_cable_id_c9682ba2; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_powerport_cable_id_c9682ba2 ON public.dcim_powerport USING btree (cable_id);
 
 
 --
@@ -15094,6 +15087,13 @@ CREATE INDEX dcim_rackreservation_user_id_0785a527 ON public.dcim_rackreservatio
 
 
 --
+-- Name: dcim_rearport__cable_peer_type_id_cecf241c; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_rearport__cable_peer_type_id_cecf241c ON public.dcim_rearport USING btree (_cable_peer_type_id);
+
+
+--
 -- Name: dcim_rearport__name_50f20c9e; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -15105,6 +15105,13 @@ CREATE INDEX dcim_rearport__name_50f20c9e ON public.dcim_rearport USING btree (_
 --
 
 CREATE INDEX dcim_rearport__name_50f20c9e_like ON public.dcim_rearport USING btree (_name varchar_pattern_ops);
+
+
+--
+-- Name: dcim_rearport_cable_id_42c0e4e7; Type: INDEX; Schema: public; Owner: nautobot
+--
+
+CREATE INDEX dcim_rearport_cable_id_42c0e4e7 ON public.dcim_rearport USING btree (cable_id);
 
 
 --
@@ -15189,13 +15196,6 @@ CREATE INDEX dcim_softwareversion_status_id_e167dc1f ON public.dcim_softwarevers
 --
 
 CREATE INDEX dcim_virtualchassis_name_7dcc237d_like ON public.dcim_virtualchassis USING btree (name varchar_pattern_ops);
-
-
---
--- Name: dcim_virtualdevicecontext_controller_managed_device__d65d0532; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX dcim_virtualdevicecontext_controller_managed_device__d65d0532 ON public.dcim_virtualdevicecontext USING btree (controller_managed_device_group_id);
 
 
 --
@@ -16151,13 +16151,6 @@ CREATE INDEX extras_jobqueueassignment_job_queue_id_94e2147b ON public.extras_jo
 
 
 --
--- Name: extras_jobresult_canceled_by_id_9bd0780e; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX extras_jobresult_canceled_by_id_9bd0780e ON public.extras_jobresult USING btree (canceled_by_id);
-
-
---
 -- Name: extras_jobresult_completed_41ca396b; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -16837,13 +16830,6 @@ CREATE INDEX ipam_ipaddr_ip_vers_d82ba5_idx ON public.ipam_ipaddress USING btree
 
 
 --
--- Name: ipam_ipaddr_parent__859c12_idx; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddr_parent__859c12_idx ON public.ipam_ipaddressrange USING btree (parent_id, ip_version, start_host, end_host);
-
-
---
 -- Name: ipam_ipaddress_dns_name_d5c4f5d8; Type: INDEX; Schema: public; Owner: nautobot
 --
 
@@ -16911,69 +16897,6 @@ CREATE INDEX ipam_ipaddress_status_id_942778b7 ON public.ipam_ipaddress USING bt
 --
 
 CREATE INDEX ipam_ipaddress_tenant_id_ac55acfd ON public.ipam_ipaddress USING btree (tenant_id);
-
-
---
--- Name: ipam_ipaddressrange_end_host_6810d1b3; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_end_host_6810d1b3 ON public.ipam_ipaddressrange USING btree (end_host);
-
-
---
--- Name: ipam_ipaddressrange_ip_version_baf7a76d; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_ip_version_baf7a76d ON public.ipam_ipaddressrange USING btree (ip_version);
-
-
---
--- Name: ipam_ipaddressrange_name_230d1b53; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_name_230d1b53 ON public.ipam_ipaddressrange USING btree (name);
-
-
---
--- Name: ipam_ipaddressrange_name_230d1b53_like; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_name_230d1b53_like ON public.ipam_ipaddressrange USING btree (name varchar_pattern_ops);
-
-
---
--- Name: ipam_ipaddressrange_parent_id_f5b3accd; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_parent_id_f5b3accd ON public.ipam_ipaddressrange USING btree (parent_id);
-
-
---
--- Name: ipam_ipaddressrange_role_id_453551db; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_role_id_453551db ON public.ipam_ipaddressrange USING btree (role_id);
-
-
---
--- Name: ipam_ipaddressrange_start_host_2337a950; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_start_host_2337a950 ON public.ipam_ipaddressrange USING btree (start_host);
-
-
---
--- Name: ipam_ipaddressrange_status_id_cba43d64; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_status_id_cba43d64 ON public.ipam_ipaddressrange USING btree (status_id);
-
-
---
--- Name: ipam_ipaddressrange_tenant_id_4bfe4e16; Type: INDEX; Schema: public; Owner: nautobot
---
-
-CREATE INDEX ipam_ipaddressrange_tenant_id_4bfe4e16 ON public.ipam_ipaddressrange USING btree (tenant_id);
 
 
 --
@@ -18551,6 +18474,22 @@ ALTER TABLE ONLY public.circuits_circuit
 
 
 --
+-- Name: circuits_circuittermination circuits_circuitterm__cable_peer_type_id_bd122156_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.circuits_circuittermination
+    ADD CONSTRAINT circuits_circuitterm__cable_peer_type_id_bd122156_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: circuits_circuittermination circuits_circuitterm__path_id_6dfd8db0_fk_dcim_cabl; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.circuits_circuittermination
+    ADD CONSTRAINT circuits_circuitterm__path_id_6dfd8db0_fk_dcim_cabl FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: circuits_circuittermination circuits_circuitterm_circuit_id_257e87e7_fk_circuits_; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -18580,6 +18519,14 @@ ALTER TABLE ONLY public.circuits_circuittermination
 
 ALTER TABLE ONLY public.circuits_circuittermination
     ADD CONSTRAINT circuits_circuitterm_provider_network_id_b0c660f1_fk_circuits_ FOREIGN KEY (provider_network_id) REFERENCES public.circuits_providernetwork(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: circuits_circuittermination circuits_circuittermination_cable_id_35e9f703_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.circuits_circuittermination
+    ADD CONSTRAINT circuits_circuittermination_cable_id_35e9f703_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -18743,11 +18690,19 @@ ALTER TABLE ONLY public.data_validation_uniquerule
 
 
 --
--- Name: dcim_cable dcim_cable_cable_type_id_476b3754_fk_dcim_cabletype_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+-- Name: dcim_cable dcim_cable__termination_a_device_id_e59cde1c_fk_dcim_device_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
 ALTER TABLE ONLY public.dcim_cable
-    ADD CONSTRAINT dcim_cable_cable_type_id_476b3754_fk_dcim_cabletype_id FOREIGN KEY (cable_type_id) REFERENCES public.dcim_cabletype(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT dcim_cable__termination_a_device_id_e59cde1c_fk_dcim_device_id FOREIGN KEY (_termination_a_device_id) REFERENCES public.dcim_device(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_cable dcim_cable__termination_b_device_id_a9073762_fk_dcim_device_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_cable
+    ADD CONSTRAINT dcim_cable__termination_b_device_id_a9073762_fk_dcim_device_id FOREIGN KEY (_termination_b_device_id) REFERENCES public.dcim_device(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -18756,6 +18711,22 @@ ALTER TABLE ONLY public.dcim_cable
 
 ALTER TABLE ONLY public.dcim_cable
     ADD CONSTRAINT dcim_cable_status_id_6a580869_fk_extras_status_id FOREIGN KEY (status_id) REFERENCES public.extras_status(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_cable dcim_cable_termination_a_type_i_a614bab8_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_cable
+    ADD CONSTRAINT dcim_cable_termination_a_type_i_a614bab8_fk_django_co FOREIGN KEY (termination_a_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_cable dcim_cable_termination_b_type_i_a91595d0_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_cable
+    ADD CONSTRAINT dcim_cable_termination_b_type_i_a91595d0_fk_django_co FOREIGN KEY (termination_b_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -18775,91 +18746,27 @@ ALTER TABLE ONLY public.dcim_cablepath
 
 
 --
--- Name: dcim_cabletocabletermination dcim_cabletocableter_circuit_termination__c55de3d4_fk_circuits_; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+-- Name: dcim_consoleport dcim_consoleport__cable_peer_type_id_52adb1be_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_circuit_termination__c55de3d4_fk_circuits_ FOREIGN KEY (circuit_termination_id) REFERENCES public.circuits_circuittermination(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocableter_console_port_id_e23ae225_fk_dcim_cons; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_console_port_id_e23ae225_fk_dcim_cons FOREIGN KEY (console_port_id) REFERENCES public.dcim_consoleport(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.dcim_consoleport
+    ADD CONSTRAINT dcim_consoleport__cable_peer_type_id_52adb1be_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: dcim_cabletocabletermination dcim_cabletocableter_console_server_port__288571bb_fk_dcim_cons; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+-- Name: dcim_consoleport dcim_consoleport__path_id_e40a4436_fk_dcim_cablepath_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_console_server_port__288571bb_fk_dcim_cons FOREIGN KEY (console_server_port_id) REFERENCES public.dcim_consoleserverport(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocableter_front_port_id_dc4aad9c_fk_dcim_fron; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_front_port_id_dc4aad9c_fk_dcim_fron FOREIGN KEY (front_port_id) REFERENCES public.dcim_frontport(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.dcim_consoleport
+    ADD CONSTRAINT dcim_consoleport__path_id_e40a4436_fk_dcim_cablepath_id FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- Name: dcim_cabletocabletermination dcim_cabletocableter_interface_id_1a299e3f_fk_dcim_inte; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+-- Name: dcim_consoleport dcim_consoleport_cable_id_a9ae5465_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_interface_id_1a299e3f_fk_dcim_inte FOREIGN KEY (interface_id) REFERENCES public.dcim_interface(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocableter_power_feed_id_a60ab629_fk_dcim_powe; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_power_feed_id_a60ab629_fk_dcim_powe FOREIGN KEY (power_feed_id) REFERENCES public.dcim_powerfeed(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocableter_power_outlet_id_88e97bdb_fk_dcim_powe; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_power_outlet_id_88e97bdb_fk_dcim_powe FOREIGN KEY (power_outlet_id) REFERENCES public.dcim_poweroutlet(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocableter_power_port_id_7c3e336a_fk_dcim_powe; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_power_port_id_7c3e336a_fk_dcim_powe FOREIGN KEY (power_port_id) REFERENCES public.dcim_powerport(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocableter_rear_port_id_83277674_fk_dcim_rear; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocableter_rear_port_id_83277674_fk_dcim_rear FOREIGN KEY (rear_port_id) REFERENCES public.dcim_rearport(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletocabletermination dcim_cabletocabletermination_cable_id_21aad480_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletocabletermination
-    ADD CONSTRAINT dcim_cabletocabletermination_cable_id_21aad480_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_cabletype dcim_cabletype_manufacturer_id_49e6bbe2_fk_dcim_manufacturer_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_cabletype
-    ADD CONSTRAINT dcim_cabletype_manufacturer_id_49e6bbe2_fk_dcim_manufacturer_id FOREIGN KEY (manufacturer_id) REFERENCES public.dcim_manufacturer(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY public.dcim_consoleport
+    ADD CONSTRAINT dcim_consoleport_cable_id_a9ae5465_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -18895,6 +18802,14 @@ ALTER TABLE ONLY public.dcim_consoleporttemplate
 
 
 --
+-- Name: dcim_consoleserverport dcim_consoleserverpo__cable_peer_type_id_132b6744_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_consoleserverport
+    ADD CONSTRAINT dcim_consoleserverpo__cable_peer_type_id_132b6744_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: dcim_consoleserverporttemplate dcim_consoleserverpo_device_type_id_579bdc86_fk_dcim_devi; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -18908,6 +18823,22 @@ ALTER TABLE ONLY public.dcim_consoleserverporttemplate
 
 ALTER TABLE ONLY public.dcim_consoleserverporttemplate
     ADD CONSTRAINT dcim_consoleserverpo_module_type_id_4abf751a_fk_dcim_modu FOREIGN KEY (module_type_id) REFERENCES public.dcim_moduletype(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_consoleserverport dcim_consoleserverport__path_id_dc5abe09_fk_dcim_cablepath_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_consoleserverport
+    ADD CONSTRAINT dcim_consoleserverport__path_id_dc5abe09_fk_dcim_cablepath_id FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_consoleserverport dcim_consoleserverport_cable_id_f2940dfd_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_consoleserverport
+    ADD CONSTRAINT dcim_consoleserverport_cable_id_f2940dfd_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -19247,6 +19178,22 @@ ALTER TABLE ONLY public.dcim_devicetypetosoftwareimagefile
 
 
 --
+-- Name: dcim_frontport dcim_frontport__cable_peer_type_id_c4690f56_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_frontport
+    ADD CONSTRAINT dcim_frontport__cable_peer_type_id_c4690f56_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_frontport dcim_frontport_cable_id_04ff8aab_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_frontport
+    ADD CONSTRAINT dcim_frontport_cable_id_04ff8aab_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: dcim_frontport dcim_frontport_device_id_950557b5_fk_dcim_device_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -19295,11 +19242,35 @@ ALTER TABLE ONLY public.dcim_frontporttemplate
 
 
 --
+-- Name: dcim_interface dcim_interface__cable_peer_type_id_ce52cb81_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_interface
+    ADD CONSTRAINT dcim_interface__cable_peer_type_id_ce52cb81_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_interface dcim_interface__path_id_f8f4f7f0_fk_dcim_cablepath_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_interface
+    ADD CONSTRAINT dcim_interface__path_id_f8f4f7f0_fk_dcim_cablepath_id FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: dcim_interface dcim_interface_bridge_id_f2a8df85_fk_dcim_interface_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
 ALTER TABLE ONLY public.dcim_interface
     ADD CONSTRAINT dcim_interface_bridge_id_f2a8df85_fk_dcim_interface_id FOREIGN KEY (bridge_id) REFERENCES public.dcim_interface(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_interface dcim_interface_cable_id_1b264edb_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_interface
+    ADD CONSTRAINT dcim_interface_cable_id_1b264edb_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -19679,6 +19650,30 @@ ALTER TABLE ONLY public.dcim_platform
 
 
 --
+-- Name: dcim_powerfeed dcim_powerfeed__cable_peer_type_id_9f930589_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerfeed
+    ADD CONSTRAINT dcim_powerfeed__cable_peer_type_id_9f930589_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_powerfeed dcim_powerfeed__path_id_a1ea1f28_fk_dcim_cablepath_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerfeed
+    ADD CONSTRAINT dcim_powerfeed__path_id_a1ea1f28_fk_dcim_cablepath_id FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_powerfeed dcim_powerfeed_cable_id_ec44c4f8_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerfeed
+    ADD CONSTRAINT dcim_powerfeed_cable_id_ec44c4f8_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: dcim_powerfeed dcim_powerfeed_destination_panel_id_7f6d6103_fk_dcim_powe; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -19708,6 +19703,30 @@ ALTER TABLE ONLY public.dcim_powerfeed
 
 ALTER TABLE ONLY public.dcim_powerfeed
     ADD CONSTRAINT dcim_powerfeed_status_id_8c424cc3_fk_extras_status_id FOREIGN KEY (status_id) REFERENCES public.extras_status(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_poweroutlet dcim_poweroutlet__cable_peer_type_id_bbff28d0_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_poweroutlet
+    ADD CONSTRAINT dcim_poweroutlet__cable_peer_type_id_bbff28d0_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_poweroutlet dcim_poweroutlet__path_id_cbb47bb9_fk_dcim_cablepath_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_poweroutlet
+    ADD CONSTRAINT dcim_poweroutlet__path_id_cbb47bb9_fk_dcim_cablepath_id FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_poweroutlet dcim_poweroutlet_cable_id_8dbea1ec_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_poweroutlet
+    ADD CONSTRAINT dcim_poweroutlet_cable_id_8dbea1ec_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -19772,6 +19791,30 @@ ALTER TABLE ONLY public.dcim_powerpanel
 
 ALTER TABLE ONLY public.dcim_powerpanel
     ADD CONSTRAINT dcim_powerpanel_rack_group_id_76467cc9_fk_dcim_rackgroup_id FOREIGN KEY (rack_group_id) REFERENCES public.dcim_rackgroup(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_powerport dcim_powerport__cable_peer_type_id_9df2a278_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerport
+    ADD CONSTRAINT dcim_powerport__cable_peer_type_id_9df2a278_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_powerport dcim_powerport__path_id_9fe4af8f_fk_dcim_cablepath_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerport
+    ADD CONSTRAINT dcim_powerport__path_id_9fe4af8f_fk_dcim_cablepath_id FOREIGN KEY (_path_id) REFERENCES public.dcim_cablepath(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_powerport dcim_powerport_cable_id_c9682ba2_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_powerport
+    ADD CONSTRAINT dcim_powerport_cable_id_c9682ba2_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -19887,6 +19930,22 @@ ALTER TABLE ONLY public.dcim_rackreservation
 
 
 --
+-- Name: dcim_rearport dcim_rearport__cable_peer_type_id_cecf241c_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_rearport
+    ADD CONSTRAINT dcim_rearport__cable_peer_type_id_cecf241c_fk_django_co FOREIGN KEY (_cable_peer_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: dcim_rearport dcim_rearport_cable_id_42c0e4e7_fk_dcim_cable_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
+--
+
+ALTER TABLE ONLY public.dcim_rearport
+    ADD CONSTRAINT dcim_rearport_cable_id_42c0e4e7_fk_dcim_cable_id FOREIGN KEY (cable_id) REFERENCES public.dcim_cable(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: dcim_rearport dcim_rearport_device_id_0bdfe9c0_fk_dcim_device_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -19964,14 +20023,6 @@ ALTER TABLE ONLY public.dcim_softwareversion
 
 ALTER TABLE ONLY public.dcim_virtualchassis
     ADD CONSTRAINT dcim_virtualchassis_master_id_ab54cfc6_fk_dcim_device_id FOREIGN KEY (master_id) REFERENCES public.dcim_device(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: dcim_virtualdevicecontext dcim_virtualdeviceco_controller_managed_d_d65d0532_fk_dcim_cont; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.dcim_virtualdevicecontext
-    ADD CONSTRAINT dcim_virtualdeviceco_controller_managed_d_d65d0532_fk_dcim_cont FOREIGN KEY (controller_managed_device_group_id) REFERENCES public.dcim_controllermanageddevicegroup(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -20631,14 +20682,6 @@ ALTER TABLE ONLY public.extras_jobqueueassignment
 
 
 --
--- Name: extras_jobresult extras_jobresult_canceled_by_id_9bd0780e_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.extras_jobresult
-    ADD CONSTRAINT extras_jobresult_canceled_by_id_9bd0780e_fk_auth_user_id FOREIGN KEY (canceled_by_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
 -- Name: extras_jobresult extras_jobresult_job_model_id_d581ec7e_fk_extras_job_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
 --
 
@@ -21028,38 +21071,6 @@ ALTER TABLE ONLY public.ipam_ipaddress
 
 ALTER TABLE ONLY public.ipam_ipaddress
     ADD CONSTRAINT ipam_ipaddress_tenant_id_ac55acfd_fk_tenancy_tenant_id FOREIGN KEY (tenant_id) REFERENCES public.tenancy_tenant(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: ipam_ipaddressrange ipam_ipaddressrange_parent_id_f5b3accd_fk_ipam_prefix_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.ipam_ipaddressrange
-    ADD CONSTRAINT ipam_ipaddressrange_parent_id_f5b3accd_fk_ipam_prefix_id FOREIGN KEY (parent_id) REFERENCES public.ipam_prefix(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: ipam_ipaddressrange ipam_ipaddressrange_role_id_453551db_fk_extras_role_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.ipam_ipaddressrange
-    ADD CONSTRAINT ipam_ipaddressrange_role_id_453551db_fk_extras_role_id FOREIGN KEY (role_id) REFERENCES public.extras_role(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: ipam_ipaddressrange ipam_ipaddressrange_status_id_cba43d64_fk_extras_status_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.ipam_ipaddressrange
-    ADD CONSTRAINT ipam_ipaddressrange_status_id_cba43d64_fk_extras_status_id FOREIGN KEY (status_id) REFERENCES public.extras_status(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: ipam_ipaddressrange ipam_ipaddressrange_tenant_id_4bfe4e16_fk_tenancy_tenant_id; Type: FK CONSTRAINT; Schema: public; Owner: nautobot
---
-
-ALTER TABLE ONLY public.ipam_ipaddressrange
-    ADD CONSTRAINT ipam_ipaddressrange_tenant_id_4bfe4e16_fk_tenancy_tenant_id FOREIGN KEY (tenant_id) REFERENCES public.tenancy_tenant(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -22250,5 +22261,5 @@ ALTER TABLE ONLY public.wireless_wirelessnetwork
 -- PostgreSQL database dump complete
 --
 
-\unrestrict J7oUjMgxHHAEaVX9KIHIwgEdreqRsc3erK3743ih3Yjb8OeBdyBexldAJs2yxoI
+\unrestrict zhIEpSw8MJvKUnhn2VTd7He1GN01euswWOVbqd8WLGDCHKfhQ8qwPs4a4qEO3kQ
 
